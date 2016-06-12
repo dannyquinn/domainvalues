@@ -23,5 +23,27 @@ namespace DomainValues.Test.ParsingTests
 
             AreEqual(expectedOutput,output);            
         }
+
+        [Test]
+        public void CommentParserPrimaryType()
+        {
+            var parser = new CommentParser();
+
+            Assert.AreEqual(parser.PrimaryType,TokenType.Comment);
+        }
+
+        [Test]
+        public void NextTokenIsSameAsPassedIn()
+        {
+            var parser = new CommentParser();
+
+            var output = parser.ParseLine(0, "#", TokenType.Data).Single();
+
+            Assert.AreEqual(parser.NextTokenType, TokenType.Data);
+
+            output = parser.ParseLine(0, "#", TokenType.Table).Single();
+
+            Assert.AreEqual(parser.NextTokenType, TokenType.Table);
+        }
     }
 }

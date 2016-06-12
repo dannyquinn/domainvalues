@@ -35,6 +35,6 @@ namespace DomainValues.Parsing
             }
         }
 
-        protected override TokenType PrimaryType => TokenType.Table;
+        internal override TokenType PrimaryType => TokenType.Table;
     }
 }

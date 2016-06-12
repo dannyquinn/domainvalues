@@ -75,6 +75,6 @@ namespace DomainValues.Parsing
             }
         }
 
-        protected override TokenType PrimaryType => TokenType.Key;
+        internal override TokenType PrimaryType => TokenType.Key;
     }
 }

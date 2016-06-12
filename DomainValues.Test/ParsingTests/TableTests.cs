@@ -63,5 +63,15 @@ namespace DomainValues.Test.ParsingTests
 
             Assert.AreEqual(TokenType.Key,parser.NextTokenType);
         }
+
+        [Test]
+        public void TableParserPrimaryType()
+        {
+            var parser = new TableParser();
+
+            Assert.AreEqual(parser.PrimaryType,TokenType.Table);
+        }
+
+      
     }
 }

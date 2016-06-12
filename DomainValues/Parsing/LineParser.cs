@@ -11,7 +11,7 @@ namespace DomainValues.Parsing
     internal abstract class LineParser
     {
         internal abstract IEnumerable<ParsedSpan> ParseLine(int lineNumber, string source, TokenType? expectedTokenType);
-        protected abstract TokenType PrimaryType { get; }
+        internal abstract TokenType PrimaryType { get; }
         internal TokenType? NextTokenType { get; set; }
 
         protected void CheckOrder(ParsedSpan span, TokenType? expectedType)

@@ -94,5 +94,13 @@ namespace DomainValues.Test.ParsingTests
 
             Assert.AreEqual(TokenType.Data, parser.NextTokenType);
         }
+
+        [Test]
+        public void KeyParserPrimaryType()
+        {
+            var parser = new KeyParser();
+
+            Assert.AreEqual(parser.PrimaryType,TokenType.Key);
+        }
     }
 }

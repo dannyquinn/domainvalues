@@ -13,6 +13,6 @@ namespace DomainValues.Parsing
             yield return new ParsedSpan(lineNumber,TokenType.Comment,source.GetTextSpan());
         }
 
-        protected override TokenType PrimaryType=>TokenType.Comment;
+        internal override TokenType PrimaryType=>TokenType.Comment;
     }
 }

@@ -59,6 +59,7 @@
     <Compile Include="Model\ParsedSpan.cs" />
     <Compile Include="Model\TextSpan.cs" />
     <Compile Include="Parsing\CommentParser.cs" />
+    <Compile Include="Parsing\DataParser.cs" />
     <Compile Include="Parsing\KeyParser.cs" />
     <Compile Include="Parsing\LineParser.cs" />
     <Compile Include="Parsing\Parser.cs" />

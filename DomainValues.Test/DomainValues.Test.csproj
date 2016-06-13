@@ -47,6 +47,7 @@
     <Compile Include="ParsingTests\CommentTests.cs" />
     <Compile Include="ParsingTests\DataTests.cs" />
     <Compile Include="ParsingTests\KeyTests.cs" />
+    <Compile Include="ParsingTests\RowTests.cs" />
     <Compile Include="ParsingTests\TableTests.cs" />
     <Compile Include="ParsingTests\Util.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

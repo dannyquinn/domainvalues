@@ -59,10 +59,10 @@ namespace DomainValues.Parsing
         internal static Dictionary<string, LineParser> Rules = new Dictionary<string, LineParser>
         {
             {"#", new CommentParser()},
-            //{"table", new TableParser()},
-            //{"key", new KeyParser()},
-            //{"data", new DataParser()},
-            //{"|", new RowParser()}
+            {"table", new TableParser()},
+            {"key", new KeyParser()},
+            {"data", new DataParser()},
+            {"|", new RowParser()}
         };
     }
 }

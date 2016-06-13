@@ -8,13 +8,13 @@ namespace DomainValues.Util
 {
     internal static class Extensions
     {
-        internal static Predicate<char> WhitespacePredicate = a => !(new[] { '\t', '\n', '\r', ' ' }).Any(c => a == c);
+        internal static Predicate<char> IsNotWhiteSpace = a => !(new[] { '\t', '\n', '\r', ' ' }).Any(c => a == c);
         internal static Span TrimedSpan(this string source)
         {
             return new Span(
-                Array.FindIndex(source.ToCharArray(), WhitespacePredicate),
-                Array.FindLastIndex(source.ToCharArray(), WhitespacePredicate) -
-                Array.FindIndex(source.ToCharArray(),WhitespacePredicate) + 1
+                Array.FindIndex(source.ToCharArray(), IsNotWhiteSpace),
+                Array.FindLastIndex(source.ToCharArray(), IsNotWhiteSpace) -
+                Array.FindIndex(source.ToCharArray(),IsNotWhiteSpace) + 1
                 );
         }
 

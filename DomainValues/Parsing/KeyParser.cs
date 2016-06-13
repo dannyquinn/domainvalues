@@ -51,7 +51,7 @@ namespace DomainValues.Parsing
                     Char = a,
                     Index = i
                 })
-                .Where(a => !a.Valid && Extensions.WhitespacePredicate(a.Char))
+                .Where(a => !a.Valid && Extensions.IsNotWhiteSpace(a.Char))
                 .Select(a => a.Index)
                 .ToRange();
 

@@ -1,5 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using DomainValues.Parsing;
 using Microsoft.VisualStudio.Shell;
 using VSLangProj80;
 
@@ -18,7 +20,16 @@ namespace DomainValues.Generation
 
         protected override byte[] GenerateCode(string inputFileContent)
         {
-            return Encoding.UTF8.GetBytes("TODO");
+            var spans = Parser.GetSpans(inputFileContent,true);
+
+            if (spans.Any(a => a.Errors.Any()))
+            {
+                return Encoding.UTF8.GetBytes("Error Generating Output");
+            }
+
+            var content = SpansToContent.Convert(spans);
+
+            return content.GetSqlBytes();
         }
     }
 }

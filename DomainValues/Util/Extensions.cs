@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Microsoft.VisualStudio.Text;
 using DomainValues.Model;
 
@@ -45,6 +42,34 @@ namespace DomainValues.Util
                 yield return source.Where(a => a.LineNumber >= start && a.LineNumber < end).ToList();
             }
 
+        }
+
+        internal static IEnumerable<Span> ToRange(this IEnumerable<int> source)
+        {
+            var e = source.GetEnumerator();
+
+            if (!e.MoveNext())
+            {
+                yield break;
+            }
+
+            var currentList = new List<int> {e.Current};
+
+            while (e.MoveNext())
+            {
+                var current = e.Current;
+
+                if (current.Equals(currentList.Last()+1))
+                {
+                    currentList.Add(current);
+                }
+                else
+                {
+                    yield return new Span(currentList.Min(),currentList.Max()-currentList.Min()+1);
+                    currentList = new List<int> {current};
+                }
+            }
+            yield return new Span(currentList.Min(), currentList.Max() - currentList.Min() + 1);
         }
     }
 }

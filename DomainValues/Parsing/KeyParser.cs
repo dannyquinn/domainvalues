@@ -32,46 +32,32 @@ namespace DomainValues.Parsing
 
             yield return key;
 
-            if (span.Text.Length > 4)
+            if (span.Text.Length <= 4)
+                yield break;
+
+            var param = source.GetTextSpan(span.Start+3);
+
+            var matches = RegExpr.Variable.Matches(param.Text);
+
+            foreach (Match match in matches)
             {
-                var param = source.GetTextSpan(span.Start+3);
+                yield return new ParsedSpan(lineNumber, TokenType.Key | TokenType.Variable, param.Start + match.Index, match.Value);
+            }
 
-                var matches = RegExpr.Variable.Matches(param.Text);
-
-                foreach (Match match in matches)
+            var invalidSpans = param.Text.ToCharArray()
+                .Select((a, i) => new
                 {
-                    yield return new ParsedSpan(lineNumber, TokenType.Key | TokenType.Variable, param.Start + match.Index, match.Value);
-                }
+                    Valid = matches.Cast<Match>().SelectMany(b => Enumerable.Range(b.Index, b.Length)).Contains(i),
+                    Char = a,
+                    Index = i
+                })
+                .Where(a => !a.Valid && Extensions.WhitespacePredicate(a.Char))
+                .Select(a => a.Index)
+                .ToRange();
 
-                var spanStart = -1;
-                var spanRange = 1;
-
-                for (int i = 0; i < param.Text.Length; i++)
-                {
-                    if (matches.Cast<Match>().Any(a => i >= a.Index && i <= a.Index + a.Length - 1) || !Extensions.WhitespacePredicate(param.Text[i]))
-                    {
-                        if (spanStart != -1)
-                        {
-                            yield return new ParsedSpan(lineNumber,TokenType.Parameter, param.Start+spanStart,param.Text.Substring(spanStart,spanRange),"Invalid text");
-                            spanStart = -1;
-                        }
-                        continue;
-                    }
-                    if (spanStart == -1)
-                    {
-                        spanStart = i;
-                        spanRange = 1;
-                    }
-                    else
-                    {
-                        spanRange++;
-                    }
-                }
-                if (spanStart != -1)
-                {
-                    yield return new ParsedSpan(lineNumber, TokenType.Parameter, param.Start + spanStart, param.Text.Substring(spanStart, spanRange), "Invalid text");
-                }
-
+            foreach (var invalidSpan in invalidSpans)
+            {
+                yield return new ParsedSpan(lineNumber,TokenType.Parameter,param.Start+invalidSpan.Start,param.Text.Substring(invalidSpan.Start,invalidSpan.Length),"Invalid text");
             }
         }
 

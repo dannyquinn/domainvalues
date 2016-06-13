@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DomainValues.Model;
 using DomainValues.Util;
-using Microsoft.VisualStudio.Text.Differencing;
 
 namespace DomainValues.Parsing
 {
@@ -53,6 +50,7 @@ namespace DomainValues.Parsing
 
                 }
             }
+            //TODO - Extended validation
             return spans;
         }
 

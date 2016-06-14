@@ -52,6 +52,7 @@ namespace DomainValues.Tagging
                 {TokenType.HeaderRow, DvContent.DvHeaderRow},
                 {TokenType.Data, DvContent.DvKeyword},
                 {TokenType.ItemRow, DvContent.DvText},
+                {TokenType.Parameter,DvContent.DvText },
                 {TokenType.Parameter|TokenType.Table, DvContent.DvText},
                 {TokenType.Variable|TokenType.Key, DvContent.DvVariable}
             };

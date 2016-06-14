@@ -50,6 +50,12 @@ namespace DomainValues.Parsing
 
                 }
             }
+
+            if (!spans.Any(a => a.Errors.Any()) && spans.Any(a => a.Type == TokenType.Table) && expectedType != (TokenType.Table | TokenType.ItemRow | TokenType.Data))
+            {
+                spans.Last(a=>a.Type!=TokenType.Comment).Errors.Add("Unexpected end of file");
+            }
+
             //TODO - Extended validation
             return spans;
         }

@@ -74,6 +74,8 @@
     <Compile Include="Tagging\ClassifierDefinition.cs" />
     <Compile Include="Tagging\ClassifierFormat.cs" />
     <Compile Include="Tagging\ClassifierProvider.cs" />
+    <Compile Include="Tagging\ErrorProvider.cs" />
+    <Compile Include="Tagging\ErrorTagger.cs" />
     <Compile Include="TokenType.cs" />
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\RegExpr.cs" />

@@ -85,6 +85,39 @@ namespace DomainValues.Test.ParsingTests
 
             AreEqual(expectedOutput, output);
         }
+
+        [Test]
+        public void DuplicateVariables()
+        {
+            var output = new KeyParser().ParseLine(0, "key <id> <a> <id>", TokenType.Key).ToList();
+
+            var expectedOutput = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.Key, 0, "key"),
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 4, "<id>"),
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 9, "<a>"),
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 13, "<id>", "Key <id> is a duplicate value.")
+            };
+
+            AreEqual(expectedOutput,output);
+        }
+
+        [Test]
+        public void DuplicateVariablesIgnoreCase()
+        {
+            var output = new KeyParser().ParseLine(0, "key <id> <a> <ID>", TokenType.Key).ToList();
+
+            var expectedOutput = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.Key, 0, "key"),
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 4, "<id>"),
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 9, "<a>"),
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 13, "<ID>", "Key <ID> is a duplicate value.")
+            };
+
+            AreEqual(expectedOutput, output);
+        }
+
         [Test]
         public void NextTokenShouldBeData()
         {

@@ -34,6 +34,89 @@ namespace DomainValues.Test.ParsingTests
         }
 
         [Test]
+        public void HeaderRowDuplicateValues()
+        {
+            var output = new RowParser().ParseLine(0,"|A|B|C|A|",TokenType.HeaderRow).ToList();
+
+            var expectedOutput = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|A|"),
+                new ParsedSpan(0, TokenType.HeaderRow, 7, "A", "Column A is a duplicate value")
+            };
+
+            AreEqual(expectedOutput,output);
+        }
+
+        [Test]
+        public void HeaderRowDuplicateValuesIgnoreCase()
+        {
+            var output = new RowParser().ParseLine(0, "|A|B|C|a|", TokenType.HeaderRow).ToList();
+
+            var expectedOutput = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|a|"),
+                new ParsedSpan(0, TokenType.HeaderRow, 7, "a", "Column a is a duplicate value")
+            };
+
+            AreEqual(expectedOutput, output);
+        }
+
+        [Test]
+        public void HeaderRowTextOutsideOfPipeInvalid()
+        {
+            var output = new RowParser().ParseLine(0, "|A|B|C|test", TokenType.HeaderRow).ToList();
+
+            var expectedOutput = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|"),
+                new ParsedSpan(0, TokenType.Parameter, 7, "test", "Invalid text")
+            };
+
+            AreEqual(expectedOutput, output);
+        }
+
+        [Test]
+        public void HeaderRowTextOutsideOfPipeInvalidEscaped()
+        {
+            var output = new RowParser().ParseLine(0, @"|A|B|C|test\|", TokenType.HeaderRow).ToList();
+
+            var expectedOutput = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|"),
+                new ParsedSpan(0, TokenType.Parameter, 7, @"test\|", "Invalid text")
+            };
+
+            AreEqual(expectedOutput, output);
+        }
+
+        [Test]
+        public void ItemRowTextOutsideOfPipeInvalidEscaped()
+        {
+            var output = new RowParser().ParseLine(0, @"|A|B|C|test\|", TokenType.ItemRow).ToList();
+
+            var expectedOutput = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.ItemRow, 0, "|A|B|C|"),
+                new ParsedSpan(0, TokenType.Parameter, 7, @"test\|", "Invalid text")
+            };
+
+            AreEqual(expectedOutput, output);
+        }
+
+        public void ItemRowTextOutsideOfPipeInvalid()
+        {
+            var output = new RowParser().ParseLine(0, "|A|B|C|test", TokenType.ItemRow).ToList();
+
+            var expectedOutput = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.ItemRow, 0, "|A|B|C|"),
+                new ParsedSpan(0, TokenType.Parameter, 7, "test", "Invalid text")
+            };
+
+            AreEqual(expectedOutput, output);
+        }
+
+        [Test]
         public void NextTokenShouldBeItemRow()
         {
             var parser = new RowParser();

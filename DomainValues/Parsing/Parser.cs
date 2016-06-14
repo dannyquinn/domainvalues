@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Controls.Primitives;
 using DomainValues.Model;
 using DomainValues.Util;
 
@@ -60,6 +60,8 @@ namespace DomainValues.Parsing
             if (extendedCheck)
                 ExtendedChecks(spans);
 
+
+            Debug.Assert(spans.All(a=>a.Text.Length>0));
             return spans;
         }
 
@@ -72,13 +74,10 @@ namespace DomainValues.Parsing
                 if (header == null)
                     continue;
 
-
-
                 var columns = header.Text.GetColumns()
                     .Select(a=>a.ToLower())
                     .ToList();
 
-                //TODO - Check Duplicates 
                 //TODO - Check Headers Match 
                 //TODO - Check ItemRow columns equal HeaderRowColumns                
 
@@ -93,7 +92,12 @@ namespace DomainValues.Parsing
 
             foreach (var key in keyVars)
             {
-                var keyValue = key.Text.Substring(1, key.Text.Length - 2).ToLower();
+                var keyValue = key.Text
+                    .Substring(1, key.Text.Length - 2)
+                    .ToLower();
+
+                if (keyValue.EndsWith("*"))
+                    keyValue = $"{keyValue}*";
 
                 if (columns.Contains($"{keyValue}*"))
                 {

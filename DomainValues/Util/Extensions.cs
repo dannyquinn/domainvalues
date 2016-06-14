@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.Text;
@@ -21,6 +22,9 @@ namespace DomainValues.Util
 
         internal static TextSpan GetTextSpan(this string source, int offset = 0)
         {
+            if (string.IsNullOrWhiteSpace(source.Substring(offset)))
+                return new TextSpan(offset,string.Empty);
+
             var span = source.Substring(offset).TrimedSpan();
 
             return new TextSpan(span.Start + offset, source.Substring(span.Start + offset).Trim());
@@ -83,5 +87,7 @@ namespace DomainValues.Util
                     .Replace("\\\0", "\\|")
                 );
         }
+
+        
     }
 }

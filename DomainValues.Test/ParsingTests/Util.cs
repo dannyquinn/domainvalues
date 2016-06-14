@@ -24,7 +24,7 @@ namespace DomainValues.Test.ParsingTests
                 Assert.AreEqual(ex.Text, t.Text,"Text");
                 Assert.AreEqual(ex.LineNumber,t.LineNumber,"Line Number");
 
-                Assert.AreEqual(t.Errors.Count, ex.Errors.Count,"Error count");
+                Assert.AreEqual( ex.Errors.Count,t.Errors.Count,"Error count");
                 foreach (var error in t.Errors)
                 {
                     var exErr = ex.Errors.SingleOrDefault(a => a.Equals(error));

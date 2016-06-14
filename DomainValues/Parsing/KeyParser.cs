@@ -39,9 +39,17 @@ namespace DomainValues.Parsing
 
             var matches = RegExpr.Variable.Matches(param.Text);
 
+            var duplicates = matches.Cast<Match>().GroupBy(a => a.Value.ToLower()).SelectMany(a => a.Skip(1)).ToList();
+
             foreach (Match match in matches)
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Key | TokenType.Variable, param.Start + match.Index, match.Value);
+                var spanVar = new ParsedSpan(lineNumber, TokenType.Key | TokenType.Variable, param.Start + match.Index, match.Value);
+
+                if (duplicates.Contains(match))
+                {
+                    spanVar.Errors.Add($"Key {match.Value} is a duplicate value.");
+                }
+                yield return spanVar;
             }
 
             var invalidSpans = param.Text.ToCharArray()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.Text;
 using DomainValues.Model;
 
@@ -70,6 +71,17 @@ namespace DomainValues.Util
                 }
             }
             yield return new Span(currentList.Min(), currentList.Max() - currentList.Min() + 1);
+        }
+
+        internal static IEnumerable<string> GetColumns(this string source)
+        {
+            return RegExpr.Columns.Matches(source).Cast<Match>()
+                 .Select(a => a.Value
+                    .Trim()
+                    .Replace("\\\\\\|", "\\\0")
+                    .Replace("\\|", "|")
+                    .Replace("\\\0", "\\|")
+                );
         }
     }
 }

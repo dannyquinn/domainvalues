@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Controls.Primitives;
-using System.Windows.Documents;
 using DomainValues.Model;
 using DomainValues.Util;
 
@@ -34,7 +29,7 @@ namespace DomainValues.Parsing
 
                 foreach (var item in block.Where(a => a.Type == TokenType.ItemRow))
                 {
-                    var columns = GetColumns(item.Text).ToList();
+                    var columns = item.Text.GetColumns().ToList();
 
                     for (var i = 0; i < columns.Count(); i++)
                     {
@@ -49,22 +44,11 @@ namespace DomainValues.Parsing
 
         private static IEnumerable<Column> GetColumns(string source, IEnumerable<string> keyVars)
         {
-            return from header in GetColumns(source)
+            return from header in source.GetColumns()
                    let text = header.TrimEnd(' ', '*')
                    let isKey = keyVars.Any(a => a.Equals(text, StringComparison.CurrentCultureIgnoreCase))
                    let isDbColumn = !header.TrimEnd().EndsWith("*")
                    select new Column(text, isKey, isDbColumn);
-        }
-
-        private static IEnumerable<string> GetColumns(string source)
-        {
-            return RegExpr.Columns.Matches(source).Cast<Match>()
-                .Select(a=>a.Value
-                    .Trim()
-                    .Replace("\\\\\\|", "\\\0")
-                    .Replace("\\|", "|")
-                    .Replace("\\\0", "\\|")
-                );
         }
     }
 }

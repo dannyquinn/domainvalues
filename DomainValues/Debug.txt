@@ -1,0 +1,6 @@
+﻿In order to run this code in Visual Studio.
+
+1) Open property pages for DomainValues project 
+2) Goto debug tab.
+3) Set Start Action to 'Start External Program' with value: C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe
+4) Set Command line arguments to: /rootsuffix Exp

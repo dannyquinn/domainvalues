@@ -13,7 +13,7 @@ namespace DomainValues.Model
             Errors = new List<string>();
 
             if (error!=null)
-                Errors.Add(error);
+                Errors.Add(error); 
         }
 
         public ParsedSpan(int lineNumber, TokenType type, TextSpan span, string error = null)

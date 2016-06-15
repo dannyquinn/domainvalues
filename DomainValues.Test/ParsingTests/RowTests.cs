@@ -117,6 +117,16 @@ namespace DomainValues.Test.ParsingTests
         }
 
         [Test]
+        public void RowLineStarting()
+        {
+            var output = new RowParser().ParseLine(0, "  |", TokenType.HeaderRow).Single();
+
+            var expectedOutput = new ParsedSpan(0,TokenType.HeaderRow,2,"|");
+
+            AreEqual(expectedOutput,output);
+        }
+
+        [Test]
         public void NextTokenShouldBeItemRow()
         {
             var parser = new RowParser();

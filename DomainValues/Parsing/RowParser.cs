@@ -26,23 +26,17 @@ namespace DomainValues.Parsing
                 NextTokenType = TokenType.Data | TokenType.Table | TokenType.ItemRow;
             }
 
-            // Need to use regex to exclude escaped pipes
-            var lastCellIndex = RegExpr.Columns.Matches(source).Cast<Match>()
-                .OrderByDescending(a => a.Index)
-                .Select(a => a.Index + a.Length)
-                .First();
+            var lastPipe = RegExpr.LastPipe.Matches(source).Cast<Match>().Last().Index+1;
 
-            var index = source.LastIndexOf('|',lastCellIndex)+1;
-
-            var span = new ParsedSpan(lineNumber,token,source.Substring(0,index).GetTextSpan());
+            var span = new ParsedSpan(lineNumber,token,source.Substring(0,lastPipe).GetTextSpan());
 
             CheckOrder(span,expectedTokenType);
 
             yield return span;
 
-            if (source.Length > index)
+            if (source.Length > lastPipe)
             {
-                var invalidSpan = source.GetTextSpan(index);
+                var invalidSpan = source.GetTextSpan(lastPipe);
 
                 if (invalidSpan.Text.Length>0)
                     yield return new ParsedSpan(lineNumber, TokenType.Parameter, invalidSpan, "Invalid text");

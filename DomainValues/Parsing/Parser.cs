@@ -60,8 +60,6 @@ namespace DomainValues.Parsing
             if (extendedCheck)
                 ExtendedChecks(spans);
 
-
-            Debug.Assert(spans.All(a=>a.Text.Length>0));
             return spans;
         }
 

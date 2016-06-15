@@ -1,4 +1,4 @@
-﻿In order to run this code in Visual Studio.
+﻿In order to run this code in Visual Studio (2015).
 
 1) Open property pages for DomainValues project 
 2) Goto debug tab.

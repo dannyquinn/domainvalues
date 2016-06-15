@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Text.Tagging;
 using System.Linq;
 using System.Windows;
 using DomainValues.Parsing;
+using Microsoft.VisualStudio.Text.Adornments;
 
 namespace DomainValues.Tagging
 {
@@ -67,7 +68,7 @@ namespace DomainValues.Tagging
 
             }
             if (errors.Any())
-                CreateTagSpan(span, new ErrorTag(errors.First(), errors.First()));
+                CreateTagSpan(span, new ErrorTag(PredefinedErrorTypeNames.SyntaxError, errors.First()));
         }
         private ErrorTask CreateErrorTask(ITextSnapshotLine line, int start, string text)
         {
@@ -77,7 +78,7 @@ namespace DomainValues.Tagging
                 Line = line.LineNumber,
                 Column = start,
                 Category = TaskCategory.Misc,
-                ErrorCategory = TaskErrorCategory.Warning,
+                ErrorCategory = TaskErrorCategory.Error,
                 Priority = TaskPriority.Low,
                 Document = _textDocument.FilePath
             };

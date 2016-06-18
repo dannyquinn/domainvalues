@@ -13,7 +13,7 @@ namespace DomainValues.Parsing
             
             TokenType token = TokenType.HeaderRow;
 
-            if ((expectedTokenType & TokenType.HeaderRow) != 0)
+            if (expectedTokenType!=null && (expectedTokenType & TokenType.HeaderRow) != 0)
             {
                 NextTokenType = TokenType.ItemRow;
             }

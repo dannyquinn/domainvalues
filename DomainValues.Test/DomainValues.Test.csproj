@@ -47,6 +47,8 @@
     <Compile Include="ParsingTests\BlockValidationTests.cs" />
     <Compile Include="ParsingTests\CommentTests.cs" />
     <Compile Include="ParsingTests\DataTests.cs" />
+    <Compile Include="ParsingTests\EndOfFileTests.cs" />
+    <Compile Include="ParsingTests\FlowTests.cs" />
     <Compile Include="ParsingTests\KeyTests.cs" />
     <Compile Include="ParsingTests\RowTests.cs" />
     <Compile Include="ParsingTests\TableTests.cs" />

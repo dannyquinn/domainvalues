@@ -17,6 +17,7 @@ namespace DomainValues.Parsing
             if ((expectedType & PrimaryType) == 0)
             {
                 span.Errors.Add($"{span.Type} was unexpected.  Expected {expectedType}");
+                NextTokenType = null;
             }
         }
 

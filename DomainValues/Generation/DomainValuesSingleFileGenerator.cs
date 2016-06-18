@@ -10,6 +10,7 @@ namespace DomainValues.Generation
     [ComVisible(true)]
     [Guid(DvContent.SingleFileGeneratorGuid)]
     [CodeGeneratorRegistrationWithFileExtension(typeof(DomainValuesSingleFileGenerator),"C# Domain Values Generator",vsContextGuids.vsContextGuidVCSProject,GeneratesDesignTimeSource=true,FileExtension=DvContent.DvFileExtension)]
+    [CodeGeneratorRegistrationWithFileExtension(typeof(DomainValuesSingleFileGenerator),"VB Domain Values Generator",vsContextGuids.vsContextGuidVBProject,GeneratesDesignTimeSource=true,FileExtension=DvContent.DvFileExtension)]
     [ProvideObject(typeof(DomainValuesSingleFileGenerator))]
     public class DomainValuesSingleFileGenerator : BaseGeneratorWithSite
     {

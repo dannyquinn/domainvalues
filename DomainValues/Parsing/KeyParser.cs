@@ -37,8 +37,8 @@ namespace DomainValues.Parsing
 
             var param = source.GetTextSpan(span.Start+3);
 
-            var matches = RegExpr.Variable.Matches(param.Text);
-
+            var matches = Regex.Matches(param.Text, @"\S+", RegexOptions.Compiled);
+            
             var duplicates = matches.Cast<Match>().GroupBy(a => a.Value.ToLower()).SelectMany(a => a.Skip(1)).ToList();
 
             foreach (Match match in matches)
@@ -50,22 +50,6 @@ namespace DomainValues.Parsing
                     spanVar.Errors.Add(new Error($"Key {match.Value} is a duplicate value.",false));
                 }
                 yield return spanVar;
-            }
-
-            var invalidSpans = param.Text.ToCharArray()
-                .Select((a, i) => new
-                {
-                    Valid = matches.Cast<Match>().SelectMany(b => Enumerable.Range(b.Index, b.Length)).Contains(i),
-                    Char = a,
-                    Index = i
-                })
-                .Where(a => !a.Valid && Extensions.IsNotWhiteSpace(a.Char))
-                .Select(a => a.Index)
-                .ToRange();
-
-            foreach (var invalidSpan in invalidSpans)
-            {
-                yield return new ParsedSpan(lineNumber,TokenType.Parameter,param.Start+invalidSpan.Start,param.Text.Substring(invalidSpan.Start,invalidSpan.Length),"Invalid text.");
             }
         }
 

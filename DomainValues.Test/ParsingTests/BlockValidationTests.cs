@@ -13,7 +13,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var test = @"
                 table dbo.test
-                    key <id>
+                    key id
                     data 
                         | id | test |
                         | 1  | test |
@@ -29,7 +29,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var test = @"
                 table dbo.test
-                    key <id>
+                    key id
                     data 
                         | i  | test |
                         | 1  | test |
@@ -39,7 +39,7 @@ namespace DomainValues.Test.ParsingTests
 
             var error = output.SelectMany(a=>a.Errors).Single();
 
-            Assert.AreEqual("Key value <id> not found in the column row.", error.Message);
+            Assert.AreEqual("Key value 'id' not found in the column row.", error.Message);
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var test = @"
                 table dbo.test
-                    key <id>
+                    key id
                     data 
                         | id* | test |
                         | 1   | test |
@@ -57,7 +57,7 @@ namespace DomainValues.Test.ParsingTests
 
             var error = output.SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Key value <id> is marked as non db in the column row.  Cannot be used as a key.", error.Message);
+            Assert.AreEqual("Key value 'id' is marked as non db in the column row.  Cannot be used as a key.", error.Message);
             Assert.IsFalse(error.OutputWindowOnly);
         }
 
@@ -66,7 +66,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var test = @"
                 table dbo.test
-                    key <id*>
+                    key id*
                     data 
                         | id* | test |
                         | 1   | test |
@@ -76,7 +76,7 @@ namespace DomainValues.Test.ParsingTests
 
             var error = output.SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Key value <id*> not found in the column row.", error.Message);
+            Assert.AreEqual("Key value 'id*' not found in the column row.", error.Message);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var test = @"
                 table dbo.test
-                    key <id>
+                    key id
                     data 
                         | id | test |
                         | 1  | test | thing|
@@ -100,13 +100,13 @@ namespace DomainValues.Test.ParsingTests
         {
             var test = @"
                 table dbo.test
-                    key <id>
+                    key id
                     data 
                         | id | test |
                         | 1  | test |
 
                 table dbo.test
-                    key <id>
+                    key id
                     data 
                         | id | test |
                         | 1  | test |

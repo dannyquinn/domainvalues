@@ -20,7 +20,7 @@ namespace DomainValues.Parsing
 
                 var keyVars = block
                     .Where(a => a.Type == (TokenType.Key | TokenType.Variable))
-                    .Select(a => a.Text.Substring(1, a.Text.Length - 2));
+                    .Select(a => a.Text);
 
                 foreach (var column in GetColumns(block.First(a => a.Type == TokenType.HeaderRow).Text,keyVars))
                 {

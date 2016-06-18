@@ -15,13 +15,13 @@ namespace DomainValues.Test.ParsingTests
         public void CompleteBlocksNoError()
         {
             var test = @"table dbo.test
-                key <id>
+                key id
                 data 
                     | id | data | 
                     | 1  | test |
 
                 table dbo.test1 
-                key <id>
+                key id
                 data 
                     | id | data |
                     | 1  | one  |
@@ -40,7 +40,7 @@ namespace DomainValues.Test.ParsingTests
         public void FileEndsWithTableThenError()
         {
             var test = @"table dbo.test
-                key <id>
+                key id
                 data 
                     | id | data | 
                     | 1  | test |
@@ -57,13 +57,13 @@ namespace DomainValues.Test.ParsingTests
         public void FileEndsWithKeyThenError()
         {
             var test = @"table dbo.test
-                key <id>
+                key id
                 data 
                     | id | data | 
                     | 1  | test |
 
                 table dbo.test1 
-                key <id>
+                key id
             ";
 
             var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
@@ -76,7 +76,7 @@ namespace DomainValues.Test.ParsingTests
         public void FileEndsWithDataThenError()
         {
             var test = @"table dbo.test
-                key <id>
+                key id
                 data 
                     | id | data | 
                     | 1  | test |
@@ -95,13 +95,13 @@ namespace DomainValues.Test.ParsingTests
         public void FileEndsWithHeaderThenError()
         {
             var test = @"table dbo.test
-                key <id>
+                key id
                 data 
                     | id | data | 
                     | 1  | test |
 
                 table dbo.test1 
-                key <id>
+                key id
                 data 
                     | id | data |";
 

@@ -15,7 +15,7 @@ namespace DomainValues.Test.ParsingTests
         public void FlowIsOkayNoErrors()
         {
             var test = @"table dbo.test
-                key <id>
+                key id
                 data 
                     | id | data | 
                     | 1  | test |
@@ -30,7 +30,7 @@ namespace DomainValues.Test.ParsingTests
         public void TableIsExpected()
         {
             var test = @"
-                key <id>
+                key id
                 data 
                     | id | data | 
                     | 1  | test |
@@ -60,7 +60,7 @@ namespace DomainValues.Test.ParsingTests
         public void DataIsExpected()
         {
             var test = @"table dbo.test
-                key <id>
+                key id
               
                     | id | data | 
                     | 1  | test |

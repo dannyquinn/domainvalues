@@ -33,12 +33,12 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void KeyWithParamIsRecognised()
         {
-            var output = new KeyParser().ParseLine(0, " key  <id>  ", TokenType.Key).ToList();
+            var output = new KeyParser().ParseLine(0, " key  id  ", TokenType.Key).ToList();
 
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Key, 1, "key"),
-                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 6, "<id>")
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 6, "id")
             };
 
             AreEqual(expectedOutput,output);
@@ -57,46 +57,29 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void KeyWithTwoVariables()
         {
-            var output = new KeyParser().ParseLine(0, "  key <id> <id2>", TokenType.Key).ToList();
+            var output = new KeyParser().ParseLine(0, "  key id id2", TokenType.Key).ToList();
 
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0,TokenType.Key,2, "key"),
-                new ParsedSpan(0,TokenType.Variable|TokenType.Key,6, "<id>"),
-                new ParsedSpan(0,TokenType.Variable|TokenType.Key,11, "<id2>")
+                new ParsedSpan(0,TokenType.Variable|TokenType.Key,6, "id"),
+                new ParsedSpan(0,TokenType.Variable|TokenType.Key,9, "id2")
             };
 
             AreEqual(expectedOutput,output);
         }
 
         [Test]
-        public void KeyWithVariablesAndInvalidText()
-        {
-            var output = new KeyParser().ParseLine(0, "key <id>, <id2>,test", TokenType.Key).ToList();
-
-            var expectedOutput = new List<ParsedSpan>
-            {
-                new ParsedSpan(0,TokenType.Key, 0, "key"),
-                new ParsedSpan(0,TokenType.Variable | TokenType.Key, 4, "<id>"),
-                new ParsedSpan(0,TokenType.Variable | TokenType.Key, 10, "<id2>"),
-                new ParsedSpan(0,TokenType.Parameter, 8, ",","Invalid text."),
-                new ParsedSpan(0,TokenType.Parameter, 15, ",test","Invalid text.")
-            };
-
-            AreEqual(expectedOutput, output);
-        }
-
-        [Test]
         public void DuplicateVariables()
         {
-            var output = new KeyParser().ParseLine(0, "key <id> <a> <id>", TokenType.Key).ToList();
+            var output = new KeyParser().ParseLine(0, "key id a id", TokenType.Key).ToList();
 
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Key, 0, "key"),
-                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 4, "<id>"),
-                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 9, "<a>"),
-                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 13, "<id>", "Key <id> is a duplicate value.")
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 4, "id"),
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 7, "a"),
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 9, "id", "Key id is a duplicate value.")
             };
 
             AreEqual(expectedOutput,output);
@@ -105,14 +88,14 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void DuplicateVariablesIgnoreCase()
         {
-            var output = new KeyParser().ParseLine(0, "key <id> <a> <ID>", TokenType.Key).ToList();
+            var output = new KeyParser().ParseLine(0, "key id a ID", TokenType.Key).ToList();
 
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Key, 0, "key"),
-                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 4, "<id>"),
-                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 9, "<a>"),
-                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 13, "<ID>", "Key <ID> is a duplicate value.")
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 4, "id"),
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 7, "a"),
+                new ParsedSpan(0, TokenType.Key | TokenType.Variable, 9, "ID", "Key ID is a duplicate value.")
             };
 
             AreEqual(expectedOutput, output);

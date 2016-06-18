@@ -117,23 +117,21 @@ namespace DomainValues.Parsing
 
             foreach (var key in keyVars)
             {
-                var keyValue = key.Text
-                    .Substring(1, key.Text.Length - 2)
-                    .ToLower();
+                var keyValue = key.Text.ToLower();
 
                 if (keyValue.EndsWith("*"))
                     keyValue = $"{keyValue}*";
 
                 if (columns.Contains($"{keyValue}*"))
                 {
-                    key.Errors.Add(new Error($"Key value {key.Text} is marked as non db in the column row.  Cannot be used as a key.",false));
+                    key.Errors.Add(new Error($"Key value '{key.Text}' is marked as non db in the column row.  Cannot be used as a key.",false));
                     continue;
                 }
 
                 if (columns.Contains(keyValue))
                     continue;
                 
-                key.Errors.Add(new Error($"Key value {key.Text} not found in the column row.",false));
+                key.Errors.Add(new Error($"Key value '{key.Text}' not found in the column row.",false));
             }
         }
         

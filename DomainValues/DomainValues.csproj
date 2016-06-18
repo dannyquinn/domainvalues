@@ -58,6 +58,7 @@
     <Compile Include="Generation\DomainValuesSingleFileGenerator.cs" />
     <Compile Include="Model\Column.cs" />
     <Compile Include="Model\DataBlock.cs" />
+    <Compile Include="Model\Error.cs" />
     <Compile Include="Model\ParsedSpan.cs" />
     <Compile Include="Model\TextSpan.cs" />
     <Compile Include="Parsing\CommentParser.cs" />

@@ -24,9 +24,11 @@ namespace DomainValues.Test.ParsingTests
                 Assert.AreEqual( ex.Errors.Count,t.Errors.Count,"Error count");
                 foreach (var error in t.Errors)
                 {
-                    var exErr = ex.Errors.SingleOrDefault(a => a.Equals(error));
+                    var exErr = ex.Errors.SingleOrDefault(a => a.Message.Equals(error.Message));
+
 
                     Assert.IsNotNull(exErr, $"No error '{error}'");
+                    Assert.AreEqual(exErr.OutputWindowOnly,error.OutputWindowOnly);
                 }
             }
         }

@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using System.Linq;
 using System.Windows;
+using DomainValues.Model;
 using DomainValues.Parsing;
 using Microsoft.VisualStudio.Text.Adornments;
 
@@ -56,19 +57,19 @@ namespace DomainValues.Tagging
                 CreateTag(line, span.Start, span.Text.Length, span.Errors);
             }
         }
-        private void CreateTag(ITextSnapshotLine line, int index, int length, List<string> errors)
+        private void CreateTag(ITextSnapshotLine line, int index, int length, List<Error> errors)
         {
 
             var span = line.Snapshot.CreateTrackingSpan(new Span(line.Start + index, length), SpanTrackingMode.EdgeNegative);
 
             foreach (var error in errors)
             {
-                ErrorTask task = CreateErrorTask(line, index, error);
+                ErrorTask task = CreateErrorTask(line, index, error.Message);
                 _errorListProvider.Tasks.Add(task);
 
             }
-            if (errors.Any())
-                CreateTagSpan(span, new ErrorTag(PredefinedErrorTypeNames.SyntaxError, errors.First()));
+            if (errors.Any(a => !a.OutputWindowOnly))
+                CreateTagSpan(span, new ErrorTag(PredefinedErrorTypeNames.SyntaxError, errors.First(a=>!a.OutputWindowOnly).Message));
         }
         private ErrorTask CreateErrorTask(ITextSnapshotLine line, int start, string text)
         {

@@ -15,7 +15,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new KeyParser().ParseLine(0, "key", TokenType.Key).Single();
 
-            var expectedOutput = new ParsedSpan(0,TokenType.Key, 0,"key","Key expects at least one parameter");
+            var expectedOutput = new ParsedSpan(0,TokenType.Key, 0,"key","Key expects at least one parameter.");
 
             AreEqual(expectedOutput,output);
         }
@@ -25,7 +25,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new KeyParser().ParseLine(0, " key  ", TokenType.Key).Single();
 
-            var expectedOutput = new ParsedSpan(0, TokenType.Key, 1, "key", "Key expects at least one parameter");
+            var expectedOutput = new ParsedSpan(0, TokenType.Key, 1, "key", "Key expects at least one parameter.");
 
             AreEqual(expectedOutput,output);
         }
@@ -49,7 +49,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new KeyParser().ParseLine(0, "keytest", TokenType.Key).Single();
 
-            var expectedOutput = new ParsedSpan(0,TokenType.Parameter, 0,"keytest","Invalid text in file");
+            var expectedOutput = new ParsedSpan(0,TokenType.Parameter, 0,"keytest","Invalid text in file.");
 
             AreEqual(expectedOutput,output);
         }
@@ -79,8 +79,8 @@ namespace DomainValues.Test.ParsingTests
                 new ParsedSpan(0,TokenType.Key, 0, "key"),
                 new ParsedSpan(0,TokenType.Variable | TokenType.Key, 4, "<id>"),
                 new ParsedSpan(0,TokenType.Variable | TokenType.Key, 10, "<id2>"),
-                new ParsedSpan(0,TokenType.Parameter, 8, ",","Invalid text"),
-                new ParsedSpan(0,TokenType.Parameter, 15, ",test","Invalid text")
+                new ParsedSpan(0,TokenType.Parameter, 8, ",","Invalid text."),
+                new ParsedSpan(0,TokenType.Parameter, 15, ",test","Invalid text.")
             };
 
             AreEqual(expectedOutput, output);

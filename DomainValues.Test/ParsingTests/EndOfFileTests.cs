@@ -49,7 +49,8 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Unexpected end of file", output);
+            Assert.AreEqual("Unexpected end of file.", output.Message);
+            Assert.IsTrue(output.OutputWindowOnly);
         }
 
         [Test]
@@ -67,7 +68,8 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Unexpected end of file", output);
+            Assert.AreEqual("Unexpected end of file.", output.Message);
+            Assert.IsTrue(output.OutputWindowOnly);
         }
 
         [Test]
@@ -85,7 +87,8 @@ namespace DomainValues.Test.ParsingTests
             ";
 
             var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
-            Assert.AreEqual("Unexpected end of file",output);
+            Assert.AreEqual("Unexpected end of file.",output.Message);
+            Assert.IsTrue(output.OutputWindowOnly);
         }
 
         [Test]
@@ -103,7 +106,8 @@ namespace DomainValues.Test.ParsingTests
                     | id | data |";
 
             var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
-            Assert.AreEqual("Unexpected end of file",output);
+            Assert.AreEqual("Unexpected end of file.", output.Message);
+            Assert.IsTrue(output.OutputWindowOnly);
         }
     }
 }

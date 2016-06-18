@@ -17,7 +17,7 @@ namespace DomainValues.Parsing
 
            if (!IsValid(span,3))
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span, "Invalid text in file");
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span, "Invalid text in file.");
                 yield break;
             }
 
@@ -25,7 +25,7 @@ namespace DomainValues.Parsing
 
             if (span.Text.Length == 3 || string.IsNullOrWhiteSpace(span.Text.Substring(4)))
             {
-                key.Errors.Add("Key expects at least one parameter");
+                key.Errors.Add(new Error("Key expects at least one parameter.",false));
             }
 
             CheckOrder(key,expectedTokenType);
@@ -47,7 +47,7 @@ namespace DomainValues.Parsing
 
                 if (duplicates.Contains(match))
                 {
-                    spanVar.Errors.Add($"Key {match.Value} is a duplicate value.");
+                    spanVar.Errors.Add(new Error($"Key {match.Value} is a duplicate value.",false));
                 }
                 yield return spanVar;
             }
@@ -65,7 +65,7 @@ namespace DomainValues.Parsing
 
             foreach (var invalidSpan in invalidSpans)
             {
-                yield return new ParsedSpan(lineNumber,TokenType.Parameter,param.Start+invalidSpan.Start,param.Text.Substring(invalidSpan.Start,invalidSpan.Length),"Invalid text");
+                yield return new ParsedSpan(lineNumber,TokenType.Parameter,param.Start+invalidSpan.Start,param.Text.Substring(invalidSpan.Start,invalidSpan.Length),"Invalid text.");
             }
         }
 

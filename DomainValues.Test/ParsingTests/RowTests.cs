@@ -38,7 +38,7 @@ namespace DomainValues.Test.ParsingTests
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|A|"),
-                new ParsedSpan(0, TokenType.HeaderRow, 7, "A", "Column A is a duplicate value")
+                new ParsedSpan(0, TokenType.HeaderRow, 7, "A", "Column A is a duplicate value.")
             };
 
             AreEqual(expectedOutput,output);
@@ -52,7 +52,7 @@ namespace DomainValues.Test.ParsingTests
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|a|"),
-                new ParsedSpan(0, TokenType.HeaderRow, 7, "a", "Column a is a duplicate value")
+                new ParsedSpan(0, TokenType.HeaderRow, 7, "a", "Column a is a duplicate value.")
             };
 
             AreEqual(expectedOutput, output);
@@ -66,7 +66,7 @@ namespace DomainValues.Test.ParsingTests
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|"),
-                new ParsedSpan(0, TokenType.Parameter, 7, "test", "Invalid text")
+                new ParsedSpan(0, TokenType.Parameter, 7, "test", "Invalid text.")
             };
 
             AreEqual(expectedOutput, output);
@@ -80,7 +80,7 @@ namespace DomainValues.Test.ParsingTests
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|"),
-                new ParsedSpan(0, TokenType.Parameter, 7, @"test\|", "Invalid text")
+                new ParsedSpan(0, TokenType.Parameter, 7, @"test\|", "Invalid text.")
             };
 
             AreEqual(expectedOutput, output);
@@ -94,7 +94,7 @@ namespace DomainValues.Test.ParsingTests
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.ItemRow, 0, "|A|B|C|"),
-                new ParsedSpan(0, TokenType.Parameter, 7, @"test\|", "Invalid text")
+                new ParsedSpan(0, TokenType.Parameter, 7, @"test\|", "Invalid text.")
             };
 
             AreEqual(expectedOutput, output);

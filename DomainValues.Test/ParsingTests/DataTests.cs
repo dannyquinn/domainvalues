@@ -34,7 +34,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new DataParser().ParseLine(0, " datatest", TokenType.Data).Single();
 
-            var expectedOutput = new ParsedSpan(0, TokenType.Parameter, 1, "datatest", "Invalid text in file");
+            var expectedOutput = new ParsedSpan(0, TokenType.Parameter, 1, "datatest", "Invalid text in file.");
             AreEqual(expectedOutput,output);
         }
 
@@ -46,7 +46,7 @@ namespace DomainValues.Test.ParsingTests
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Data,1, "data"),
-                new ParsedSpan(0, TokenType.Parameter,8, "test", "Data keyword does not have a parameter")
+                new ParsedSpan(0, TokenType.Parameter,8, "test", "Data keyword does not have a parameter.")
             };
 
             AreEqual(expectedOutput, output);

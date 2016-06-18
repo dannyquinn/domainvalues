@@ -38,7 +38,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Key was unexpected.  Expected Table", output);
+            Assert.AreEqual("Key was unexpected.  Expected Table.", output.Message);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Data was unexpected.  Expected Key", output);
+            Assert.AreEqual("Data was unexpected.  Expected Key.", output.Message);
         }
 
         [Test]
@@ -68,14 +68,14 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("ItemRow was unexpected.  Expected Data", output);
+            Assert.AreEqual("ItemRow was unexpected.  Expected Data.", output.Message);
         }
 
         [Test]
         public void KeyIsExpectedButTableDuplicated()
         {
             var test = @"table dbo.test
-                table dbo.test
+                table dbo.test1
                 data 
                     | id | data | 
                     | 1  | test |
@@ -83,7 +83,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Table was unexpected.  Expected Key", output);
+            Assert.AreEqual("Table was unexpected.  Expected Key.", output.Message);
 
         }
     }

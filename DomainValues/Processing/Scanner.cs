@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DomainValues.Model;
+using DomainValues.Processing.Parsing;
 using DomainValues.Util;
 
-namespace DomainValues.Parsing
+namespace DomainValues.Processing
 {
-    internal static class Parser
+    internal static class Scanner
     {
         public static List<ParsedSpan> GetSpans(string source, bool extendedCheck)
         {
@@ -53,7 +54,7 @@ namespace DomainValues.Parsing
 
             if (spans.Any(a => a.Type == TokenType.Table) && expectedType != (TokenType.Table | TokenType.ItemRow | TokenType.Data))
             {
-                spans.Last(a=>a.Type!=TokenType.Comment).Errors.Add(new Error("Unexpected end of file.",true));
+                spans.Last(a => a.Type != TokenType.Comment).Errors.Add(new Error("Unexpected end of file.", true));
             }
 
             if (extendedCheck)
@@ -72,9 +73,9 @@ namespace DomainValues.Parsing
                     continue;
 
                 var columns = header.Text.GetColumns()
-                    .Select(a=>a.ToLower())
+                    .Select(a => a.ToLower())
                     .ToList();
-                                
+
                 CheckRowLengths(block);
 
                 CheckKeyVariables(columns, block.Where(a => a.Type == (TokenType.Key | TokenType.Variable)).ToList());
@@ -87,7 +88,7 @@ namespace DomainValues.Parsing
 
             foreach (var duplicateTableName in duplicateTableNames)
             {
-                duplicateTableName.Errors.Add(new Error($"Table named {duplicateTableName.Text} already used in this file.",false));
+                duplicateTableName.Errors.Add(new Error($"Table named {duplicateTableName.Text} already used in this file.", false));
             }
 
         }
@@ -102,12 +103,12 @@ namespace DomainValues.Parsing
 
             var pipeCount = firstHeader.Text.ToCharArray().Count(a => a == '|');
 
-            foreach (var itemRow in itemRows.Skip(1).Where(a=>!a.Errors.Any()))
+            foreach (var itemRow in itemRows.Skip(1).Where(a => !a.Errors.Any()))
             {
                 var rowPipeCount = itemRow.Text.ToCharArray().Count(a => a == '|');
 
-                if (rowPipeCount!=pipeCount)
-                    itemRow.Errors.Add(new Error("Row count doesn't match header.",false));
+                if (rowPipeCount != pipeCount)
+                    itemRow.Errors.Add(new Error("Row count doesn't match header.", false));
             }
         }
         internal static void CheckKeyVariables(List<string> columns, List<ParsedSpan> keyVars)
@@ -124,18 +125,18 @@ namespace DomainValues.Parsing
 
                 if (columns.Contains($"{keyValue}*"))
                 {
-                    key.Errors.Add(new Error($"Key value '{key.Text}' is marked as non db in the column row.  Cannot be used as a key.",false));
+                    key.Errors.Add(new Error($"Key value '{key.Text}' is marked as non db in the column row.  Cannot be used as a key.", false));
                     continue;
                 }
 
                 if (columns.Contains(keyValue))
                     continue;
-                
-                key.Errors.Add(new Error($"Key value '{key.Text}' not found in the column row.",false));
+
+                key.Errors.Add(new Error($"Key value '{key.Text}' not found in the column row.", false));
             }
         }
-        
-        internal static Dictionary<string, LineParser> Rules = new Dictionary<string, LineParser>
+
+        internal static Dictionary<string, ParserBase> Rules = new Dictionary<string, ParserBase>
         {
             {"#", new CommentParser()},
             {"table", new TableParser()},

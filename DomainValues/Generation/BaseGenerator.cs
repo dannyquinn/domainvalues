@@ -9,9 +9,6 @@ namespace DomainValues.Generation
     [ComVisible(true)]
     public abstract class BaseGenerator : IVsSingleFileGenerator
     {
-        private IVsGeneratorProgress _codeGeneratorProgress;
-        private string _codeFilePath;
-        private string _codeFileNamespace;
         int IVsSingleFileGenerator.DefaultExtension(out string pbstrDefaultExtension)
         {
             try
@@ -33,9 +30,9 @@ namespace DomainValues.Generation
             {
                 throw new ArgumentException(nameof(bstrInputFileContents));
             }
-            _codeFilePath = wszInputFilePath;
-            _codeFileNamespace = wszDefaultNamespace;
-            _codeGeneratorProgress = pGenerateProgress;
+            InputFilePath = wszInputFilePath;
+            FileNamespace = wszDefaultNamespace;
+            CodeGeneratorProgress = pGenerateProgress;
 
             var bytes = GenerateCode(bstrInputFileContents);
 
@@ -56,9 +53,12 @@ namespace DomainValues.Generation
         protected abstract string GetDefaultExtension();
         protected abstract byte[] GenerateCode(string inputFileContent);
 
-        protected string FileNamespace => _codeFileNamespace;
-        protected string InputFilePath => _codeFilePath;
-        protected IVsGeneratorProgress CodeGeneratorProgress => _codeGeneratorProgress;
+        protected string FileNamespace { get; private set; }
+
+        protected string InputFilePath { get; private set; }
+
+        protected IVsGeneratorProgress CodeGeneratorProgress { get; private set; }
+
         protected virtual void GeneratorError(uint level, string message, uint line, uint column)
         {
             CodeGeneratorProgress?.GeneratorError(0, level, message, line, column);

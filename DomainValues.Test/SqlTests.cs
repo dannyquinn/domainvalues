@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Text;
-using DomainValues.Parsing;
+using DomainValues.Processing;
 using NUnit.Framework;
 
 namespace DomainValues.Test
@@ -143,7 +143,7 @@ namespace DomainValues.Test
 
         private string GetData(string source)
         {
-            var spans = Parser.GetSpans(source, true);
+            var spans = Scanner.GetSpans(source, true);
 
             if (spans.Any(a => a.Errors.Any()))
                 return "Error";

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using DomainValues.Model;
 using DomainValues.Util;
 
-namespace DomainValues.Parsing
+namespace DomainValues.Processing.Parsing
 {
-    internal class TemplateParser:LineParser
+    internal class TemplateParser : ParserBase
     {
         internal override IEnumerable<ParsedSpan> ParseLine(int lineNumber, string source, TokenType? expectedTokenType)
         {
@@ -34,9 +30,9 @@ namespace DomainValues.Parsing
 
             yield return template;
 
-            if (span.Text.Length<=8)
+            if (span.Text.Length <= 8)
                 yield break;
-            
+
 
             var patterns = new Dictionary<string, int>
             {
@@ -46,7 +42,7 @@ namespace DomainValues.Parsing
                 {@"^\s*(\w+)\s*=\s*(\w+)\s*$", 3}
             };
 
-            var param = source.GetTextSpan(span.Start+8);
+            var param = source.GetTextSpan(span.Start + 8);
 
             bool matched = false;
             foreach (var pattern in patterns)
@@ -61,9 +57,9 @@ namespace DomainValues.Parsing
                 switch (pattern.Value)
                 {
                     case 0:
-                        yield return new ParsedSpan(lineNumber,TokenType.EnumDesc,param.Start+match.Groups[1].Index,match.Groups[1].Value);
-                        yield return new ParsedSpan(lineNumber,TokenType.EnumMember,param.Start+match.Groups[2].Index,match.Groups[2].Value);
-                        yield return new ParsedSpan(lineNumber,TokenType.EnumInit,param.Start+match.Groups[3].Index,match.Groups[3].Value);
+                        yield return new ParsedSpan(lineNumber, TokenType.EnumDesc, param.Start + match.Groups[1].Index, match.Groups[1].Value);
+                        yield return new ParsedSpan(lineNumber, TokenType.EnumMember, param.Start + match.Groups[2].Index, match.Groups[2].Value);
+                        yield return new ParsedSpan(lineNumber, TokenType.EnumInit, param.Start + match.Groups[3].Index, match.Groups[3].Value);
                         break;
                     case 1:
                         yield return new ParsedSpan(lineNumber, TokenType.EnumDesc, param.Start + match.Groups[1].Index, match.Groups[1].Value);
@@ -81,11 +77,10 @@ namespace DomainValues.Parsing
             }
             if (!matched)
             {
-                yield return new ParsedSpan(lineNumber,TokenType.Parameter, param,"Cannot determine meaning from string.");
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, param, "Cannot determine meaning from string.");
             }
         }
-    
-
+        
         internal override TokenType PrimaryType => TokenType.Template;
     }
 }

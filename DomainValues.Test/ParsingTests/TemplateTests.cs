@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using DomainValues.Model;
-using DomainValues.Parsing;
+using DomainValues.Processing.Parsing;
 using NUnit.Framework;
 using static DomainValues.Test.ParsingTests.Util;
 

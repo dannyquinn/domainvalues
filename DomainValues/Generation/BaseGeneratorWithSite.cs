@@ -15,9 +15,9 @@ namespace DomainValues.Generation
     [ComVisible(true)]
     public abstract class BaseGeneratorWithSite : BaseGenerator, VSOLE.IObjectWithSite
     {
-        private object _site = null;
-        private CodeDomProvider _codeDomProvider = null;
-        private ServiceProvider _serviceProvider = null;
+        private object _site;
+        private CodeDomProvider _codeDomProvider;
+        private ServiceProvider _serviceProvider;
         void VSOLE.IObjectWithSite.GetSite(ref Guid riid, out IntPtr ppvSite)
         {
             if (_site == null)
@@ -47,11 +47,11 @@ namespace DomainValues.Generation
         {
             get
             {
-                if (_serviceProvider == null)
-                {
-                    _serviceProvider = new ServiceProvider(_site as VSOLE.IServiceProvider);
-                    Debug.Assert(_serviceProvider != null, "Unable to get ServiceProvider from site object");
-                }
+                if (_serviceProvider != null)
+                    return _serviceProvider;
+
+                _serviceProvider = new ServiceProvider(_site as VSOLE.IServiceProvider);
+                Debug.Assert(_serviceProvider != null, "Unable to get ServiceProvider from site object");
                 return _serviceProvider;
             }
         }

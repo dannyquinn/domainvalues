@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using DomainValues.Parsing;
+using DomainValues.Processing;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
@@ -62,7 +62,7 @@ namespace DomainValues.Tagging
 
             var lineNumber = 0;
             ITextSnapshotLine line = snapshot.GetLineFromLineNumber(0);
-            foreach (var span in Parser.GetSpans(snapshot.GetText(), false))
+            foreach (var span in Scanner.GetSpans(snapshot.GetText(), false))
             {
                 if (span.LineNumber > lineNumber)
                 {

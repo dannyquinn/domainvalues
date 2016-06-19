@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Text.Tagging;
 using System.Linq;
 using System.Windows;
 using DomainValues.Model;
-using DomainValues.Parsing;
+using DomainValues.Processing;
 using Microsoft.VisualStudio.Text.Adornments;
 
 namespace DomainValues.Tagging
@@ -47,7 +47,7 @@ namespace DomainValues.Tagging
             var lineNumber = 0;
             ITextSnapshotLine line = snapshot.GetLineFromLineNumber(lineNumber);
             _errorListProvider.Tasks.Clear();
-            foreach (var span in Parser.GetSpans(snapshot.GetText(), true).Where(a => a.Errors.Any()))
+            foreach (var span in Scanner.GetSpans(snapshot.GetText(), true).Where(a => a.Errors.Any()))
             {
                 if (span.LineNumber > lineNumber)
                 {

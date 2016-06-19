@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DomainValues.Parsing;
+﻿using System.Linq;
+using DomainValues.Processing;
 using NUnit.Framework;
 
 namespace DomainValues.Test.ParsingTests
@@ -21,7 +17,7 @@ namespace DomainValues.Test.ParsingTests
                     | 1  | test |
             ";
 
-            var output = Parser.GetSpans(test, true).ToList();
+            var output = Scanner.GetSpans(test, true).ToList();
 
             Assert.IsFalse(output.Any(a=>a.Errors.Any()));
         }
@@ -36,7 +32,7 @@ namespace DomainValues.Test.ParsingTests
                     | 1  | test |
             ";
 
-            var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
+            var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
             Assert.AreEqual("Key was unexpected.  Expected Table.", output.Message);
         }
@@ -51,7 +47,7 @@ namespace DomainValues.Test.ParsingTests
                     | 1  | test |
             ";
 
-            var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
+            var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
             Assert.AreEqual("Data was unexpected.  Expected Key.", output.Message);
         }
@@ -66,7 +62,7 @@ namespace DomainValues.Test.ParsingTests
                     | 1  | test |
             ";
 
-            var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
+            var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
             Assert.AreEqual("ItemRow was unexpected.  Expected Data, Enum.", output.Message);
         }
@@ -81,7 +77,7 @@ namespace DomainValues.Test.ParsingTests
                     | 1  | test |
             ";
 
-            var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
+            var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
             Assert.AreEqual("Table was unexpected.  Expected Key.", output.Message);
 

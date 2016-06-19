@@ -4,16 +4,16 @@ using System.Text.RegularExpressions;
 using DomainValues.Model;
 using DomainValues.Util;
 
-namespace DomainValues.Parsing
+namespace DomainValues.Processing.Parsing
 {
-    internal class RowParser : LineParser
+    internal class RowParser : ParserBase
     {
         internal override IEnumerable<ParsedSpan> ParseLine(int lineNumber, string source, TokenType? expectedTokenType)
         {
-            
+
             TokenType token = TokenType.HeaderRow;
 
-            if (expectedTokenType!=null && (expectedTokenType & TokenType.HeaderRow) != 0)
+            if (expectedTokenType != null && (expectedTokenType & TokenType.HeaderRow) != 0)
             {
                 NextTokenType = TokenType.ItemRow;
             }
@@ -23,11 +23,11 @@ namespace DomainValues.Parsing
                 NextTokenType = TokenType.Data | TokenType.Table | TokenType.ItemRow;
             }
 
-            var lastPipe = Regex.Matches(source,@"(?<!\\)\|",  RegexOptions.Compiled).Cast<Match>().Last().Index+1;
+            var lastPipe = Regex.Matches(source, @"(?<!\\)\|", RegexOptions.Compiled).Cast<Match>().Last().Index + 1;
 
-            var span = new ParsedSpan(lineNumber,token,source.Substring(0,lastPipe).GetTextSpan());
+            var span = new ParsedSpan(lineNumber, token, source.Substring(0, lastPipe).GetTextSpan());
 
-            CheckOrder(span,expectedTokenType);
+            CheckOrder(span, expectedTokenType);
 
             yield return span;
 
@@ -35,12 +35,12 @@ namespace DomainValues.Parsing
             {
                 var invalidSpan = source.GetTextSpan(lastPipe);
 
-                if (invalidSpan.Text.Length>0)
+                if (invalidSpan.Text.Length > 0)
                     yield return new ParsedSpan(lineNumber, TokenType.Parameter, invalidSpan, "Invalid text.");
             }
-                
 
-            if (token==TokenType.ItemRow)
+
+            if (token == TokenType.ItemRow)
                 yield break;
 
             var columns = RegExpr.Columns.Matches(source);
@@ -53,7 +53,7 @@ namespace DomainValues.Parsing
             foreach (var duplicate in duplicates)
             {
                 var value = duplicate.Value.GetTextSpan();
-                yield return new ParsedSpan(lineNumber,TokenType.HeaderRow,duplicate.Index+value.Start,value.Text,$"Column {value.Text} is a duplicate value.");
+                yield return new ParsedSpan(lineNumber, TokenType.HeaderRow, duplicate.Index + value.Start, value.Text, $"Column {value.Text} is a duplicate value.");
             }
         }
 

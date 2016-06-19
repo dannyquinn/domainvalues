@@ -13,7 +13,7 @@ namespace DomainValues.Tagging
     internal class ErrorProvider : ITaggerProvider
     {
         [Import]
-        ITextDocumentFactoryService TextService = null;
+        ITextDocumentFactoryService _textService = null;
 
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
@@ -22,7 +22,7 @@ namespace DomainValues.Tagging
 
             ITextDocument doc;
 
-            if (TextService.TryGetTextDocument(buffer, out doc) && errors != null)
+            if (_textService.TryGetTextDocument(buffer, out doc) && errors != null)
             {
                 return buffer.Properties.GetOrCreateSingletonProperty(() => new ErrorTagger(buffer, view, errors, doc)) as ITagger<T>;
             }

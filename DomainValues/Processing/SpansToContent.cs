@@ -4,7 +4,7 @@ using System.Linq;
 using DomainValues.Model;
 using DomainValues.Util;
 
-namespace DomainValues.Parsing
+namespace DomainValues.Processing
 {
     internal static class SpansToContent
     {
@@ -22,7 +22,7 @@ namespace DomainValues.Parsing
                     .Where(a => a.Type == (TokenType.Key | TokenType.Variable))
                     .Select(a => a.Text);
 
-                foreach (var column in GetColumns(block.First(a => a.Type == TokenType.HeaderRow).Text,keyVars))
+                foreach (var column in GetColumns(block.First(a => a.Type == TokenType.HeaderRow).Text, keyVars))
                 {
                     dataBlock.Data.Add(column, new List<string>());
                 }

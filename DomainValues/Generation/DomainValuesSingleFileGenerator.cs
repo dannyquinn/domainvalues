@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using DomainValues.Parsing;
+using DomainValues.Processing;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using VSLangProj80;
@@ -27,10 +27,10 @@ namespace DomainValues.Generation
             
             var projectItem = GetProjectItem();
 
-            var spans = Parser.GetSpans(inputFileContent,true);
+            var spans = Scanner.GetSpans(inputFileContent,true);
 
             byte[] sqlBytes;
-            bool enumCreated = false;
+            var enumCreated = false;
 
             if (!spans.Any(a => a.Errors.Any()))
             {

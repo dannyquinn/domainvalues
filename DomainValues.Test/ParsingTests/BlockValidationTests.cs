@@ -1,6 +1,5 @@
 ﻿using System.Linq;
-using DomainValues.Model;
-using DomainValues.Parsing;
+using DomainValues.Processing;
 using NUnit.Framework;
 
 namespace DomainValues.Test.ParsingTests
@@ -19,7 +18,7 @@ namespace DomainValues.Test.ParsingTests
                         | 1  | test |
             ";
 
-            var output = Parser.GetSpans(test, true).ToList();
+            var output = Scanner.GetSpans(test, true).ToList();
 
             Assert.IsFalse(output.Any(a=>a.Errors.Any()));
         }
@@ -35,7 +34,7 @@ namespace DomainValues.Test.ParsingTests
                         | 1  | test |
             ";
 
-            var output = Parser.GetSpans(test, true).ToList();
+            var output = Scanner.GetSpans(test, true).ToList();
 
             var error = output.SelectMany(a=>a.Errors).Single();
 
@@ -53,7 +52,7 @@ namespace DomainValues.Test.ParsingTests
                         | 1   | test |
                 ";
 
-            var output = Parser.GetSpans(test, true).ToList();
+            var output = Scanner.GetSpans(test, true).ToList();
 
             var error = output.SelectMany(a => a.Errors).Single();
 
@@ -72,7 +71,7 @@ namespace DomainValues.Test.ParsingTests
                         | 1   | test |
                 ";
 
-            var output = Parser.GetSpans(test, true).ToList();
+            var output = Scanner.GetSpans(test, true).ToList();
 
             var error = output.SelectMany(a => a.Errors).Single();
 
@@ -90,7 +89,7 @@ namespace DomainValues.Test.ParsingTests
                         | 1  | test | thing|
                 ";
 
-            var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
+            var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
             Assert.AreEqual("Row count doesn't match header.", output.Message);
         }
@@ -112,7 +111,7 @@ namespace DomainValues.Test.ParsingTests
                         | 1  | test |
                 ";
 
-            var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
+            var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
             Assert.AreEqual("Table named dbo.test already used in this file.", output.Message);
         }

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using DomainValues.Model;
 using DomainValues.Util;
 
-namespace DomainValues.Parsing
+namespace DomainValues.Processing.Parsing
 {
-    internal class EnumParser : LineParser
+    internal class EnumParser : ParserBase
     {
         internal override IEnumerable<ParsedSpan> ParseLine(int lineNumber, string source, TokenType? expectedTokenType)
         {
@@ -19,18 +16,18 @@ namespace DomainValues.Parsing
 
             if (!IsValid(span, 4))
             {
-                yield return new ParsedSpan(lineNumber,TokenType.Parameter,span,"Invalid text in file.");
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span, "Invalid text in file.");
                 yield break;
             }
 
-            var enu = new ParsedSpan(lineNumber,TokenType.Enum,span.Start,span.Text.Substring(0,4));
+            var enu = new ParsedSpan(lineNumber, TokenType.Enum, span.Start, span.Text.Substring(0, 4));
 
             if (span.Text.Length == 4 || string.IsNullOrWhiteSpace(span.Text.Substring(4)))
             {
-                enu.Errors.Add(new Error("Enum expects at least parameter, the name of the enumeration",false));
+                enu.Errors.Add(new Error("Enum expects at least parameter, the name of the enumeration", false));
             }
 
-            CheckOrder(enu,expectedTokenType);
+            CheckOrder(enu, expectedTokenType);
 
             if (span.Text.Length <= 4)
             {
@@ -61,12 +58,12 @@ namespace DomainValues.Parsing
                         found = true;
                         if ((flags & type.Key) == 0)
                         {
-                            yield return new ParsedSpan(lineNumber,type.Key,match.Start+param.Start,match.Text,$"Already found a parameter that looks like the enum {type.Key}");
+                            yield return new ParsedSpan(lineNumber, type.Key, match.Start + param.Start, match.Text, $"Already found a parameter that looks like the enum {type.Key}");
                             continue;
                         }
                         flags = flags ^ type.Key;
 
-                        yield return new ParsedSpan(lineNumber,type.Key, match.Start + param.Start, match.Text);
+                        yield return new ParsedSpan(lineNumber, type.Key, match.Start + param.Start, match.Text);
                         break;
                     }
                 }
@@ -75,15 +72,15 @@ namespace DomainValues.Parsing
 
                 if ((flags & TokenType.Parameter) == 0)
                 {
-                    yield return new ParsedSpan(lineNumber,TokenType.Enum | TokenType.Parameter, match.Start + param.Start, match.Text, "Invalid Text.");
+                    yield return new ParsedSpan(lineNumber, TokenType.Enum | TokenType.Parameter, match.Start + param.Start, match.Text, "Invalid Text.");
                     continue;
                 }
                 flags = flags ^ TokenType.Parameter;
-                yield return new ParsedSpan(lineNumber,TokenType.Enum | TokenType.Parameter, match.Start + param.Start, match.Text);
+                yield return new ParsedSpan(lineNumber, TokenType.Enum | TokenType.Parameter, match.Start + param.Start, match.Text);
             }
-            if ((flags & TokenType.Parameter)!=0)
-                enu.Errors.Add(new Error("No name provided for enumeration.",false));
-            
+            if ((flags & TokenType.Parameter) != 0)
+                enu.Errors.Add(new Error("No name provided for enumeration.", false));
+
             yield return enu;
         }
 

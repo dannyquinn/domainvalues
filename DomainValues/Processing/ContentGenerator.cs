@@ -5,12 +5,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using DomainValues.Model;
-using Microsoft.VisualStudio.Shell.Interop;
 
-namespace DomainValues.Parsing
+namespace DomainValues.Processing
 {
     internal class ContentGenerator
     {
@@ -30,11 +28,11 @@ namespace DomainValues.Parsing
             if (_blocks.All(a => string.IsNullOrWhiteSpace(a.EnumName)))
                 return null;
 
-            CodeCompileUnit code = new CodeCompileUnit();
+            var code = new CodeCompileUnit();
             code.UserData.Add("AllowLateBound", false);
             code.UserData.Add("RequiresVariableDeclaration", true);
 
-            CodeNamespace codeNamespace = new CodeNamespace();
+            var codeNamespace = new CodeNamespace();
 
             if (_blocks.Any(a => a.EnumHasFlagsAttribute))
                 codeNamespace.Imports.Add(new CodeNamespaceImport("System"));
@@ -44,11 +42,11 @@ namespace DomainValues.Parsing
 
             code.Namespaces.Add(codeNamespace);
 
-            CodeNamespace enumNamespace = new CodeNamespace(fileNamespace);
+            var enumNamespace = new CodeNamespace(fileNamespace);
 
-            foreach (var block in _blocks.Where(a=>!string.IsNullOrWhiteSpace(a.EnumName)))
+            foreach (var block in _blocks.Where(a => !string.IsNullOrWhiteSpace(a.EnumName)))
             {
-                CodeTypeDeclaration type = new CodeTypeDeclaration(block.EnumName)
+                var type = new CodeTypeDeclaration(block.EnumName)
                 {
                     IsEnum = true
                 };
@@ -61,13 +59,13 @@ namespace DomainValues.Parsing
                 if (block.EnumHasFlagsAttribute)
                     type.CustomAttributes.Add(new CodeAttributeDeclaration("Flags"));
 
-                var enumMember = block.Data.Single(a => a.Key.Text.Equals(block.EnumMemberField,StringComparison.CurrentCultureIgnoreCase));
+                var enumMember = block.Data.Single(a => a.Key.Text.Equals(block.EnumMemberField, StringComparison.CurrentCultureIgnoreCase));
                 var enumDesc = block.Data.SingleOrDefault(a => a.Key.Text.Equals(block.EnumDescField, StringComparison.CurrentCultureIgnoreCase));
                 var enumInit = block.Data.SingleOrDefault(a => a.Key.Text.Equals(block.EnumInitField, StringComparison.CurrentCultureIgnoreCase));
 
-                for (int i = 0; i < block.Data.Values.ElementAt(0).Count; i++)
+                for (var i = 0; i < block.Data.Values.ElementAt(0).Count; i++)
                 {
-                    CodeMemberField field = new CodeMemberField(block.EnumName,enumMember.Value.ElementAt(i));
+                    var field = new CodeMemberField(block.EnumName, enumMember.Value.ElementAt(i));
 
                     if (enumDesc.Value != null)
                     {
@@ -87,7 +85,7 @@ namespace DomainValues.Parsing
 
                             field.InitExpression = new CodePrimitiveExpression(value);
                         }
-                        catch (Exception e)
+                        catch
                         {
                             return Encoding.UTF8.GetBytes($"// Error Generating Output.  Failed to convert value {enumInit.Key.Text}({enumInit.Value.ElementAt(i)}) to type {block.EnumBaseType} on enum {block.EnumName}.");
                         }
@@ -100,15 +98,15 @@ namespace DomainValues.Parsing
             }
             code.Namespaces.Add(enumNamespace);
 
-            CodeGeneratorOptions options = new CodeGeneratorOptions()
+            var options = new CodeGeneratorOptions()
             {
-                BlankLinesBetweenMembers = false,    
+                BlankLinesBetweenMembers = false,
                 BracingStyle = "C"
             };
 
-            
 
-            using (StringWriter writer = new StringWriter(new StringBuilder()))
+
+            using (var writer = new StringWriter(new StringBuilder()))
             {
                 provider.GenerateCodeFromCompileUnit(code, writer, options);
                 writer.Flush();

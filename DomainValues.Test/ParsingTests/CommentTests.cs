@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using DomainValues.Model;
 using NUnit.Framework;
-using DomainValues.Parsing;
+using DomainValues.Processing.Parsing;
 using static DomainValues.Test.ParsingTests.Util;
 
 namespace DomainValues.Test.ParsingTests

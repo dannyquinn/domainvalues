@@ -78,19 +78,37 @@ namespace DomainValues.Processing
 
                 CheckRowLengths(block);
 
-                CheckKeyVariables(columns, block.Where(a => a.Type == (TokenType.Key | TokenType.Variable)).ToList());
+                CheckKeyVariables(columns, block.Where(a => a.Type == (TokenType.Key | TokenType.Variable)));
+                CheckEnumVariables(columns,block.Where(a=>(a.Type & (TokenType.EnumMember | TokenType.EnumDesc | TokenType.EnumInit))!=0));
             }
 
+            CheckDuplicateTableNames(spans);
+            CheckDuplicateEnumNames(spans);
+        }
+
+        private static void CheckDuplicateEnumNames(IEnumerable<ParsedSpan> spans)
+        {
+            var duplicateEnumNames = spans
+                .Where(a => a.Type == (TokenType.Enum | TokenType.Parameter))
+                .GroupBy(a => a.Text.ToLower())
+                .SelectMany(a => a.Skip(1));
+
+            foreach (var duplicateEnumName in duplicateEnumNames)
+            {
+                duplicateEnumName.Errors.Add(new Error($"Enumeration named {duplicateEnumName.Text} already used in this file.",false));
+            }
+        }
+        private static void CheckDuplicateTableNames(IEnumerable<ParsedSpan> spans)
+        {
             var duplicateTableNames = spans
                 .Where(a => a.Type == (TokenType.Table | TokenType.Parameter))
-                .GroupBy(a => a.Text)
+                .GroupBy(a => a.Text.ToLower())
                 .SelectMany(a => a.Skip(1));
 
             foreach (var duplicateTableName in duplicateTableNames)
             {
                 duplicateTableName.Errors.Add(new Error($"Table named {duplicateTableName.Text} already used in this file.", false));
             }
-
         }
 
         internal static void CheckRowLengths(List<ParsedSpan> spans)
@@ -111,7 +129,7 @@ namespace DomainValues.Processing
                     itemRow.Errors.Add(new Error("Row count doesn't match header.", false));
             }
         }
-        internal static void CheckKeyVariables(List<string> columns, List<ParsedSpan> keyVars)
+        internal static void CheckKeyVariables(List<string> columns, IEnumerable<ParsedSpan> keyVars)
         {
             if (keyVars == null)
                 return;
@@ -133,6 +151,22 @@ namespace DomainValues.Processing
                     continue;
 
                 key.Errors.Add(new Error($"Key value '{key.Text}' not found in the column row.", false));
+            }
+        }
+
+        internal static void CheckEnumVariables(List<string> columns, IEnumerable<ParsedSpan> enumVars)
+        {
+            if (enumVars == null)
+                return;
+
+            foreach (var enumVar in enumVars)
+            {
+                var enumValue = enumVar.Text.ToLower();
+
+                if (columns.Select(a => a.TrimEnd('*')).Contains(enumValue))
+                    continue;
+
+                enumVar.Errors.Add(new Error($"Enum template values '{enumVar.Text}' not found in the column row.",false));
             }
         }
 

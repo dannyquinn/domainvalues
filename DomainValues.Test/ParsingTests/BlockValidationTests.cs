@@ -79,6 +79,66 @@ namespace DomainValues.Test.ParsingTests
         }
 
         [Test]
+        public void EnumDescIsNotInColumnsRow()
+        {
+            var test = @"
+                table dbo.test
+                    key id
+                    enum test 
+                    template [missing] test = id 
+                    data 
+                        | id | test |
+                        | 1  | test |
+                ";
+
+            var output = Scanner.GetSpans(test, true).ToList();
+
+            var error = output.SelectMany(a => a.Errors).Single();
+
+            Assert.AreEqual("Enum template values 'missing' not found in the column row.", error.Message);
+        }
+
+        [Test]
+        public void EnumMemberIsNotInColumnsRow()
+        {
+            var test = @"
+                table dbo.test
+                    key id
+                    enum test 
+                    template [test] missing = id 
+                    data 
+                        | id | test |
+                        | 1  | test |
+                ";
+
+            var output = Scanner.GetSpans(test, true).ToList();
+
+            var error = output.SelectMany(a => a.Errors).Single();
+
+            Assert.AreEqual("Enum template values 'missing' not found in the column row.", error.Message);
+        }
+
+        [Test]
+        public void EnumInitIsNotInColumnsRow()
+        {
+            var test = @"
+                table dbo.test
+                    key id
+                    enum test 
+                    template [test] test = missing
+                    data 
+                        | id | test |
+                        | 1  | test |
+                ";
+
+            var output = Scanner.GetSpans(test, true).ToList();
+
+            var error = output.SelectMany(a => a.Errors).Single();
+
+            Assert.AreEqual("Enum template values 'missing' not found in the column row.", error.Message);
+        }
+
+        [Test]
         public void RowsHaveUnequalNumberOfPipes()
         {
             var test = @"
@@ -104,7 +164,7 @@ namespace DomainValues.Test.ParsingTests
                         | id | test |
                         | 1  | test |
 
-                table dbo.test
+                table dbo.Test
                     key id
                     data 
                         | id | test |
@@ -113,7 +173,35 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Table named dbo.test already used in this file.", output.Message);
+            Assert.AreEqual("Table named dbo.Test already used in this file.", output.Message);
+        }
+
+
+
+        [Test]
+        public void EnumNameIsDuplicated()
+        {
+            var test = @"
+                table dbo.test
+                    key id
+                    enum test
+                    template id
+                    data 
+                        | id | test |
+                        | 1  | test |
+
+                table dbo.test1
+                    key id
+                    enum Test
+                    template id
+                    data 
+                        | id | test |
+                        | 1  | test |
+                ";
+
+            var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
+
+            Assert.AreEqual("Enumeration named Test already used in this file.", output.Message);
         }
     }
 }

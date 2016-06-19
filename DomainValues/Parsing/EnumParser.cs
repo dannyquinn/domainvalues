@@ -23,7 +23,7 @@ namespace DomainValues.Parsing
                 yield break;
             }
 
-            var enu = new ParsedSpan(lineNumber,TokenType.Key,span.Start,span.Text.Substring(0,4));
+            var enu = new ParsedSpan(lineNumber,TokenType.Enum,span.Start,span.Text.Substring(0,4));
 
             if (span.Text.Length == 4 || string.IsNullOrWhiteSpace(span.Text.Substring(4)))
             {
@@ -32,12 +32,13 @@ namespace DomainValues.Parsing
 
             CheckOrder(enu,expectedTokenType);
 
-            yield return enu;
-
-            if (span.Text.Length <= 8)
+            if (span.Text.Length <= 4)
+            {
+                yield return enu;
                 yield break;
+            }
 
-            var param = source.GetTextSpan(span.Start + 7);
+            var param = source.GetTextSpan(span.Start + 4);
 
             var matches = Regex.Matches(param.Text, @"\w+").Cast<Match>().Select(a => new TextSpan(a.Index, a.Value));
 
@@ -80,6 +81,10 @@ namespace DomainValues.Parsing
                 flags = flags ^ TokenType.Parameter;
                 yield return new ParsedSpan(lineNumber,TokenType.Enum | TokenType.Parameter, match.Start + param.Start, match.Text);
             }
+            if ((flags & TokenType.Parameter)!=0)
+                enu.Errors.Add(new Error("No name provided for enumeration.",false));
+            
+            yield return enu;
         }
 
         internal override TokenType PrimaryType => TokenType.Enum;

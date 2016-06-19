@@ -54,6 +54,7 @@
     <Compile Include="ParsingTests\TableTests.cs" />
     <Compile Include="ParsingTests\Util.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

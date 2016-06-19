@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using DomainValues.Parsing;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using VSLangProj80;
 
@@ -18,19 +21,58 @@ namespace DomainValues.Generation
         {
             return string.Concat(DvContent.DvFileExtension, ".sql");
         }
-
+        
         protected override byte[] GenerateCode(string inputFileContent)
         {
+            
+            var projectItem = GetProjectItem();
+
             var spans = Parser.GetSpans(inputFileContent,true);
 
-            if (spans.Any(a => a.Errors.Any()))
+            byte[] sqlBytes;
+            bool enumCreated = false;
+
+            if (!spans.Any(a => a.Errors.Any()))
             {
-                return Encoding.UTF8.GetBytes("Error Generating Output");
+                var content = SpansToContent.Convert(spans);
+
+                var enumBytes = content.GetEnumBytes(GetCodeProvider(), FileNamespace);
+
+                if (enumBytes != null)
+                {
+
+                    var enumFilename = $"{InputFilePath}.cs";
+
+                    using (var fileStream = File.Create(enumFilename))
+                    {
+                        fileStream.Write(enumBytes, 0, enumBytes.Length);
+                        fileStream.Close();
+                    }
+                    projectItem.ProjectItems.AddFromFile(enumFilename);
+
+                    enumCreated = true;
+                }
+                sqlBytes = content.GetSqlBytes();
+            }
+            else
+            {
+                sqlBytes = Encoding.UTF8.GetBytes("Error Generating Output");
             }
 
-            var content = SpansToContent.Convert(spans);
+            foreach (ProjectItem item in projectItem.ProjectItems)
+            {
+                if (item.Name.Equals($"{projectItem.Name}.sql", StringComparison.CurrentCultureIgnoreCase))
+                    continue;
 
-            return content.GetSqlBytes();
+                if (enumCreated && item.Name.Equals($"{projectItem.Name}.cs", StringComparison.CurrentCultureIgnoreCase))
+                    continue;
+
+                item.Delete();
+            }
+
+            return sqlBytes;
         }
+
+        
     }
 }

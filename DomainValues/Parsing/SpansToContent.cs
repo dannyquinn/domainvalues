@@ -37,6 +37,20 @@ namespace DomainValues.Parsing
                     }
                 }
 
+                // enum
+
+                if (block.Any(a => a.Type == TokenType.Enum))
+                {
+                    dataBlock.EnumName = block.Single(a => a.Type == (TokenType.Enum | TokenType.Parameter)).Text;
+                    dataBlock.EnumBaseType = block.SingleOrDefault(a => a.Type == TokenType.BaseType)?.Text ?? "int";
+                    dataBlock.IsEnumInternal = block.SingleOrDefault(a => a.Type == TokenType.AccessType)?.Text.ToLower() == "internal";
+                    dataBlock.EnumHasFlagsAttribute = block.Any(a => a.Type == TokenType.FlagsAttribute);
+
+                    dataBlock.EnumDescField = block.SingleOrDefault(a => a.Type == TokenType.EnumDesc)?.Text;
+                    dataBlock.EnumMemberField = block.Single(a => a.Type == TokenType.EnumMember).Text;
+                    dataBlock.EnumInitField = block.SingleOrDefault(a => a.Type == TokenType.EnumInit)?.Text;
+                }
+
                 content.AddBlock(dataBlock);
             }
             return content;

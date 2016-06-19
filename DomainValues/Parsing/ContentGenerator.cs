@@ -1,8 +1,14 @@
 ﻿using System;
+using System.CodeDom;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using DomainValues.Model;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace DomainValues.Parsing
 {
@@ -19,9 +25,95 @@ namespace DomainValues.Parsing
 
         public void AddBlock(DataBlock block) => _blocks.Add(block);
 
-        public byte[] GetEnumBytes()
+        public byte[] GetEnumBytes(CodeDomProvider provider, string fileNamespace)
         {
-            throw new NotImplementedException();
+            if (_blocks.All(a => string.IsNullOrWhiteSpace(a.EnumName)))
+                return null;
+
+            CodeCompileUnit code = new CodeCompileUnit();
+            code.UserData.Add("AllowLateBound", false);
+            code.UserData.Add("RequiresVariableDeclaration", true);
+
+            CodeNamespace codeNamespace = new CodeNamespace();
+
+            if (_blocks.Any(a => a.EnumHasFlagsAttribute))
+                codeNamespace.Imports.Add(new CodeNamespaceImport("System"));
+
+            if (_blocks.Any(a => !string.IsNullOrWhiteSpace(a.EnumDescField)))
+                codeNamespace.Imports.Add(new CodeNamespaceImport("System.ComponentModel"));
+
+            code.Namespaces.Add(codeNamespace);
+
+            CodeNamespace enumNamespace = new CodeNamespace(fileNamespace);
+
+            foreach (var block in _blocks.Where(a=>!string.IsNullOrWhiteSpace(a.EnumName)))
+            {
+                CodeTypeDeclaration type = new CodeTypeDeclaration(block.EnumName)
+                {
+                    IsEnum = true
+                };
+
+                if (block.IsEnumInternal)
+                    type.TypeAttributes = TypeAttributes.NotPublic;
+
+                type.BaseTypes.Add(block.GetBaseType());
+
+                if (block.EnumHasFlagsAttribute)
+                    type.CustomAttributes.Add(new CodeAttributeDeclaration("Flags"));
+
+                var enumMember = block.Data.Single(a => a.Key.Text.Equals(block.EnumMemberField,StringComparison.CurrentCultureIgnoreCase));
+                var enumDesc = block.Data.SingleOrDefault(a => a.Key.Text.Equals(block.EnumDescField, StringComparison.CurrentCultureIgnoreCase));
+                var enumInit = block.Data.SingleOrDefault(a => a.Key.Text.Equals(block.EnumInitField, StringComparison.CurrentCultureIgnoreCase));
+
+                for (int i = 0; i < block.Data.Values.ElementAt(0).Count; i++)
+                {
+                    CodeMemberField field = new CodeMemberField(block.EnumName,enumMember.Value.ElementAt(i));
+
+                    if (enumDesc.Value != null)
+                    {
+                        field.CustomAttributes.Add(
+                            new CodeAttributeDeclaration("Description",
+                                new CodeAttributeArgument(
+                                    new CodePrimitiveExpression(enumDesc.Value.ElementAt(i))
+                                    )
+                                ));
+                    }
+
+                    if (enumInit.Value != null)
+                    {
+                        try
+                        {
+                            var value = Convert.ChangeType(enumInit.Value.ElementAt(i), block.GetBaseType());
+
+                            field.InitExpression = new CodePrimitiveExpression(value);
+                        }
+                        catch (Exception e)
+                        {
+                            return Encoding.UTF8.GetBytes($"// Error Generating Output.  Failed to convert value {enumInit.Key.Text}({enumInit.Value.ElementAt(i)}) to type {block.EnumBaseType} on enum {block.EnumName}.");
+                        }
+                    }
+
+                    type.Members.Add(field);
+                }
+
+                enumNamespace.Types.Add(type);
+            }
+            code.Namespaces.Add(enumNamespace);
+
+            CodeGeneratorOptions options = new CodeGeneratorOptions()
+            {
+                BlankLinesBetweenMembers = false,    
+                BracingStyle = "C"
+            };
+
+            
+
+            using (StringWriter writer = new StringWriter(new StringBuilder()))
+            {
+                provider.GenerateCodeFromCompileUnit(code, writer, options);
+                writer.Flush();
+                return Encoding.UTF8.GetBytes(writer.ToString());
+            }
         }
 
         public byte[] GetSqlBytes()

@@ -68,7 +68,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Parser.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("ItemRow was unexpected.  Expected Data.", output.Message);
+            Assert.AreEqual("ItemRow was unexpected.  Expected Data, Enum.", output.Message);
         }
 
         [Test]

@@ -23,7 +23,7 @@ namespace DomainValues.Parsing
                 NextTokenType = TokenType.Data | TokenType.Table | TokenType.ItemRow;
             }
 
-            var lastPipe = RegExpr.LastPipe.Matches(source).Cast<Match>().Last().Index+1;
+            var lastPipe = Regex.Matches(source,@"(?<!\\)\|",  RegexOptions.Compiled).Cast<Match>().Last().Index+1;
 
             var span = new ParsedSpan(lineNumber,token,source.Substring(0,lastPipe).GetTextSpan());
 

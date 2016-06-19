@@ -141,7 +141,9 @@ namespace DomainValues.Parsing
             {"table", new TableParser()},
             {"key", new KeyParser()},
             {"data", new DataParser()},
-            {"|", new RowParser()}
+            {"|", new RowParser()},
+            {"enum",new EnumParser() },
+            {"template",new TemplateParser() }
         };
     }
 }

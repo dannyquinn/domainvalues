@@ -11,7 +11,7 @@ namespace DomainValues.Parsing
     {
         internal override IEnumerable<ParsedSpan> ParseLine(int lineNumber, string source, TokenType? expectedTokenType)
         {
-            NextTokenType = TokenType.Data;
+            NextTokenType = TokenType.Data | TokenType.Enum;
 
             var span = source.GetTextSpan();
 

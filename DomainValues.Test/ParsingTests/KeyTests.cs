@@ -108,7 +108,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = parser.ParseLine(0, "key", TokenType.Key).Single();
 
-            Assert.AreEqual(TokenType.Data, parser.NextTokenType);
+            Assert.AreEqual(TokenType.Data | TokenType.Enum, parser.NextTokenType);
         }
 
         [Test]

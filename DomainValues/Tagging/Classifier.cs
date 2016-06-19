@@ -48,7 +48,16 @@ namespace DomainValues.Tagging
                 {TokenType.ItemRow, DvContent.DvText},
                 {TokenType.Parameter,DvContent.DvText },
                 {TokenType.Parameter|TokenType.Table, DvContent.DvText},
-                {TokenType.Variable|TokenType.Key, DvContent.DvVariable}
+                {TokenType.Variable|TokenType.Key, DvContent.DvVariable},
+                {TokenType.Enum,DvContent.DvKeyword },
+                {TokenType.Template,DvContent.DvKeyword },
+                {TokenType.Enum | TokenType.Parameter,DvContent.DvText },
+                {TokenType.AccessType,DvContent.DvKeyword },
+                {TokenType.BaseType,DvContent.DvKeyword },
+                {TokenType.FlagsAttribute,DvContent.DvKeyword },
+                {TokenType.EnumDesc,DvContent.DvVariable },
+                {TokenType.EnumMember,DvContent.DvVariable },
+                {TokenType.EnumInit,DvContent.DvVariable }
             };
 
             var lineNumber = 0;

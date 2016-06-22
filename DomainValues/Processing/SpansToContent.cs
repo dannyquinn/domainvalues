@@ -12,6 +12,20 @@ namespace DomainValues.Processing
         {
             var content = new ContentGenerator();
 
+            var nullAs = spans.FirstOrDefault(a => a.Type == (TokenType.NullAs | TokenType.Parameter));
+
+            if (nullAs != null)
+            {
+                content.UpdateNullAs(nullAs.Text);
+            }
+
+            var spaceAs = spans.FirstOrDefault(a => a.Type == (TokenType.SpaceAs | TokenType.Parameter));
+
+            if (spaceAs != null)
+            {
+                content.UpdateSpaceAs(spaceAs.Text);
+            }
+
             foreach (var block in spans.GetStatementBlocks())
             {
                 content.AddBlock(GetBlock(block));

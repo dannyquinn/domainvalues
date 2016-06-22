@@ -141,6 +141,55 @@ namespace DomainValues.Test
             Assert.AreEqual(expected, output);
         }
 
+        [Test]
+        public void DefaultNullSpaceOptions()
+        {
+            var test = @"table dbo.test
+                key id
+                data 
+                    | id | col1 | col2   | col3  | col4 | col5  |
+                    | 1  |      | $space | $null |      | data  |";
+
+            var output = GetData(test);
+
+            Assert.IsTrue(output.Contains("(N'1', null, N'', N'$null', null, N'data')"));
+        }
+
+        [Test]
+        public void SpaceAsDefaultOption()
+        {
+            var test = @"
+                space as default 
+
+                table dbo.test
+                key id
+                data 
+                    | id | col1 | col2   | col3  | col4 | col5  |
+                    | 1  |      | $space | $null |      | data  |";
+
+            var output = GetData(test);
+
+            Assert.IsTrue(output.Contains("(N'1', N'', N'$space', null, N'', N'data')"),output);
+        }
+
+        [Test]
+        public void NullAsAndSpaceAsAreCustomValues()
+        {
+            var test = @"
+                null as $space
+                space as $null 
+
+                table dbo.test
+                key id
+                data 
+                    | id | col1 | col2   | col3  | col4 | col5  |
+                    | 1  |      | $space | $null |      | data  |";
+
+            var output = GetData(test);
+
+            Assert.IsTrue(output.Contains("(N'1', N'', null, N'', N'', N'data')"), output);
+        }
+
         private string GetData(string source)
         {
             var spans = Scanner.GetSpans(source, true);

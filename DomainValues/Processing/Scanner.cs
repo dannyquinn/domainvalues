@@ -16,7 +16,7 @@ namespace DomainValues.Processing
 
             var lineCount = -1;
 
-            TokenType? expectedType = TokenType.Table;
+            TokenType? expectedType = TokenType.Table | TokenType.NullAs | TokenType.SpaceAs;
 
             using (var sr = new StringReader(source))
             {
@@ -65,6 +65,8 @@ namespace DomainValues.Processing
 
         internal static void ExtendedChecks(List<ParsedSpan> spans)
         {
+            CheckNullAsSpaceAs(spans);
+
             foreach (var block in spans.GetStatementBlocks())
             {
                 var header = block.FirstOrDefault(a => a.Type == TokenType.HeaderRow);
@@ -86,6 +88,23 @@ namespace DomainValues.Processing
             CheckDuplicateEnumNames(spans);
         }
 
+        private static void CheckNullAsSpaceAs(IEnumerable<ParsedSpan> spans)
+        {
+            var nullAs = spans.FirstOrDefault(a => a.Type == (TokenType.NullAs | TokenType.Parameter));
+
+            if (nullAs == null)
+                return;
+
+            var spaceAs = spans.FirstOrDefault(a => a.Type == (TokenType.SpaceAs | TokenType.Parameter));
+
+            if (spaceAs == null)
+                return;
+
+            if (nullAs.Text.Equals(spaceAs.Text, StringComparison.CurrentCultureIgnoreCase))
+            {
+                spaceAs.Errors.Add(new Error("Null as and space as cannot be set to the same value",false));
+            }
+        }
         private static void CheckDuplicateEnumNames(IEnumerable<ParsedSpan> spans)
         {
             var duplicateEnumNames = spans
@@ -153,7 +172,6 @@ namespace DomainValues.Processing
                 key.Errors.Add(new Error($"Key value '{key.Text}' not found in the column row.", false));
             }
         }
-
         internal static void CheckEnumVariables(List<string> columns, IEnumerable<ParsedSpan> enumVars)
         {
             if (enumVars == null)
@@ -178,7 +196,9 @@ namespace DomainValues.Processing
             {"data", new DataParser()},
             {"|", new RowParser()},
             {"enum",new EnumParser() },
-            {"template",new TemplateParser() }
+            {"template",new TemplateParser() },
+            {"null as", new NullAsParser() },
+            {"space as",new SpaceAsParser() }
         };
     }
 }

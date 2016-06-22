@@ -66,8 +66,10 @@
     <Compile Include="Processing\Parsing\DataParser.cs" />
     <Compile Include="Processing\Parsing\EnumParser.cs" />
     <Compile Include="Processing\Parsing\KeyParser.cs" />
+    <Compile Include="Processing\Parsing\NullAsParser.cs" />
     <Compile Include="Processing\Parsing\ParserBase.cs" />
     <Compile Include="Processing\Parsing\RowParser.cs" />
+    <Compile Include="Processing\Parsing\SpaceAsParser.cs" />
     <Compile Include="Processing\Parsing\TableParser.cs" />
     <Compile Include="Processing\Parsing\TemplateParser.cs" />
     <Compile Include="Processing\Scanner.cs" />

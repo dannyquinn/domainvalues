@@ -14,13 +14,43 @@ namespace DomainValues.Processing
     {
         private readonly List<DataBlock> _blocks;
         private string _nullOption = string.Empty;
-        private string _spaceOption = "$empty";
+        private string _spaceOption = "$space";
 
         public ContentGenerator()
         {
             _blocks = new List<DataBlock>();
         }
 
+        public void UpdateNullAs(string nullAs)
+        {
+            if (nullAs.Equals("default", StringComparison.CurrentCultureIgnoreCase))
+            {
+                _nullOption = string.Empty;
+                _spaceOption = "$space";
+            }
+            else {
+                _nullOption = nullAs;
+                
+            }
+        }
+
+        public void UpdateSpaceAs(string spaceAs)
+        {
+            if (spaceAs.Equals("default", StringComparison.CurrentCultureIgnoreCase))
+            {
+                _spaceOption = string.Empty;
+                if (_nullOption == string.Empty)
+                {
+                    _nullOption = "$null";
+                }
+            }
+            else
+            { 
+                _spaceOption = spaceAs;
+            }
+
+
+        }
         public void AddBlock(DataBlock block) => _blocks.Add(block);
 
         public byte[] GetEnumBytes(CodeDomProvider provider, string fileNamespace)

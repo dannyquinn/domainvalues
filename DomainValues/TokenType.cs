@@ -20,9 +20,9 @@ namespace DomainValues
         FlagsAttribute  = 1 << 12,
         EnumDesc        = 1 << 13,
         EnumMember      = 1 << 14,
-        EnumInit         =1 << 15,
-//      NullAs          = 1 << 16,
-//      SpaceAs         = 1 << 17,
+        EnumInit        = 1 << 15,
+        NullAs          = 1 << 16,
+        SpaceAs         = 1 << 17,
 //      CopySql         = 1 << 18
     }
 }

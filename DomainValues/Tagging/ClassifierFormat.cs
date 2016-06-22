@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.Composition;
-using System.Windows.Media;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
@@ -15,7 +14,7 @@ namespace DomainValues.Tagging
         public DvKeywordFormatDefinition()
         {
             DisplayName = "Domain Values Keyword";
-            ForegroundColor = Color.FromArgb(255, 86, 156, 214);
+            ForegroundColor = ClassifierColor.GetColor(DvContent.DvKeyword);
         }
     }
 
@@ -29,7 +28,7 @@ namespace DomainValues.Tagging
         public DvHeaderRowFormatDefinition()
         {
             DisplayName = "Domain Values Header Row";
-            ForegroundColor = Colors.MediumPurple;
+            ForegroundColor = ClassifierColor.GetColor(DvContent.DvHeaderRow);
         }
     }
 
@@ -43,7 +42,7 @@ namespace DomainValues.Tagging
         public DvVariableFormatDefinition()
         {
             DisplayName = "Domain Values Variable";
-            ForegroundColor = Colors.Peru;
+            ForegroundColor = ClassifierColor.GetColor(DvContent.DvVariable);
         }
     }
 
@@ -57,7 +56,7 @@ namespace DomainValues.Tagging
         public DvTextFormatDefinition()
         {
             DisplayName = "Domain Values Text";
-            ForegroundColor = Colors.White;
+            ForegroundColor = ClassifierColor.GetColor(DvContent.DvText);
         }
     }
 
@@ -71,7 +70,7 @@ namespace DomainValues.Tagging
         public DvCommentFormatDefinition()
         {
             DisplayName = "Domain Values Comment";
-            ForegroundColor = Color.FromArgb(255, 87, 166, 74);
+            ForegroundColor = ClassifierColor.GetColor(DvContent.DvComment);
         }
     }
 }

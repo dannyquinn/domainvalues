@@ -88,7 +88,7 @@ namespace DomainValues.Processing
             CheckDuplicateEnumNames(spans);
         }
 
-        private static void CheckNullAsSpaceAs(IEnumerable<ParsedSpan> spans)
+        private static void CheckNullAsSpaceAs(List<ParsedSpan> spans)
         {
             var nullAs = spans.FirstOrDefault(a => a.Type == (TokenType.NullAs | TokenType.Parameter));
 

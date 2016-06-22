@@ -11,16 +11,17 @@ namespace DomainValues.Tagging
     [TagType(typeof(ClassificationTag))]
     internal sealed class ClassifierProvider : ITaggerProvider
     {
-        private readonly IClassificationTypeRegistryService _classificationTypeRegistryService;
-
+        private readonly IClassificationTypeRegistryService _typeRegistry;
+        private readonly IClassificationFormatMapService _formatMap;
         [ImportingConstructor]
-        public ClassifierProvider(IClassificationTypeRegistryService classificationTypeRegistryService)
+        public ClassifierProvider(IClassificationTypeRegistryService typeRegistry,IClassificationFormatMapService formatMap)
         {
-            _classificationTypeRegistryService = classificationTypeRegistryService;
+            _typeRegistry = typeRegistry;
+            _formatMap = formatMap;
         }
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
-            return buffer.Properties.GetOrCreateSingletonProperty(() => new Classifier(buffer, _classificationTypeRegistryService)) as ITagger<T>;
+            return buffer.Properties.GetOrCreateSingletonProperty(() => new Classifier(_typeRegistry,_formatMap,buffer)) as ITagger<T>;
         }
     }
 }

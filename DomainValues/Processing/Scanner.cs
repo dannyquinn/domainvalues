@@ -35,7 +35,7 @@ namespace DomainValues.Processing
 
                     if (lookup.Key == null)
                     {
-                        spans.Add(new ParsedSpan(lineCount, TokenType.Parameter, currentLine.GetTextSpan(), "Invalid text in file."));
+                        spans.Add(new ParsedSpan(lineCount, TokenType.Parameter, currentLine.GetTextSpan(), Errors.INVALID));
                         continue;
                     }
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using DomainValues.Model;
 using DomainValues.Processing.Parsing;
+using DomainValues.Util;
 using NUnit.Framework;
 using static DomainValues.Test.ParsingTests.Util;
 
@@ -49,7 +50,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new TableParser().ParseLine(0,"  tabletest ",TokenType.Table).Single();
 
-            var expectedOutput = new ParsedSpan(0,TokenType.Parameter,2,"tabletest","Invalid text in file.");
+            var expectedOutput = new ParsedSpan(0,TokenType.Parameter,2,"tabletest", Errors.INVALID);
 
             AreEqual(expectedOutput,output);
         }
@@ -69,7 +70,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var parser = new TableParser();
 
-            Assert.AreEqual(parser.PrimaryType,TokenType.Table);
+            Assert.AreEqual(TokenType.Table, parser.PrimaryType);
         }
 
       

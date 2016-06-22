@@ -51,7 +51,9 @@
     <Compile Include="ParsingTests\EnumTests.cs" />
     <Compile Include="ParsingTests\FlowTests.cs" />
     <Compile Include="ParsingTests\KeyTests.cs" />
+    <Compile Include="ParsingTests\NullAsTests.cs" />
     <Compile Include="ParsingTests\RowTests.cs" />
+    <Compile Include="ParsingTests\SpaceAsTests.cs" />
     <Compile Include="ParsingTests\TableTests.cs" />
     <Compile Include="ParsingTests\TemplateTests.cs" />
     <Compile Include="ParsingTests\Util.cs" />

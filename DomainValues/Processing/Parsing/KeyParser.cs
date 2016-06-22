@@ -16,7 +16,7 @@ namespace DomainValues.Processing.Parsing
 
             if (!IsValid(span, 3))
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span, "Invalid text in file.");
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.INVALID);
                 yield break;
             }
 

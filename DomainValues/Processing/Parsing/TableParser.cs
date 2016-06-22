@@ -14,7 +14,7 @@ namespace DomainValues.Processing.Parsing
 
             if (span.Text.Length > 5 && span.Text.Substring(5, 1) != " ")
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span, "Invalid text in file.");
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.INVALID);
                 yield break;
             }
 

@@ -12,13 +12,13 @@ namespace DomainValues.Processing.Parsing
     {
         internal override IEnumerable<ParsedSpan> ParseLine(int lineNumber, string source, TokenType? expectedTokenType)
         {
-            NextTokenType = TokenType.Table | TokenType.NullAs | TokenType.SpaceAs;
+            NextTokenType = TokenType.Table;
 
             var span = source.GetTextSpan();
 
             if (span.Text.Length > 8 && span.Text.Substring(8, 1) != " ")
             {
-                yield return new ParsedSpan(lineNumber,TokenType.Parameter, span,"Invalid test in file.");
+                yield return new ParsedSpan(lineNumber,TokenType.Parameter, span,Errors.INVALID);
                 yield break;
             }
 

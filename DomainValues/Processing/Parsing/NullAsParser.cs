@@ -20,7 +20,7 @@ namespace DomainValues.Processing.Parsing
 
             if (span.Text.Length > 7 && span.Text.Substring(7, 1) != " ")
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span, "Invalid test in file.");
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.INVALID);
                 yield break;
             }
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using DomainValues.Model;
 using DomainValues.Processing.Parsing;
+using DomainValues.Util;
 using NUnit.Framework;
 using static DomainValues.Test.ParsingTests.Util;
 
@@ -49,7 +50,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new EnumParser().ParseLine(0, " enumtest", TokenType.Enum).Single();
 
-            var expected = new ParsedSpan(0, TokenType.Parameter, 1, "enumtest", "Invalid text in file.");
+            var expected = new ParsedSpan(0, TokenType.Parameter, 1, "enumtest",Errors.INVALID);
 
             AreEqual(expected, output);
         }

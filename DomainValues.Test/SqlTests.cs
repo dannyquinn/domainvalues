@@ -190,6 +190,24 @@ namespace DomainValues.Test
             Assert.IsTrue(output.Contains("(N'1', N'', null, N'', N'', N'data')"), output);
         }
 
+        [Test]
+        public void NullAsAndSpaceAsAreSameValue()
+        {
+            var test = @"
+                null as test
+                space as test
+
+                table dbo.test
+                key id
+                data 
+                    | id | col1 | col2   | col3  | col4 | col5  |
+                    | 1  |      | $space | $null |      | data  |";
+
+            var error = Scanner.GetSpans(test, true).SelectMany(a=>a.Errors).Single();
+
+            Assert.AreEqual("Null as and space as cannot be set to the same value", error.Message);
+        }
+
         private string GetData(string source)
         {
             var spans = Scanner.GetSpans(source, true);

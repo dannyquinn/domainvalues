@@ -34,7 +34,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Key was unexpected.  Expected Table.", output.Message);
+            Assert.AreEqual("Key was unexpected.  Expected Table, NullAs, SpaceAs.", output.Message);
         }
 
         [Test]

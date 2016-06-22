@@ -2,6 +2,7 @@
 using System.Linq;
 using DomainValues.Model;
 using DomainValues.Processing.Parsing;
+using DomainValues.Util;
 using NUnit.Framework;
 using static DomainValues.Test.ParsingTests.Util;
 
@@ -49,7 +50,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new KeyParser().ParseLine(0, "keytest", TokenType.Key).Single();
 
-            var expectedOutput = new ParsedSpan(0,TokenType.Parameter, 0,"keytest","Invalid text in file.");
+            var expectedOutput = new ParsedSpan(0,TokenType.Parameter, 0,"keytest", Errors.INVALID);
 
             AreEqual(expectedOutput,output);
         }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DomainValues.Model;
 using DomainValues.Processing.Parsing;
 using DomainValues.Util;
@@ -19,7 +16,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new SpaceAsParser().ParseLine(0," space as",TokenType.SpaceAs).Single();
 
-            var expected = new ParsedSpan(0,TokenType.SpaceAs,1,"space as", "Space as expects a parameter");
+            var expected = new ParsedSpan(0,TokenType.SpaceAs,1,"space as", string.Format(Errors.ExpectsParam,"Space As"));
 
             AreEqual(expected,output);
         }
@@ -29,7 +26,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new SpaceAsParser().ParseLine(0," space as  ",TokenType.SpaceAs).Single();
 
-            var expected = new ParsedSpan(0,TokenType.SpaceAs,1,"space as", "Space as expects a parameter");
+            var expected = new ParsedSpan(0,TokenType.SpaceAs,1,"space as", string.Format(Errors.ExpectsParam,"Space As"));
 
             AreEqual(expected,output);
         }
@@ -53,7 +50,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new SpaceAsParser().ParseLine(0,"space astest",TokenType.SpaceAs).Single();
 
-            var expected = new ParsedSpan(0,TokenType.Parameter,0,"space astest",Errors.INVALID);
+            var expected = new ParsedSpan(0,TokenType.Parameter,0,"space astest",Errors.Invalid);
 
             AreEqual(expected,output);
         }

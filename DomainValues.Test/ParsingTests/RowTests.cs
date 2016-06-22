@@ -2,6 +2,7 @@
 using System.Linq;
 using DomainValues.Model;
 using DomainValues.Processing.Parsing;
+using DomainValues.Util;
 using NUnit.Framework;
 using static DomainValues.Test.ParsingTests.Util;
 
@@ -38,7 +39,7 @@ namespace DomainValues.Test.ParsingTests
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|A|"),
-                new ParsedSpan(0, TokenType.HeaderRow, 7, "A", "Column A is a duplicate value.")
+                new ParsedSpan(0, TokenType.HeaderRow, 7, "A",string.Format(Errors.DuplicateValue,"Column","A"))
             };
 
             AreEqual(expectedOutput,output);
@@ -52,7 +53,7 @@ namespace DomainValues.Test.ParsingTests
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|a|"),
-                new ParsedSpan(0, TokenType.HeaderRow, 7, "a", "Column a is a duplicate value.")
+                new ParsedSpan(0, TokenType.HeaderRow, 7, "a", string.Format(Errors.DuplicateValue,"Column","a"))
             };
 
             AreEqual(expectedOutput, output);
@@ -66,7 +67,7 @@ namespace DomainValues.Test.ParsingTests
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|"),
-                new ParsedSpan(0, TokenType.Parameter, 7, "test", "Invalid text.")
+                new ParsedSpan(0, TokenType.Parameter, 7, "test", Errors.Invalid)
             };
 
             AreEqual(expectedOutput, output);
@@ -80,7 +81,7 @@ namespace DomainValues.Test.ParsingTests
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|"),
-                new ParsedSpan(0, TokenType.Parameter, 7, @"test\|", "Invalid text.")
+                new ParsedSpan(0, TokenType.Parameter, 7, @"test\|", Errors.Invalid)
             };
 
             AreEqual(expectedOutput, output);
@@ -94,7 +95,7 @@ namespace DomainValues.Test.ParsingTests
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.ItemRow, 0, "|A|B|C|"),
-                new ParsedSpan(0, TokenType.Parameter, 7, @"test\|", "Invalid text.")
+                new ParsedSpan(0, TokenType.Parameter, 7, @"test\|", Errors.Invalid)
             };
 
             AreEqual(expectedOutput, output);
@@ -107,7 +108,7 @@ namespace DomainValues.Test.ParsingTests
             var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.ItemRow, 0, "|A|B|C|"),
-                new ParsedSpan(0, TokenType.Parameter, 7, "test", "Invalid text")
+                new ParsedSpan(0, TokenType.Parameter, 7, "test", Errors.Invalid)
             };
 
             AreEqual(expectedOutput, output);

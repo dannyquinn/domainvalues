@@ -117,7 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="INVALID" xml:space="preserve">
-    <value>Invalid text in file.</value>
+  <data name="DuplicateValue" xml:space="preserve">
+    <value>{0} '{1}' is a duplicate value.</value>
+  </data>
+  <data name="EndOfFile" xml:space="preserve">
+    <value>Unexpected end of file.</value>
+  </data>
+  <data name="EnumDuplicate" xml:space="preserve">
+    <value>Already found a parameter that looks like the enum '{0}'.</value>
+  </data>
+  <data name="EnumNoName" xml:space="preserve">
+    <value>No name provided for enumeration.</value>
+  </data>
+  <data name="EnumParam" xml:space="preserve">
+    <value>Enum expects at least parameter, the name of the enumeration.</value>
+  </data>
+  <data name="ExpectsParam" xml:space="preserve">
+    <value>'{0}' expects a parameter.</value>
+  </data>
+  <data name="ExpectsParams" xml:space="preserve">
+    <value>'{0}' expects at least one parameter.</value>
+  </data>
+  <data name="Invalid" xml:space="preserve">
+    <value>Invalid text.</value>
+  </data>
+  <data name="KeyMapsToNonDBColumn" xml:space="preserve">
+    <value>Key value '{0}' is marked as non db in the column row.  Cannot be used as a key.</value>
+  </data>
+  <data name="NameAlreadyUsed" xml:space="preserve">
+    <value>{0} named '{1}' already used in this file.</value>
+  </data>
+  <data name="NoParams" xml:space="preserve">
+    <value>'{0}' does not have a parameter.</value>
+  </data>
+  <data name="NotFoundInColumns" xml:space="preserve">
+    <value>{0} value '{1}' not found in the column row.</value>
+  </data>
+  <data name="NullAsSpaceAs" xml:space="preserve">
+    <value>Null as and space as cannot be set to the same value.</value>
+  </data>
+  <data name="RowCountMismatch" xml:space="preserve">
+    <value>Row count doesn't match header.</value>
+  </data>
+  <data name="TemplateParam" xml:space="preserve">
+    <value>Template expects at least one parameter, the dataitem to use as the enum member.</value>
+  </data>
+  <data name="TemplatePatternNotRecognised" xml:space="preserve">
+    <value>Cannot determine meaning from string.</value>
+  </data>
+  <data name="UnexpectedKeyword" xml:space="preserve">
+    <value>'{0}' was unexpected.  Expected '{1}'.</value>
   </data>
 </root>

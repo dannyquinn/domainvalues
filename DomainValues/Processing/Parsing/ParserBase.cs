@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DomainValues.Model;
+using DomainValues.Util;
 
 namespace DomainValues.Processing.Parsing
 {
@@ -17,7 +18,7 @@ namespace DomainValues.Processing.Parsing
             if ((expectedType & PrimaryType) != 0)
                 return;
 
-            span.Errors.Add(new Error($"{span.Type} was unexpected.  Expected {expectedType}.", false));
+            span.Errors.Add(new Error(string.Format(Errors.UnexpectedKeyword,span.Type,expectedType), false));
             NextTokenType = null;
         }
 

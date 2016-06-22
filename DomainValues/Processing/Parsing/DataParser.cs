@@ -14,7 +14,7 @@ namespace DomainValues.Processing.Parsing
 
             if (!IsValid(span, 4))
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span, Errors.INVALID);
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span, Errors.Invalid);
                 yield break;
             }
 
@@ -32,7 +32,7 @@ namespace DomainValues.Processing.Parsing
             if (string.IsNullOrWhiteSpace(param.Text))
                 yield break;
 
-            yield return new ParsedSpan(lineNumber, TokenType.Parameter, param, "Data keyword does not have a parameter.");
+            yield return new ParsedSpan(lineNumber, TokenType.Parameter, param, string.Format(Errors.NoParams,"Data"));
         }
 
         internal override TokenType PrimaryType => TokenType.Data;

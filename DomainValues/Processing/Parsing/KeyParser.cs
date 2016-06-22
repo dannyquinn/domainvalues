@@ -16,7 +16,7 @@ namespace DomainValues.Processing.Parsing
 
             if (!IsValid(span, 3))
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.INVALID);
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.Invalid);
                 yield break;
             }
 
@@ -24,7 +24,7 @@ namespace DomainValues.Processing.Parsing
 
             if (span.Text.Length == 3 || string.IsNullOrWhiteSpace(span.Text.Substring(4)))
             {
-                key.Errors.Add(new Error("Key expects at least one parameter.", false));
+                key.Errors.Add(new Error(string.Format(Errors.ExpectsParams,"Key"), false));
             }
 
             CheckOrder(key, expectedTokenType);
@@ -46,7 +46,7 @@ namespace DomainValues.Processing.Parsing
 
                 if (duplicates.Contains(match))
                 {
-                    spanVar.Errors.Add(new Error($"Key {match.Value} is a duplicate value.", false));
+                    spanVar.Errors.Add(new Error(string.Format(Errors.DuplicateValue,"Key" ,match.Value), false));
                 }
                 yield return spanVar;
             }

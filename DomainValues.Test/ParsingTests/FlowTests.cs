@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using DomainValues.Processing;
+using DomainValues.Util;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 
 namespace DomainValues.Test.ParsingTests
 {
@@ -34,7 +36,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Key was unexpected.  Expected Table, NullAs, SpaceAs.", output.Message);
+            Assert.AreEqual(string.Format(Errors.UnexpectedKeyword, "Key", "Table, NullAs, SpaceAs"), output.Message);
         }
 
         [Test]
@@ -49,7 +51,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Data was unexpected.  Expected Key.", output.Message);
+            Assert.AreEqual(string.Format(Errors.UnexpectedKeyword, "Data", "Key"), output.Message);
         }
 
         [Test]
@@ -64,7 +66,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("ItemRow was unexpected.  Expected Data, Enum.", output.Message);
+            Assert.AreEqual(string.Format(Errors.UnexpectedKeyword,"ItemRow","Data, Enum"), output.Message);
         }
 
         [Test]
@@ -79,7 +81,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Table was unexpected.  Expected Key.", output.Message);
+            Assert.AreEqual(string.Format(Errors.UnexpectedKeyword, "Table", "Key"), output.Message);
 
         }
     }

@@ -35,7 +35,7 @@ namespace DomainValues.Processing
 
                     if (lookup.Key == null)
                     {
-                        spans.Add(new ParsedSpan(lineCount, TokenType.Parameter, currentLine.GetTextSpan(), Errors.INVALID));
+                        spans.Add(new ParsedSpan(lineCount, TokenType.Parameter, currentLine.GetTextSpan(), Errors.Invalid));
                         continue;
                     }
 
@@ -54,7 +54,7 @@ namespace DomainValues.Processing
 
             if (spans.Any(a => a.Type == TokenType.Table) && expectedType != (TokenType.Table | TokenType.ItemRow | TokenType.Data))
             {
-                spans.Last(a => a.Type != TokenType.Comment).Errors.Add(new Error("Unexpected end of file.", true));
+                spans.Last(a => a.Type != TokenType.Comment).Errors.Add(new Error(Errors.EndOfFile, true));
             }
 
             if (extendedCheck)
@@ -102,7 +102,7 @@ namespace DomainValues.Processing
 
             if (nullAs.Text.Equals(spaceAs.Text, StringComparison.CurrentCultureIgnoreCase))
             {
-                spaceAs.Errors.Add(new Error("Null as and space as cannot be set to the same value",false));
+                spaceAs.Errors.Add(new Error(Errors.NullAsSpaceAs,false));
             }
         }
         private static void CheckDuplicateEnumNames(IEnumerable<ParsedSpan> spans)
@@ -114,7 +114,7 @@ namespace DomainValues.Processing
 
             foreach (var duplicateEnumName in duplicateEnumNames)
             {
-                duplicateEnumName.Errors.Add(new Error($"Enumeration named {duplicateEnumName.Text} already used in this file.",false));
+                duplicateEnumName.Errors.Add(new Error(string.Format(Errors.NameAlreadyUsed,"Enum",duplicateEnumName.Text),false));
             }
         }
         private static void CheckDuplicateTableNames(IEnumerable<ParsedSpan> spans)
@@ -126,7 +126,7 @@ namespace DomainValues.Processing
 
             foreach (var duplicateTableName in duplicateTableNames)
             {
-                duplicateTableName.Errors.Add(new Error($"Table named {duplicateTableName.Text} already used in this file.", false));
+                duplicateTableName.Errors.Add(new Error(string.Format(Errors.NameAlreadyUsed,"Table",duplicateTableName.Text), false));
             }
         }
 
@@ -145,7 +145,7 @@ namespace DomainValues.Processing
                 var rowPipeCount = itemRow.Text.ToCharArray().Count(a => a == '|');
 
                 if (rowPipeCount != pipeCount)
-                    itemRow.Errors.Add(new Error("Row count doesn't match header.", false));
+                    itemRow.Errors.Add(new Error(Errors.RowCountMismatch, false));
             }
         }
         internal static void CheckKeyVariables(List<string> columns, IEnumerable<ParsedSpan> keyVars)
@@ -162,14 +162,14 @@ namespace DomainValues.Processing
 
                 if (columns.Contains($"{keyValue}*"))
                 {
-                    key.Errors.Add(new Error($"Key value '{key.Text}' is marked as non db in the column row.  Cannot be used as a key.", false));
+                    key.Errors.Add(new Error(string.Format(Errors.KeyMapsToNonDBColumn,key.Text), false));
                     continue;
                 }
 
                 if (columns.Contains(keyValue))
                     continue;
 
-                key.Errors.Add(new Error($"Key value '{key.Text}' not found in the column row.", false));
+                key.Errors.Add(new Error(string.Format(Errors.NotFoundInColumns,"Key",key.Text), false));
             }
         }
         internal static void CheckEnumVariables(List<string> columns, IEnumerable<ParsedSpan> enumVars)
@@ -184,7 +184,7 @@ namespace DomainValues.Processing
                 if (columns.Select(a => a.TrimEnd('*')).Contains(enumValue))
                     continue;
 
-                enumVar.Errors.Add(new Error($"Enum template values '{enumVar.Text}' not found in the column row.",false));
+                enumVar.Errors.Add(new Error(string.Format(Errors.NotFoundInColumns, "Template", enumVar.Text),false));
             }
         }
 

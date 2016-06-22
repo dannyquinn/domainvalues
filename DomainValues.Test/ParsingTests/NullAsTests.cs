@@ -18,7 +18,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new NullAsParser().ParseLine(0, "  null as", TokenType.NullAs).Single();
 
-            var expected = new ParsedSpan(0, TokenType.NullAs, 2, "null as", "Null as expects a parameter.");
+            var expected = new ParsedSpan(0, TokenType.NullAs, 2, "null as", string.Format(Errors.ExpectsParam,"Null As"));
 
             AreEqual(expected,output);
         }
@@ -28,7 +28,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new NullAsParser().ParseLine(0, " null as   ", TokenType.NullAs).Single();
 
-            var expected = new ParsedSpan(0,TokenType.NullAs,1,"null as","Null as expects a parameter.");
+            var expected = new ParsedSpan(0,TokenType.NullAs,1,"null as", string.Format(Errors.ExpectsParam, "Null As"));
 
             AreEqual(expected,output);
         }
@@ -52,7 +52,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new NullAsParser().ParseLine(0," null astest",TokenType.NullAs).Single();
 
-            var expected = new ParsedSpan(0,TokenType.Parameter,1,"null astest",Errors.INVALID);
+            var expected = new ParsedSpan(0,TokenType.Parameter,1,"null astest",Errors.Invalid);
         }
 
         [Test]

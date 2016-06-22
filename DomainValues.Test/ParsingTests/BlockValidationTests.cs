@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using DomainValues.Processing;
+using DomainValues.Util;
 using NUnit.Framework;
 
 namespace DomainValues.Test.ParsingTests
@@ -38,7 +39,7 @@ namespace DomainValues.Test.ParsingTests
 
             var error = output.SelectMany(a=>a.Errors).Single();
 
-            Assert.AreEqual("Key value 'id' not found in the column row.", error.Message);
+            Assert.AreEqual(string.Format(Errors.NotFoundInColumns,"Key","id"), error.Message);
         }
 
         [Test]
@@ -56,7 +57,7 @@ namespace DomainValues.Test.ParsingTests
 
             var error = output.SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Key value 'id' is marked as non db in the column row.  Cannot be used as a key.", error.Message);
+            Assert.AreEqual(string.Format(Errors.KeyMapsToNonDBColumn,"id"), error.Message);
             Assert.IsFalse(error.OutputWindowOnly);
         }
 
@@ -75,7 +76,7 @@ namespace DomainValues.Test.ParsingTests
 
             var error = output.SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Key value 'id*' not found in the column row.", error.Message);
+            Assert.AreEqual(string.Format(Errors.NotFoundInColumns,"Key","id*"), error.Message);
         }
 
         [Test]
@@ -95,7 +96,7 @@ namespace DomainValues.Test.ParsingTests
 
             var error = output.SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Enum template values 'missing' not found in the column row.", error.Message);
+            Assert.AreEqual(string.Format(Errors.NotFoundInColumns,"Template","missing"), error.Message);
         }
 
         [Test]
@@ -115,7 +116,7 @@ namespace DomainValues.Test.ParsingTests
 
             var error = output.SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Enum template values 'missing' not found in the column row.", error.Message);
+            Assert.AreEqual(string.Format(Errors.NotFoundInColumns, "Template", "missing"), error.Message);
         }
 
         [Test]
@@ -135,7 +136,7 @@ namespace DomainValues.Test.ParsingTests
 
             var error = output.SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Enum template values 'missing' not found in the column row.", error.Message);
+            Assert.AreEqual(string.Format(Errors.NotFoundInColumns, "Template", "missing"), error.Message);
         }
 
         [Test]
@@ -151,7 +152,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Row count doesn't match header.", output.Message);
+            Assert.AreEqual(Errors.RowCountMismatch, output.Message);
         }
 
         [Test]
@@ -173,7 +174,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Table named dbo.Test already used in this file.", output.Message);
+            Assert.AreEqual(string.Format(Errors.NameAlreadyUsed,"Table","dbo.Test"), output.Message);
         }
 
 
@@ -201,7 +202,7 @@ namespace DomainValues.Test.ParsingTests
 
             var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual("Enumeration named Test already used in this file.", output.Message);
+            Assert.AreEqual(string.Format(Errors.NameAlreadyUsed,"Enum","Test"), output.Message);
         }
     }
 }

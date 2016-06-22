@@ -18,7 +18,7 @@ namespace DomainValues.Processing.Parsing
 
             if (span.Text.Length > 8 && span.Text.Substring(8, 1) != " ")
             {
-                yield return new ParsedSpan(lineNumber,TokenType.Parameter, span,Errors.INVALID);
+                yield return new ParsedSpan(lineNumber,TokenType.Parameter, span,Errors.Invalid);
                 yield break;
             }
 
@@ -26,7 +26,7 @@ namespace DomainValues.Processing.Parsing
 
             if (span.Text.Length == 8 || string.IsNullOrWhiteSpace(span.Text.Substring(8)))
             {
-                spaceAs.Errors.Add(new Error("Space as expects a parameter",false));
+                spaceAs.Errors.Add(new Error(string.Format(Errors.ExpectsParam,"Space As"),false));
             }
 
             CheckOrder(spaceAs,expectedTokenType);

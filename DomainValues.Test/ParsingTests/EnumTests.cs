@@ -16,7 +16,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new EnumParser().ParseLine(0, "enum", TokenType.Enum).Single();
 
-            var expected = new ParsedSpan(0, TokenType.Enum, 0, "enum", "Enum expects at least parameter, the name of the enumeration");
+            var expected = new ParsedSpan(0, TokenType.Enum, 0, "enum", Errors.EnumParam);
 
             AreEqual(expected, output);
         }
@@ -26,7 +26,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new EnumParser().ParseLine(0, " enum  ", TokenType.Enum).Single();
 
-            var expected = new ParsedSpan(0, TokenType.Enum, 1, "enum", "Enum expects at least parameter, the name of the enumeration");
+            var expected = new ParsedSpan(0, TokenType.Enum, 1, "enum",Errors.EnumParam);
 
             AreEqual(expected, output);
         }
@@ -50,7 +50,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new EnumParser().ParseLine(0, " enumtest", TokenType.Enum).Single();
 
-            var expected = new ParsedSpan(0, TokenType.Parameter, 1, "enumtest",Errors.INVALID);
+            var expected = new ParsedSpan(0, TokenType.Parameter, 1, "enumtest",Errors.Invalid);
 
             AreEqual(expected, output);
         }
@@ -97,7 +97,7 @@ namespace DomainValues.Test.ParsingTests
 
             var expected = new List<ParsedSpan>
             {
-                new ParsedSpan(0, TokenType.Enum, 0, "enum", "No name provided for enumeration."),
+                new ParsedSpan(0, TokenType.Enum, 0, "enum", Errors.EnumNoName),
                 new ParsedSpan(0, TokenType.AccessType, 5, "internal")
             };
 
@@ -114,7 +114,7 @@ namespace DomainValues.Test.ParsingTests
                 new ParsedSpan(0, TokenType.Enum, 0, "enum"),
                 new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 5, "test"),
                 new ParsedSpan(0, TokenType.AccessType, 10, "internal"),
-                new ParsedSpan(0, TokenType.AccessType, 19, "public", "Already found a parameter that looks like the enum AccessType")
+                new ParsedSpan(0, TokenType.AccessType, 19, "public", string.Format(Errors.EnumDuplicate,"AccessType"))
             };
 
             AreEqual(expected, output);
@@ -130,7 +130,7 @@ namespace DomainValues.Test.ParsingTests
                 new ParsedSpan(0, TokenType.Enum, 0, "enum"),
                 new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 5, "test"),
                 new ParsedSpan(0, TokenType.BaseType, 10, "byte"),
-                new ParsedSpan(0, TokenType.BaseType, 15, "int", "Already found a parameter that looks like the enum BaseType")
+                new ParsedSpan(0, TokenType.BaseType, 15, "int",  string.Format(Errors.EnumDuplicate,"BaseType"))
             };
 
             AreEqual(expected, output);
@@ -146,7 +146,7 @@ namespace DomainValues.Test.ParsingTests
                 new ParsedSpan(0, TokenType.Enum, 0, "enum"),
                 new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 5, "test"),
                 new ParsedSpan(0, TokenType.FlagsAttribute, 10, "flags"),
-                new ParsedSpan(0, TokenType.FlagsAttribute, 16, "flags", "Already found a parameter that looks like the enum FlagsAttribute")
+                new ParsedSpan(0, TokenType.FlagsAttribute, 16, "flags",string.Format(Errors.EnumDuplicate,"FlagsAttribute"))
             };
 
             AreEqual(expected, output);
@@ -162,7 +162,7 @@ namespace DomainValues.Test.ParsingTests
                 new ParsedSpan(0, TokenType.Enum, 0, "enum"),
                 new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 5, "test"),
                 new ParsedSpan(0, TokenType.AccessType, 10, "internal"),
-                new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 19, "test2", "Invalid Text.")
+                new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 19, "test2", Errors.Invalid)
             };
 
             AreEqual(expected, output);

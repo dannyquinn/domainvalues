@@ -20,7 +20,7 @@ namespace DomainValues.Processing.Parsing
 
             if (span.Text.Length > 7 && span.Text.Substring(7, 1) != " ")
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.INVALID);
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.Invalid);
                 yield break;
             }
 
@@ -28,7 +28,7 @@ namespace DomainValues.Processing.Parsing
 
             if (span.Text.Length == 7 || string.IsNullOrWhiteSpace(span.Text.Substring(7)))
             {
-                nullAs.Errors.Add(new Error("Null as expects a parameter.", false));
+                nullAs.Errors.Add(new Error(string.Format(Errors.ExpectsParam,"Null As"), false));
             }
 
             CheckOrder(nullAs, expectedTokenType);

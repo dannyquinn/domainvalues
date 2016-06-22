@@ -16,7 +16,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new TemplateParser().ParseLine(0, "template", TokenType.Template).Single();
 
-            var expected = new ParsedSpan(0, TokenType.Template, 0, "template", "Template expects at least one parameter, the dataitem to use as the enum member.");
+            var expected = new ParsedSpan(0, TokenType.Template, 0, "template",Errors.TemplateParam);
 
             AreEqual(expected, output);
         }
@@ -26,7 +26,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new TemplateParser().ParseLine(0, "template   ", TokenType.Template).Single();
 
-            var expected = new ParsedSpan(0, TokenType.Template, 0, "template", "Template expects at least one parameter, the dataitem to use as the enum member.");
+            var expected = new ParsedSpan(0, TokenType.Template, 0, "template", Errors.TemplateParam);
 
             AreEqual(expected, output);
         }
@@ -50,7 +50,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new TemplateParser().ParseLine(0, "templatetest", TokenType.Template).Single();
 
-            var expected = new ParsedSpan(0,TokenType.Parameter,0,"templatetest", Errors.INVALID);
+            var expected = new ParsedSpan(0,TokenType.Parameter,0,"templatetest", Errors.Invalid);
 
             AreEqual(expected,output);
         }
@@ -127,7 +127,7 @@ namespace DomainValues.Test.ParsingTests
             var expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Template, 0, "template"),
-                new ParsedSpan(0, TokenType.Parameter, 9, "test = id test2","Cannot determine meaning from string.")
+                new ParsedSpan(0, TokenType.Parameter, 9, "test = id test2",Errors.TemplatePatternNotRecognised)
             };
 
             AreEqual(expected,output);

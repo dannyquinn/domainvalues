@@ -27,7 +27,7 @@ namespace DomainValues.Test.ParsingTests
                     var exErr = ex.Errors.SingleOrDefault(a => a.Message.Equals(error.Message));
 
 
-                    Assert.IsNotNull(exErr, $"No error '{error}'");
+                    Assert.IsNotNull(exErr, $"No error '{error.Message}'");
                     Assert.AreEqual(exErr.OutputWindowOnly,error.OutputWindowOnly);
                 }
             }

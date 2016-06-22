@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using DomainValues.Processing;
+using DomainValues.Util;
 using NUnit.Framework;
 
 namespace DomainValues.Test
@@ -205,7 +206,7 @@ namespace DomainValues.Test
 
             var error = Scanner.GetSpans(test, true).SelectMany(a=>a.Errors).Single();
 
-            Assert.AreEqual("Null as and space as cannot be set to the same value", error.Message);
+            Assert.AreEqual(Errors.NullAsSpaceAs, error.Message);
         }
 
         private string GetData(string source)

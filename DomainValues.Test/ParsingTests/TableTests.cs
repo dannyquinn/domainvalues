@@ -16,7 +16,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new TableParser().ParseLine(0, "  table", TokenType.Table).Single();
 
-            var expectedOutput = new ParsedSpan(0, TokenType.Table, 2, "table", "Table expects a parameter.");
+            var expectedOutput = new ParsedSpan(0, TokenType.Table, 2, "table", string.Format(Errors.ExpectsParam,"Table"));
 
             AreEqual(expectedOutput,output);
         }
@@ -26,7 +26,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new TableParser().ParseLine(0," table  ",TokenType.Table).Single();
 
-            var expectedOutput = new ParsedSpan(0,TokenType.Table, 1,"table","Table expects a parameter.");
+            var expectedOutput = new ParsedSpan(0,TokenType.Table, 1,"table",string.Format(Errors.ExpectsParam,"Table"));
 
             AreEqual(expectedOutput,output);
         }
@@ -50,7 +50,7 @@ namespace DomainValues.Test.ParsingTests
         {
             var output = new TableParser().ParseLine(0,"  tabletest ",TokenType.Table).Single();
 
-            var expectedOutput = new ParsedSpan(0,TokenType.Parameter,2,"tabletest", Errors.INVALID);
+            var expectedOutput = new ParsedSpan(0,TokenType.Parameter,2,"tabletest", Errors.Invalid);
 
             AreEqual(expectedOutput,output);
         }

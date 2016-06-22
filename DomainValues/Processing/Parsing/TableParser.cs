@@ -14,7 +14,7 @@ namespace DomainValues.Processing.Parsing
 
             if (span.Text.Length > 5 && span.Text.Substring(5, 1) != " ")
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.INVALID);
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.Invalid);
                 yield break;
             }
 
@@ -22,7 +22,7 @@ namespace DomainValues.Processing.Parsing
 
             if (span.Text.Length == 5 || string.IsNullOrWhiteSpace(span.Text.Substring(6)))
             {
-                table.Errors.Add(new Error("Table expects a parameter.", false));
+                table.Errors.Add(new Error(string.Format(Errors.ExpectsParam,"Table"), false));
             }
 
             CheckOrder(table, expectedTokenType);

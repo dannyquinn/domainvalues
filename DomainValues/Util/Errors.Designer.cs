@@ -61,11 +61,155 @@ namespace DomainValues.Util {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid text in file..
+        ///   Looks up a localized string similar to {0} &apos;{1}&apos; is a duplicate value..
         /// </summary>
-        internal static string INVALID {
+        internal static string DuplicateValue {
             get {
-                return ResourceManager.GetString("INVALID", resourceCulture);
+                return ResourceManager.GetString("DuplicateValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected end of file..
+        /// </summary>
+        internal static string EndOfFile {
+            get {
+                return ResourceManager.GetString("EndOfFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Already found a parameter that looks like the enum &apos;{0}&apos;..
+        /// </summary>
+        internal static string EnumDuplicate {
+            get {
+                return ResourceManager.GetString("EnumDuplicate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No name provided for enumeration..
+        /// </summary>
+        internal static string EnumNoName {
+            get {
+                return ResourceManager.GetString("EnumNoName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum expects at least parameter, the name of the enumeration..
+        /// </summary>
+        internal static string EnumParam {
+            get {
+                return ResourceManager.GetString("EnumParam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; expects a parameter..
+        /// </summary>
+        internal static string ExpectsParam {
+            get {
+                return ResourceManager.GetString("ExpectsParam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; expects at least one parameter..
+        /// </summary>
+        internal static string ExpectsParams {
+            get {
+                return ResourceManager.GetString("ExpectsParams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid text..
+        /// </summary>
+        internal static string Invalid {
+            get {
+                return ResourceManager.GetString("Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Key value &apos;{0}&apos; is marked as non db in the column row.  Cannot be used as a key..
+        /// </summary>
+        internal static string KeyMapsToNonDBColumn {
+            get {
+                return ResourceManager.GetString("KeyMapsToNonDBColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} named &apos;{1}&apos; already used in this file..
+        /// </summary>
+        internal static string NameAlreadyUsed {
+            get {
+                return ResourceManager.GetString("NameAlreadyUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not have a parameter..
+        /// </summary>
+        internal static string NoParams {
+            get {
+                return ResourceManager.GetString("NoParams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} value &apos;{1}&apos; not found in the column row..
+        /// </summary>
+        internal static string NotFoundInColumns {
+            get {
+                return ResourceManager.GetString("NotFoundInColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Null as and space as cannot be set to the same value..
+        /// </summary>
+        internal static string NullAsSpaceAs {
+            get {
+                return ResourceManager.GetString("NullAsSpaceAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Row count doesn&apos;t match header..
+        /// </summary>
+        internal static string RowCountMismatch {
+            get {
+                return ResourceManager.GetString("RowCountMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template expects at least one parameter, the dataitem to use as the enum member..
+        /// </summary>
+        internal static string TemplateParam {
+            get {
+                return ResourceManager.GetString("TemplateParam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot determine meaning from string..
+        /// </summary>
+        internal static string TemplatePatternNotRecognised {
+            get {
+                return ResourceManager.GetString("TemplatePatternNotRecognised", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; was unexpected.  Expected &apos;{1}&apos;..
+        /// </summary>
+        internal static string UnexpectedKeyword {
+            get {
+                return ResourceManager.GetString("UnexpectedKeyword", resourceCulture);
             }
         }
     }

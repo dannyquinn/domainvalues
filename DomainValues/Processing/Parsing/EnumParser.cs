@@ -16,7 +16,7 @@ namespace DomainValues.Processing.Parsing
 
             if (!IsValid(span, 4))
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.INVALID);
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.Invalid);
                 yield break;
             }
 
@@ -24,7 +24,7 @@ namespace DomainValues.Processing.Parsing
 
             if (span.Text.Length == 4 || string.IsNullOrWhiteSpace(span.Text.Substring(4)))
             {
-                enu.Errors.Add(new Error("Enum expects at least parameter, the name of the enumeration", false));
+                enu.Errors.Add(new Error(Errors.EnumParam, false));
             }
 
             CheckOrder(enu, expectedTokenType);
@@ -58,7 +58,7 @@ namespace DomainValues.Processing.Parsing
                         found = true;
                         if ((flags & type.Key) == 0)
                         {
-                            yield return new ParsedSpan(lineNumber, type.Key, match.Start + param.Start, match.Text, $"Already found a parameter that looks like the enum {type.Key}");
+                            yield return new ParsedSpan(lineNumber, type.Key, match.Start + param.Start, match.Text, string.Format(Errors.EnumDuplicate,type.Key));
                             continue;
                         }
                         flags = flags ^ type.Key;
@@ -72,14 +72,14 @@ namespace DomainValues.Processing.Parsing
 
                 if ((flags & TokenType.Parameter) == 0)
                 {
-                    yield return new ParsedSpan(lineNumber, TokenType.Enum | TokenType.Parameter, match.Start + param.Start, match.Text, "Invalid Text.");
+                    yield return new ParsedSpan(lineNumber, TokenType.Enum | TokenType.Parameter, match.Start + param.Start, match.Text,Errors.Invalid);
                     continue;
                 }
                 flags = flags ^ TokenType.Parameter;
                 yield return new ParsedSpan(lineNumber, TokenType.Enum | TokenType.Parameter, match.Start + param.Start, match.Text);
             }
             if ((flags & TokenType.Parameter) != 0)
-                enu.Errors.Add(new Error("No name provided for enumeration.", false));
+                enu.Errors.Add(new Error(Errors.EnumNoName, false));
 
             yield return enu;
         }

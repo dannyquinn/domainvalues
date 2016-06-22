@@ -15,7 +15,7 @@ namespace DomainValues.Processing.Parsing
 
             if (!IsValid(span, 8))
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span, Errors.INVALID);
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span, Errors.Invalid);
                 yield break;
             }
 
@@ -23,7 +23,7 @@ namespace DomainValues.Processing.Parsing
 
             if (span.Text.Length == 8 || string.IsNullOrWhiteSpace(span.Text.Substring(8)))
             {
-                template.Errors.Add(new Error("Template expects at least one parameter, the dataitem to use as the enum member.", false));
+                template.Errors.Add(new Error(Errors.TemplateParam, false));
             }
 
             CheckOrder(template, expectedTokenType);
@@ -77,7 +77,7 @@ namespace DomainValues.Processing.Parsing
             }
             if (!matched)
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, param, "Cannot determine meaning from string.");
+                yield return new ParsedSpan(lineNumber, TokenType.Parameter, param,Errors.TemplatePatternNotRecognised);
             }
         }
         

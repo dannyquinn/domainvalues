@@ -26,7 +26,7 @@ namespace DomainValues.Generation
         {
             
             var projectItem = GetProjectItem();
-
+            var codeProvider = GetCodeProvider();
             var spans = Scanner.GetSpans(inputFileContent,true);
 
             byte[] sqlBytes;
@@ -36,12 +36,12 @@ namespace DomainValues.Generation
             {
                 var content = SpansToContent.Convert(spans);
 
-                var enumBytes = content.GetEnumBytes(GetCodeProvider(), FileNamespace);
+                var enumBytes = content.GetEnumBytes(codeProvider, FileNamespace);
 
                 if (enumBytes != null)
                 {
 
-                    var enumFilename = $"{InputFilePath}.cs";
+                    var enumFilename = $"{InputFilePath}.{codeProvider.FileExtension}";
 
                     using (var fileStream = File.Create(enumFilename))
                     {
@@ -64,7 +64,7 @@ namespace DomainValues.Generation
                 if (item.Name.Equals($"{projectItem.Name}.sql", StringComparison.CurrentCultureIgnoreCase))
                     continue;
 
-                if (enumCreated && item.Name.Equals($"{projectItem.Name}.cs", StringComparison.CurrentCultureIgnoreCase))
+                if (enumCreated && item.Name.Equals($"{projectItem.Name}.{codeProvider.FileExtension}", StringComparison.CurrentCultureIgnoreCase))
                     continue;
 
                 item.Delete();

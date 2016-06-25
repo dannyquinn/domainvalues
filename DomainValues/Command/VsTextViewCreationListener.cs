@@ -24,7 +24,7 @@ namespace DomainValues.Command
 
         public void VsTextViewCreated(IVsTextView textViewAdapter)
         {
-            var view = _editorAdaptersFactoryService.GetWpfTextView(textViewAdapter);
+            IWpfTextView view = _editorAdaptersFactoryService.GetWpfTextView(textViewAdapter);
 
             view.TextBuffer.Properties.GetOrCreateSingletonProperty(() => view);
 
@@ -33,7 +33,7 @@ namespace DomainValues.Command
             if (_errorListProvider == null)
                 return;
 
-            var filter = new CommandFilter(view);
+            CommandFilter filter = new CommandFilter(view);
 
             IOleCommandTarget next;
 
@@ -46,7 +46,7 @@ namespace DomainValues.Command
 
         private void View_Closed(object sender, EventArgs e)
         {
-            var view = (IWpfTextView) sender;
+            IWpfTextView view = (IWpfTextView) sender;
             view.Closed -= View_Closed;
 
             if (_errorListProvider == null)

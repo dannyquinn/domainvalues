@@ -16,9 +16,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void NullAsIsRecognised()
         {
-            var output = new NullAsParser().ParseLine(0, "  null as", TokenType.NullAs).Single();
+            ParsedSpan output = new NullAsParser().ParseLine(0, "  null as", TokenType.NullAs).Single();
 
-            var expected = new ParsedSpan(0, TokenType.NullAs, 2, "null as", string.Format(Errors.ExpectsParam,"Null As"));
+            ParsedSpan expected = new ParsedSpan(0, TokenType.NullAs, 2, "null as", string.Format(Errors.ExpectsParam,"NullAs"));
 
             AreEqual(expected,output);
         }
@@ -26,9 +26,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void NullAsWithSpacesIsRecognised()
         {
-            var output = new NullAsParser().ParseLine(0, " null as   ", TokenType.NullAs).Single();
+            ParsedSpan output = new NullAsParser().ParseLine(0, " null as   ", TokenType.NullAs).Single();
 
-            var expected = new ParsedSpan(0,TokenType.NullAs,1,"null as", string.Format(Errors.ExpectsParam, "Null As"));
+            ParsedSpan expected = new ParsedSpan(0,TokenType.NullAs,1,"null as", string.Format(Errors.ExpectsParam, "NullAs"));
 
             AreEqual(expected,output);
         }
@@ -36,9 +36,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void NullAsWithParamIsRecognised()
         {
-            var output = new NullAsParser().ParseLine(0," null as test  ",TokenType.NullAs).ToList();
+            List<ParsedSpan> output = new NullAsParser().ParseLine(0," null as test  ",TokenType.NullAs).ToList();
 
-            var expected = new List<ParsedSpan>
+            List<ParsedSpan> expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.NullAs, 1, "null as"),
                 new ParsedSpan(0, TokenType.NullAs | TokenType.Parameter, 9, "test")
@@ -50,27 +50,19 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void WordStartingWIthNullAsIsNotRecognised()
         {
-            var output = new NullAsParser().ParseLine(0," null astest",TokenType.NullAs).Single();
+            ParsedSpan output = new NullAsParser().ParseLine(0," null astest",TokenType.NullAs).Single();
 
-            var expected = new ParsedSpan(0,TokenType.Parameter,1,"null astest",Errors.Invalid);
+            ParsedSpan expected = new ParsedSpan(0,TokenType.Parameter,1,"null astest",Errors.Invalid);
         }
 
         [Test]
         public void NextTokenShouldBeTableOrSpaceAs()
         {
-            var parser = new NullAsParser();
+            NullAsParser parser = new NullAsParser();
 
-            var output = parser.ParseLine(0, "null as", TokenType.NullAs).Single();
+            ParsedSpan output = parser.ParseLine(0, "null as", TokenType.NullAs).Single();
 
-            Assert.AreEqual(TokenType.Table | TokenType.SpaceAs,parser.NextTokenType);
-        }
-
-        [Test]
-        public void NullAsParserPrimaryType()
-        {
-            var parser = new NullAsParser();
-
-            Assert.AreEqual(TokenType.NullAs,parser.PrimaryType);
+            Assert.AreEqual(TokenType.Table | TokenType.SpaceAs,parser.NextExpectedToken);
         }
     }
 }

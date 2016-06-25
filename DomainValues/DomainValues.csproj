@@ -74,6 +74,7 @@
     <Compile Include="Processing\Parsing\TemplateParser.cs" />
     <Compile Include="Processing\Scanner.cs" />
     <Compile Include="Processing\SpansToContent.cs" />
+    <Compile Include="Processing\Validate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tagging\Classifier.cs" />
     <Compile Include="Tagging\ClassifierColor.cs" />

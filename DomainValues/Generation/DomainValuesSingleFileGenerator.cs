@@ -1,8 +1,11 @@
 ﻿using System;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using DomainValues.Model;
 using DomainValues.Processing;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -25,25 +28,25 @@ namespace DomainValues.Generation
         protected override byte[] GenerateCode(string inputFileContent)
         {
             
-            var projectItem = GetProjectItem();
-            var codeProvider = GetCodeProvider();
-            var spans = Scanner.GetSpans(inputFileContent,true);
+            ProjectItem projectItem = GetProjectItem();
+            CodeDomProvider codeProvider = GetCodeProvider();
+            List<ParsedSpan> spans = Scanner.GetSpans(inputFileContent,true);
 
             byte[] sqlBytes;
-            var enumCreated = false;
+            bool enumCreated = false;
 
             if (!spans.Any(a => a.Errors.Any()))
             {
-                var content = SpansToContent.Convert(spans);
+                ContentGenerator content = SpansToContent.Convert(spans);
 
-                var enumBytes = content.GetEnumBytes(codeProvider, FileNamespace);
+                byte[] enumBytes = content.GetEnumBytes(codeProvider, FileNamespace);
 
                 if (enumBytes != null)
                 {
 
-                    var enumFilename = $"{InputFilePath}.{codeProvider.FileExtension}";
+                    string enumFilename = $"{InputFilePath}.{codeProvider.FileExtension}";
 
-                    using (var fileStream = File.Create(enumFilename))
+                    using (FileStream fileStream = File.Create(enumFilename))
                     {
                         fileStream.Write(enumBytes, 0, enumBytes.Length);
                         fileStream.Close();

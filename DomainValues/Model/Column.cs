@@ -15,7 +15,7 @@
 
         public override bool Equals(object obj)
         {
-            var c = obj as Column;
+            Column c = obj as Column;
 
             return c != null && c.Text.Equals(Text);
         }

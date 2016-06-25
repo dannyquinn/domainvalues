@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DomainValues.Model;
 using DomainValues.Processing;
 using NUnit.Framework;
 
@@ -10,7 +12,7 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void CompleteBlocksNoError()
         {
-            var test = @"table dbo.test
+            string test = @"table dbo.test
                 key id
                 data 
                     | id | data | 
@@ -27,7 +29,7 @@ namespace DomainValues.Test.ParsingTests
                     | 3  | three |
             ";
 
-            var output = Scanner.GetSpans(test, true).ToList();
+            List<ParsedSpan> output = Scanner.GetSpans(test, true).ToList();
 
             Assert.IsFalse(output.Any(a=>a.Errors.Any()));
         }
@@ -35,7 +37,7 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void FileEndsWithTableThenError()
         {
-            var test = @"table dbo.test
+            string test = @"table dbo.test
                 key id
                 data 
                     | id | data | 
@@ -43,7 +45,7 @@ namespace DomainValues.Test.ParsingTests
 
                 table dbo.test1 ";
 
-            var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
+            Error output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
             Assert.AreEqual("Unexpected end of file.", output.Message);
             Assert.IsTrue(output.OutputWindowOnly);
@@ -52,7 +54,7 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void FileEndsWithKeyThenError()
         {
-            var test = @"table dbo.test
+            string test = @"table dbo.test
                 key id
                 data 
                     | id | data | 
@@ -62,7 +64,7 @@ namespace DomainValues.Test.ParsingTests
                 key id
             ";
 
-            var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
+            Error output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
             Assert.AreEqual("Unexpected end of file.", output.Message);
             Assert.IsTrue(output.OutputWindowOnly);
@@ -71,7 +73,7 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void FileEndsWithDataThenError()
         {
-            var test = @"table dbo.test
+            string test = @"table dbo.test
                 key id
                 data 
                     | id | data | 
@@ -82,7 +84,7 @@ namespace DomainValues.Test.ParsingTests
                 data 
             ";
 
-            var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
+            Error output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
             Assert.AreEqual("Unexpected end of file.",output.Message);
             Assert.IsTrue(output.OutputWindowOnly);
         }
@@ -90,7 +92,7 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void FileEndsWithHeaderThenError()
         {
-            var test = @"table dbo.test
+            string test = @"table dbo.test
                 key id
                 data 
                     | id | data | 
@@ -101,7 +103,7 @@ namespace DomainValues.Test.ParsingTests
                 data 
                     | id | data |";
 
-            var output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
+            Error output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
             Assert.AreEqual("Unexpected end of file.", output.Message);
             Assert.IsTrue(output.OutputWindowOnly);
         }

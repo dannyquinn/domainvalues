@@ -43,10 +43,10 @@ namespace DomainValues.Tagging
         }
         private void CreateTagSpans(ITextSnapshot snapshot)
         {
-            var lineNumber = 0;
+            int lineNumber = 0;
             ITextSnapshotLine line = snapshot.GetLineFromLineNumber(lineNumber);
             _errorListProvider.Tasks.Clear();
-            foreach (var span in Scanner.GetSpans(snapshot.GetText(), true).Where(a => a.Errors.Any()))
+            foreach (ParsedSpan span in Scanner.GetSpans(snapshot.GetText(), true).Where(a => a.Errors.Any()))
             {
                 if (span.LineNumber > lineNumber)
                 {
@@ -59,9 +59,9 @@ namespace DomainValues.Tagging
         private void CreateTag(ITextSnapshotLine line, int index, int length, List<Error> errors)
         {
 
-            var span = line.Snapshot.CreateTrackingSpan(new Span(line.Start + index, length), SpanTrackingMode.EdgeNegative);
+            ITrackingSpan span = line.Snapshot.CreateTrackingSpan(new Span(line.Start + index, length), SpanTrackingMode.EdgeNegative);
 
-            foreach (var error in errors)
+            foreach (Error error in errors)
             {
                 ErrorTask task = CreateErrorTask(line, index, error.Message);
                 _errorListProvider.Tasks.Add(task);
@@ -93,8 +93,8 @@ namespace DomainValues.Tagging
             ErrorTask task = (ErrorTask) sender;
             _errorListProvider.Navigate(task, new Guid("{00000000-0000-0000-0000-000000000000}"));
 
-            var line = _view.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(task.Line);
-            var point = new SnapshotPoint(line.Snapshot, line.Start.Position + task.Column);
+            ITextSnapshotLine line = _view.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(task.Line);
+            SnapshotPoint point = new SnapshotPoint(line.Snapshot, line.Start.Position + task.Column);
             _view.Caret.MoveTo(point);
         }
 

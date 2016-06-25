@@ -14,9 +14,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void TemplateIsRecognised()
         {
-            var output = new TemplateParser().ParseLine(0, "template", TokenType.Template).Single();
+            ParsedSpan output = new TemplateParser().ParseLine(0, "template", TokenType.Template).Single();
 
-            var expected = new ParsedSpan(0, TokenType.Template, 0, "template",Errors.TemplateParam);
+            ParsedSpan expected = new ParsedSpan(0, TokenType.Template, 0, "template",string.Format(Errors.ExpectsParam,"Template"));
 
             AreEqual(expected, output);
         }
@@ -24,9 +24,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void TemplateWithSpaceIsRecognised()
         {
-            var output = new TemplateParser().ParseLine(0, "template   ", TokenType.Template).Single();
+            ParsedSpan output = new TemplateParser().ParseLine(0, "template   ", TokenType.Template).Single();
 
-            var expected = new ParsedSpan(0, TokenType.Template, 0, "template", Errors.TemplateParam);
+            ParsedSpan expected = new ParsedSpan(0, TokenType.Template, 0, "template", string.Format(Errors.ExpectsParam,"Template"));
 
             AreEqual(expected, output);
         }
@@ -34,9 +34,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void TemplateWithParamIsRecognised()
         {
-            var output = new TemplateParser().ParseLine(0, "template test", TokenType.Template).ToList();
+            List<ParsedSpan> output = new TemplateParser().ParseLine(0, "template test", TokenType.Template).ToList();
 
-            var expected = new List<ParsedSpan>
+            List<ParsedSpan> expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Template, 0, "template"),
                 new ParsedSpan(0, TokenType.EnumMember, 9, "test")
@@ -48,9 +48,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void WordStartingTemplateIsNotRecognised()
         {
-            var output = new TemplateParser().ParseLine(0, "templatetest", TokenType.Template).Single();
+            ParsedSpan output = new TemplateParser().ParseLine(0, "templatetest", TokenType.Template).Single();
 
-            var expected = new ParsedSpan(0,TokenType.Parameter,0,"templatetest", Errors.Invalid);
+            ParsedSpan expected = new ParsedSpan(0,TokenType.Parameter,0,"templatetest", Errors.Invalid);
 
             AreEqual(expected,output);
         }
@@ -58,27 +58,19 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void NextTokenShouldBeData()
         {
-            var parser = new TemplateParser();
+            TemplateParser parser = new TemplateParser();
 
-            var output = parser.ParseLine(0, "template", TokenType.Template).Single();
+            ParsedSpan output = parser.ParseLine(0, "template", TokenType.Template).Single();
 
-            Assert.AreEqual(TokenType.Data,parser.NextTokenType);
-        }
-
-        [Test]
-        public void TemplateParserPrimaryType()
-        {
-            var parser = new TemplateParser();
-
-            Assert.AreEqual(TokenType.Template,parser.PrimaryType);
+            Assert.AreEqual(TokenType.Data,parser.NextExpectedToken);
         }
 
         [Test]
         public void TemplateWithDesc()
         {
-            var output = new TemplateParser().ParseLine(0, "template [test] test2",TokenType.Template).ToList();
+            List<ParsedSpan> output = new TemplateParser().ParseLine(0, "template [test] test2",TokenType.Template).ToList();
 
-            var expected = new List<ParsedSpan>
+            List<ParsedSpan> expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Template, 0, "template"),
                 new ParsedSpan(0, TokenType.EnumDesc, 10, "test"),
@@ -91,9 +83,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void TemplateWithInit()
         {
-            var output = new TemplateParser().ParseLine(0, "template test = id", TokenType.Template).ToList();
+            List<ParsedSpan> output = new TemplateParser().ParseLine(0, "template test = id", TokenType.Template).ToList();
 
-            var expected = new List<ParsedSpan>
+            List<ParsedSpan> expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Template, 0, "template"),
                 new ParsedSpan(0, TokenType.EnumMember, 9, "test"),
@@ -106,9 +98,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void TemplateWithDescAndInit()
         {
-            var output = new TemplateParser().ParseLine(0, "template [test] test2 = id", TokenType.Template).ToList();
+            List<ParsedSpan> output = new TemplateParser().ParseLine(0, "template [test] test2 = id", TokenType.Template).ToList();
 
-            var expected = new List<ParsedSpan>
+            List<ParsedSpan> expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Template, 0, "template"),
                 new ParsedSpan(0, TokenType.EnumDesc, 10, "test"),
@@ -122,9 +114,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void TemplatePatternIsNotRecognised()
         {
-            var output = new TemplateParser().ParseLine(0, "template test = id test2", TokenType.Template).ToList();
+            List<ParsedSpan> output = new TemplateParser().ParseLine(0, "template test = id test2", TokenType.Template).ToList();
 
-            var expected = new List<ParsedSpan>
+            List<ParsedSpan> expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Template, 0, "template"),
                 new ParsedSpan(0, TokenType.Parameter, 9, "test = id test2",Errors.TemplatePatternNotRecognised)

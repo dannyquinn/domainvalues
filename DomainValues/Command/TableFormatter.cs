@@ -12,23 +12,23 @@ namespace DomainValues.Command
     {
         public static void Align(IWpfTextView view)
         {
-            var point = view.Caret.Position.BufferPosition;
+            SnapshotPoint point = view.Caret.Position.BufferPosition;
 
             if (!LineQualifies(point) || IsPipeEscaped(point))
                 return;
 
-            var lineNumber = point.GetContainingLine().LineNumber;
+            int lineNumber = point.GetContainingLine().LineNumber;
 
-            var textLines = view.TextBuffer.CurrentSnapshot.Lines.ToList();
+            List<ITextSnapshotLine> textLines = view.TextBuffer.CurrentSnapshot.Lines.ToList();
 
-            var tableStartIndex = textLines
+            int tableStartIndex = textLines
                 .Select((text, index) => new { text, index })
                 .Where(a => a.index <= lineNumber)
                 .OrderByDescending(a => a.index)
                 .TakeWhile(a => a.text.GetText().TrimStart().StartsWith("|"))
                 .Min(a => a.index);
 
-            var tableEndIndex = textLines
+            int tableEndIndex = textLines
                 .Select((text, index) => new { text, index })
                 .Where(a => a.index >= lineNumber)
                 .OrderBy(a => a.index)
@@ -38,30 +38,30 @@ namespace DomainValues.Command
             if (tableStartIndex == tableEndIndex)
                 return;
 
-            var lines = textLines.Skip(tableStartIndex).Take(tableEndIndex - tableStartIndex + 1).ToList();
+            List<ITextSnapshotLine> lines = textLines.Skip(tableStartIndex).Take(tableEndIndex - tableStartIndex + 1).ToList();
 
-            var lineColumns = lines.Select(a => GetColumns(a.Extent)).ToList();
+            List<List<Tuple<Span, string>>> lineColumns = lines.Select(a => GetColumns(a.Extent)).ToList();
 
-            var maxColumns = lineColumns.Max(a => a.Count);
+            int maxColumns = lineColumns.Max(a => a.Count);
 
             view.Caret.MoveToPreviousCaretPosition();
-            var edit = view.TextBuffer.CreateEdit();
+            ITextEdit edit = view.TextBuffer.CreateEdit();
 
             lines
                 .Select(a => new Span(a.Start, a.GetText().IndexOf('|')))
                 .ToList()
                 .ForEach(a => edit.Replace(a, new string(' ', 8)));
 
-            for (var column = 0; column < maxColumns; column++)
+            for (int column = 0; column < maxColumns; column++)
             {
-                var cols = lineColumns.Where(a => a.Count >= column + 1).ToList();
-                var maxColLen = cols.Max(a => a[column].Item2.Length);
+                List<List<Tuple<Span, string>>> cols = lineColumns.Where(a => a.Count >= column + 1).ToList();
+                int maxColLen = cols.Max(a => a[column].Item2.Length);
 
-                foreach (var col in cols)
+                foreach (List<Tuple<Span, string>> col in cols)
                 {
-                    var currentText = col[column].Item2;
+                    string currentText = col[column].Item2;
 
-                    var newText = $" {currentText}{new string(' ', maxColLen - currentText.Length)} ";
+                    string newText = $" {currentText}{new string(' ', maxColLen - currentText.Length)} ";
 
                     edit.Replace(col[column].Item1, newText);
                 }
@@ -82,7 +82,7 @@ namespace DomainValues.Command
 
         private static bool LineQualifies(SnapshotPoint point)
         {
-            var lineText = point.GetContainingLine().GetText();
+            string lineText = point.GetContainingLine().GetText();
 
             return lineText.TrimStart().StartsWith("|") &&
                    Regex.Matches(lineText, @"\|", RegexOptions.Compiled).Count >= 2;
@@ -90,7 +90,7 @@ namespace DomainValues.Command
 
         private static bool IsPipeEscaped(SnapshotPoint point)
         {
-            var lineText = point.GetContainingLine();
+            ITextSnapshotLine lineText = point.GetContainingLine();
 
             return lineText
                 .GetText()

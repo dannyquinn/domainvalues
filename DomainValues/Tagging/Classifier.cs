@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using DomainValues.Model;
 using DomainValues.Processing;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Formatting;
 
 namespace DomainValues.Tagging
 {
@@ -38,17 +40,17 @@ namespace DomainValues.Tagging
 
         private void VSColorTheme_ThemeChanged(ThemeChangedEventArgs e)
         {
-            var view = _buffer.Properties.GetProperty(typeof(IWpfTextView)) as IWpfTextView;
+            IWpfTextView view = _buffer.Properties.GetProperty(typeof(IWpfTextView)) as IWpfTextView;
 
-            var format = _formatMap.GetClassificationFormatMap(view);
+            IClassificationFormatMap format = _formatMap.GetClassificationFormatMap(view);
 
             format.BeginBatchUpdate();
             
-            foreach (var classification in _classifications)
+            foreach (string classification in _classifications)
             {
-                var classificationType = _typeRegistry.GetClassificationType(classification);
+                IClassificationType classificationType = _typeRegistry.GetClassificationType(classification);
 
-                var property = format.GetTextProperties(classificationType);
+                TextFormattingRunProperties property = format.GetTextProperties(classificationType);
 
                 format.SetTextProperties(classificationType,property.SetForeground(ClassifierColor.GetColor(classification)));
             }
@@ -72,19 +74,18 @@ namespace DomainValues.Tagging
 
         private void CreateTagSpans(ITextSnapshot snapshot)
         {
-            var lineNumber = 0;
-            var line = snapshot.GetLineFromLineNumber(0);
+            int lineNumber = 0;
+            ITextSnapshotLine line = snapshot.GetLineFromLineNumber(0);
 
-            foreach (var span in Scanner.GetSpans(snapshot.GetText(), false))
+            foreach (ParsedSpan span in Scanner.GetSpans(snapshot.GetText(), false))
             {
                 if (span.LineNumber > lineNumber)
                 {
                     lineNumber = span.LineNumber;
                     line = snapshot.GetLineFromLineNumber(lineNumber);
-
                 }
 
-                var type = _typeRegistry.GetClassificationType(TokenToClassification[span.Type]);
+                IClassificationType type = _typeRegistry.GetClassificationType(TokenToClassification[span.Type]);
 
                 CreateTag(line, span.Start, span.Text.Length, type);
             }
@@ -92,7 +93,7 @@ namespace DomainValues.Tagging
 
         private void CreateTag(ITextSnapshotLine line, int index, int length, IClassificationType type)
         {
-            var span = line.Snapshot.CreateTrackingSpan(new Span(line.Start + index, length), SpanTrackingMode.EdgeNegative);
+            ITrackingSpan span = line.Snapshot.CreateTrackingSpan(new Span(line.Start + index, length), SpanTrackingMode.EdgeNegative);
 
             CreateTagSpan(span, new ClassificationTag(type));
         }
@@ -111,7 +112,7 @@ namespace DomainValues.Tagging
             {TokenType.Table | TokenType.Parameter, DvContent.DvText},
 
             {TokenType.Key, DvContent.DvKeyword},
-            {TokenType.Key | TokenType.Variable, DvContent.DvVariable},
+            {TokenType.Key | TokenType.Parameter, DvContent.DvVariable},
 
             {TokenType.Enum, DvContent.DvKeyword},
             {TokenType.Enum | TokenType.Parameter, DvContent.DvText},

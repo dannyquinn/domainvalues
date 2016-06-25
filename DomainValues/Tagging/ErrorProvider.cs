@@ -12,17 +12,21 @@ namespace DomainValues.Tagging
     [TagType(typeof(ErrorTag))]
     internal class ErrorProvider : ITaggerProvider
     {
-        [Import]
-        ITextDocumentFactoryService _textService = null;
+        private readonly ITextDocumentFactoryService _textDocumentFactoryService;
+
+        public ErrorProvider(ITextDocumentFactoryService textDocumentFactoryService)
+        {
+            _textDocumentFactoryService = textDocumentFactoryService;
+        }
 
         public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
-            var errors = buffer.Properties.GetProperty(typeof(ErrorListProvider)) as ErrorListProvider;
-            var view = buffer.Properties.GetProperty(typeof(IWpfTextView)) as IWpfTextView;
+            ErrorListProvider errors = buffer.Properties.GetProperty(typeof(ErrorListProvider)) as ErrorListProvider;
+            IWpfTextView view = buffer.Properties.GetProperty(typeof(IWpfTextView)) as IWpfTextView;
 
             ITextDocument doc;
 
-            if (_textService.TryGetTextDocument(buffer, out doc) && errors != null)
+            if (_textDocumentFactoryService.TryGetTextDocument(buffer, out doc) && errors != null)
             {
                 return buffer.Properties.GetOrCreateSingletonProperty(() => new ErrorTagger(buffer, view, errors, doc)) as ITagger<T>;
             }

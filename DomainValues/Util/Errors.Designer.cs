@@ -97,29 +97,11 @@ namespace DomainValues.Util {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enum expects at least parameter, the name of the enumeration..
-        /// </summary>
-        internal static string EnumParam {
-            get {
-                return ResourceManager.GetString("EnumParam", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; expects a parameter..
         /// </summary>
         internal static string ExpectsParam {
             get {
                 return ResourceManager.GetString("ExpectsParam", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; expects at least one parameter..
-        /// </summary>
-        internal static string ExpectsParams {
-            get {
-                return ResourceManager.GetString("ExpectsParams", resourceCulture);
             }
         }
         
@@ -183,15 +165,6 @@ namespace DomainValues.Util {
         internal static string RowCountMismatch {
             get {
                 return ResourceManager.GetString("RowCountMismatch", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Template expects at least one parameter, the dataitem to use as the enum member..
-        /// </summary>
-        internal static string TemplateParam {
-            get {
-                return ResourceManager.GetString("TemplateParam", resourceCulture);
             }
         }
         

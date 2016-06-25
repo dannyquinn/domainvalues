@@ -58,11 +58,11 @@ namespace DomainValues.Processing
             if (_blocks.All(a => string.IsNullOrWhiteSpace(a.EnumName)))
                 return null;
 
-            var code = new CodeCompileUnit();
+            CodeCompileUnit code = new CodeCompileUnit();
             code.UserData.Add("AllowLateBound", false);
             code.UserData.Add("RequiresVariableDeclaration", true);
 
-            var codeNamespace = new CodeNamespace();
+            CodeNamespace codeNamespace = new CodeNamespace();
 
             if (_blocks.Any(a => a.EnumHasFlagsAttribute))
                 codeNamespace.Imports.Add(new CodeNamespaceImport("System"));
@@ -72,11 +72,11 @@ namespace DomainValues.Processing
 
             code.Namespaces.Add(codeNamespace);
 
-            var enumNamespace = new CodeNamespace(fileNamespace);
+            CodeNamespace enumNamespace = new CodeNamespace(fileNamespace);
 
-            foreach (var block in _blocks.Where(a => !string.IsNullOrWhiteSpace(a.EnumName)))
+            foreach (DataBlock block in _blocks.Where(a => !string.IsNullOrWhiteSpace(a.EnumName)))
             {
-                var type = new CodeTypeDeclaration(block.EnumName)
+                CodeTypeDeclaration type = new CodeTypeDeclaration(block.EnumName)
                 {
                     IsEnum = true
                 };
@@ -89,13 +89,13 @@ namespace DomainValues.Processing
                 if (block.EnumHasFlagsAttribute)
                     type.CustomAttributes.Add(new CodeAttributeDeclaration("Flags"));
 
-                var enumMember = block.Data.Single(a => a.Key.Text.Equals(block.EnumMemberField, StringComparison.CurrentCultureIgnoreCase));
-                var enumDesc = block.Data.SingleOrDefault(a => a.Key.Text.Equals(block.EnumDescField, StringComparison.CurrentCultureIgnoreCase));
-                var enumInit = block.Data.SingleOrDefault(a => a.Key.Text.Equals(block.EnumInitField, StringComparison.CurrentCultureIgnoreCase));
+                KeyValuePair<Column, List<string>> enumMember = block.Data.Single(a => a.Key.Text.Equals(block.EnumMemberField, StringComparison.CurrentCultureIgnoreCase));
+                KeyValuePair<Column, List<string>> enumDesc = block.Data.SingleOrDefault(a => a.Key.Text.Equals(block.EnumDescField, StringComparison.CurrentCultureIgnoreCase));
+                KeyValuePair<Column, List<string>> enumInit = block.Data.SingleOrDefault(a => a.Key.Text.Equals(block.EnumInitField, StringComparison.CurrentCultureIgnoreCase));
 
-                for (var i = 0; i < block.Data.Values.ElementAt(0).Count; i++)
+                for (int i = 0; i < block.Data.Values.ElementAt(0).Count; i++)
                 {
-                    var field = new CodeMemberField(block.EnumName, enumMember.Value.ElementAt(i));
+                    CodeMemberField field = new CodeMemberField(block.EnumName, enumMember.Value.ElementAt(i));
 
                     if (enumDesc.Value != null)
                     {
@@ -111,7 +111,7 @@ namespace DomainValues.Processing
                     {
                         try
                         {
-                            var value = Convert.ChangeType(enumInit.Value.ElementAt(i), block.GetBaseType());
+                            object value = Convert.ChangeType(enumInit.Value.ElementAt(i), block.GetBaseType());
 
                             field.InitExpression = new CodePrimitiveExpression(value);
                         }
@@ -128,7 +128,7 @@ namespace DomainValues.Processing
             }
             code.Namespaces.Add(enumNamespace);
 
-            var options = new CodeGeneratorOptions()
+            CodeGeneratorOptions options = new CodeGeneratorOptions()
             {
                 BlankLinesBetweenMembers = false,
                 BracingStyle = "C"
@@ -136,7 +136,7 @@ namespace DomainValues.Processing
 
 
 
-            using (var writer = new StringWriter(new StringBuilder()))
+            using (StringWriter writer = new StringWriter(new StringBuilder()))
             {
                 provider.GenerateCodeFromCompileUnit(code, writer, options);
                 writer.Flush();
@@ -149,11 +149,11 @@ namespace DomainValues.Processing
             if (!_blocks.Any())
                 return null;
 
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-            foreach (var block in _blocks)
+            foreach (DataBlock block in _blocks)
             {
-                var update = block.Data.Keys.Any(a => !a.IsKey)
+                string update = block.Data.Keys.Any(a => !a.IsKey)
                     ? string.Format(UpdateTemplate, SqlUpdateColumns(block.Data))
                     : string.Empty;
 
@@ -182,7 +182,7 @@ namespace DomainValues.Processing
 
         private static string SqlColumns(Dictionary<Column, List<string>> data, bool horizontal = false, string prefix = null)
         {
-            var cols = data.Keys
+            IEnumerable<string> cols = data.Keys
                 .Where(a => a.IsDbColumn)
                 .Select(a => $"{prefix}[{a.Text}]");
 

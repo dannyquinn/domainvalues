@@ -129,14 +129,8 @@
   <data name="EnumNoName" xml:space="preserve">
     <value>No name provided for enumeration.</value>
   </data>
-  <data name="EnumParam" xml:space="preserve">
-    <value>Enum expects at least parameter, the name of the enumeration.</value>
-  </data>
   <data name="ExpectsParam" xml:space="preserve">
     <value>'{0}' expects a parameter.</value>
-  </data>
-  <data name="ExpectsParams" xml:space="preserve">
-    <value>'{0}' expects at least one parameter.</value>
   </data>
   <data name="Invalid" xml:space="preserve">
     <value>Invalid text.</value>
@@ -158,9 +152,6 @@
   </data>
   <data name="RowCountMismatch" xml:space="preserve">
     <value>Row count doesn't match header.</value>
-  </data>
-  <data name="TemplateParam" xml:space="preserve">
-    <value>Template expects at least one parameter, the dataitem to use as the enum member.</value>
   </data>
   <data name="TemplatePatternNotRecognised" xml:space="preserve">
     <value>Cannot determine meaning from string.</value>

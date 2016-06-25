@@ -14,9 +14,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void SpaceAsIsRecognised()
         {
-            var output = new SpaceAsParser().ParseLine(0," space as",TokenType.SpaceAs).Single();
+            ParsedSpan output = new SpaceAsParser().ParseLine(0," space as",TokenType.SpaceAs).Single();
 
-            var expected = new ParsedSpan(0,TokenType.SpaceAs,1,"space as", string.Format(Errors.ExpectsParam,"Space As"));
+            ParsedSpan expected = new ParsedSpan(0,TokenType.SpaceAs,1,"space as", string.Format(Errors.ExpectsParam,"SpaceAs"));
 
             AreEqual(expected,output);
         }
@@ -24,9 +24,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void SpaceAsWithSpacesIsRecognised()
         {
-            var output = new SpaceAsParser().ParseLine(0," space as  ",TokenType.SpaceAs).Single();
+            ParsedSpan output = new SpaceAsParser().ParseLine(0," space as  ",TokenType.SpaceAs).Single();
 
-            var expected = new ParsedSpan(0,TokenType.SpaceAs,1,"space as", string.Format(Errors.ExpectsParam,"Space As"));
+            ParsedSpan expected = new ParsedSpan(0,TokenType.SpaceAs,1,"space as", string.Format(Errors.ExpectsParam,"SpaceAs"));
 
             AreEqual(expected,output);
         }
@@ -34,9 +34,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void SpaceAsWithParamIsRecognised()
         {
-            var output = new SpaceAsParser().ParseLine(0," space as test",TokenType.SpaceAs).ToList();
+            List<ParsedSpan> output = new SpaceAsParser().ParseLine(0," space as test",TokenType.SpaceAs).ToList();
 
-            var expected = new List<ParsedSpan>
+            List<ParsedSpan> expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.SpaceAs, 1, "space as"),
                 new ParsedSpan(0, TokenType.SpaceAs | TokenType.Parameter, 10, "test")
@@ -48,9 +48,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void WordStartingWithSpaceAsIsNotRecognised()
         {
-            var output = new SpaceAsParser().ParseLine(0,"space astest",TokenType.SpaceAs).Single();
+            ParsedSpan output = new SpaceAsParser().ParseLine(0,"space astest",TokenType.SpaceAs).Single();
 
-            var expected = new ParsedSpan(0,TokenType.Parameter,0,"space astest",Errors.Invalid);
+            ParsedSpan expected = new ParsedSpan(0,TokenType.Parameter,0,"space astest",Errors.Invalid);
 
             AreEqual(expected,output);
         }
@@ -58,19 +58,11 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void NextTokenShouldBeTable()
         {
-            var parser = new SpaceAsParser();
+            SpaceAsParser parser = new SpaceAsParser();
 
-            var output = parser.ParseLine(0, "space as", TokenType.SpaceAs).Single();
+            ParsedSpan output = parser.ParseLine(0, "space as", TokenType.SpaceAs).Single();
 
-            Assert.AreEqual(TokenType.Table , parser.NextTokenType);
-        }
-
-        [Test]
-        public void SpaceAsParserPrimaryType()
-        {
-            var parser = new SpaceAsParser();
-
-            Assert.AreEqual(TokenType.SpaceAs,parser.PrimaryType);
+            Assert.AreEqual(TokenType.Table , parser.NextExpectedToken);
         }
     }
 }

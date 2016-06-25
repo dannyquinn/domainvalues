@@ -10,35 +10,9 @@ namespace DomainValues.Processing.Parsing
 {
     internal class SpaceAsParser : ParserBase
     {
-        internal override IEnumerable<ParsedSpan> ParseLine(int lineNumber, string source, TokenType? expectedTokenType)
-        {
-            NextTokenType = TokenType.Table;
-
-            var span = source.GetTextSpan();
-
-            if (span.Text.Length > 8 && span.Text.Substring(8, 1) != " ")
-            {
-                yield return new ParsedSpan(lineNumber,TokenType.Parameter, span,Errors.Invalid);
-                yield break;
-            }
-
-            var spaceAs = new ParsedSpan(lineNumber,TokenType.SpaceAs,span.Start,span.Text.Substring(0,8));
-
-            if (span.Text.Length == 8 || string.IsNullOrWhiteSpace(span.Text.Substring(8)))
-            {
-                spaceAs.Errors.Add(new Error(string.Format(Errors.ExpectsParam,"Space As"),false));
-            }
-
-            CheckOrder(spaceAs,expectedTokenType);
-
-            yield return spaceAs;
-
-            if (span.Text.Length > 8)
-            {
-                yield return new ParsedSpan(lineNumber,TokenType.SpaceAs | TokenType.Parameter,source.GetTextSpan(span.Start+8));
-            }
-        }
-
-        internal override TokenType PrimaryType => TokenType.SpaceAs;
+        protected override TokenType PrimaryType => TokenType.SpaceAs;
+        protected override TokenType? NextType { get; set; } = TokenType.Table;
+        protected override bool HasParams => true;
+        protected override int KeywordLength => 8;
     }
 }

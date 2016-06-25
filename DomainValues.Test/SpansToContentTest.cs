@@ -13,16 +13,16 @@ namespace DomainValues.Test
         [Test]
         public void BasicBlock()
         {
-            var test = @"
+            string test = @"
                 table dbo.test
                 key id
                 data 
                     | id | test_col |
                     | 1  | test_val |";
 
-            var output = GetOutput(test).Single();
+            DataBlock output = GetOutput(test).Single();
 
-            var expected = new DataBlock("dbo.test");
+            DataBlock expected = new DataBlock("dbo.test");
 
             expected.Data.Add(new Column("id",true,true),new List<string> {"1"} );
             expected.Data.Add(new Column("test_col",false,true),new List<string> {"test_val"} );
@@ -33,7 +33,7 @@ namespace DomainValues.Test
         [Test]
         public void BlockWithEnum()
         {
-            var test = @"
+            string test = @"
                 table dbo.test
                 key id
                 enum testEnum internal byte flags 
@@ -42,9 +42,9 @@ namespace DomainValues.Test
                     | id | test_col | test_desc* |
                     | 1  | test_val | test_value |";
 
-            var output = GetOutput(test).Single();
+            DataBlock output = GetOutput(test).Single();
 
-            var expected = new DataBlock("dbo.test")
+            DataBlock expected = new DataBlock("dbo.test")
             {
                 EnumName = "testEnum",
                 IsEnumInternal = true,
@@ -64,7 +64,7 @@ namespace DomainValues.Test
         [Test]
         public void TwoBlocks()
         {
-            var test = @"
+            string test = @"
                 table dbo.test
                 key id 
                 data 
@@ -79,19 +79,19 @@ namespace DomainValues.Test
                     | 2     | value2 | 
             ";
 
-            var output = GetOutput(test).ToList();
+            List<DataBlock> output = GetOutput(test).ToList();
 
-            var expected = new List<DataBlock>()
+            List<DataBlock> expected = new List<DataBlock>()
             {
                 new DataBlock("dbo.test"),
                 new DataBlock("dbo.testTwo")
             };
 
-            var first = expected.Single(a => a.Table.Equals("dbo.test"));
+            DataBlock first = expected.Single(a => a.Table.Equals("dbo.test"));
             first.Data.Add(new Column("id", true, true), new List<string> {"1"});
             first.Data.Add(new Column("test_col", false, true), new List<string> {"test_val"});
 
-            var second = expected.Single(a => a.Table.Equals("dbo.testTwo"));
+            DataBlock second = expected.Single(a => a.Table.Equals("dbo.testTwo"));
             second.Data.Add(new Column("keyid", true, true), new List<string> {"1", "2"});
             second.Data.Add(new Column("test", false, true), new List<string> {"value1","value2"} );
 
@@ -125,13 +125,13 @@ namespace DomainValues.Test
 
         private List<DataBlock> GetOutput(string source)
         {
-            var blocks = new List<DataBlock>();
+            List<DataBlock> blocks = new List<DataBlock>();
 
-            var spans = Scanner.GetSpans(source, true);
+            List<ParsedSpan> spans = Scanner.GetSpans(source, true);
 
             Assert.IsFalse(spans.Any(a=>a.Errors.Any()),"spans.Any(a=>a.Errors.Any())");
 
-            foreach (var block in spans.GetStatementBlocks())
+            foreach (List<ParsedSpan> block in spans.GetStatementBlocks())
             {
                 blocks.Add(SpansToContent.GetBlock(block));    
             }

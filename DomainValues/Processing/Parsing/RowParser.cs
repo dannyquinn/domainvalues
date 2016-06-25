@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using DomainValues.Model;
@@ -8,55 +9,60 @@ namespace DomainValues.Processing.Parsing
 {
     internal class RowParser : ParserBase
     {
-        internal override IEnumerable<ParsedSpan> ParseLine(int lineNumber, string source, TokenType? expectedTokenType)
+        public override List<ParsedSpan> ParseLine(int lineNumber, string source,TokenType? expectedType)
         {
+            List<ParsedSpan> parsedSpans = new List<ParsedSpan>();
+            TextSpan span = source.GetTextSpan();
 
             TokenType token = TokenType.HeaderRow;
 
-            if (expectedTokenType != null && (expectedTokenType & TokenType.HeaderRow) != 0)
+            if (expectedType != null && (expectedType & TokenType.HeaderRow) != 0)
             {
-                NextTokenType = TokenType.ItemRow;
+                NextType = TokenType.ItemRow;
             }
             else
             {
                 token = TokenType.ItemRow;
-                NextTokenType = TokenType.Data | TokenType.Table | TokenType.ItemRow;
+                NextType = TokenType.Data | TokenType.Table | TokenType.ItemRow;
             }
 
-            var lastPipe = Regex.Matches(source, @"(?<!\\)\|", RegexOptions.Compiled).Cast<Match>().Last().Index + 1;
+            int lastPipe = Regex.Matches(span.Text, @"(?<!\\)\|", RegexOptions.Compiled).Cast<Match>().Last().Index + 1;
 
-            var span = new ParsedSpan(lineNumber, token, source.Substring(0, lastPipe).GetTextSpan());
+            ParsedSpan data = new ParsedSpan(lineNumber, token, span.To(lastPipe));
 
-            CheckOrder(span, expectedTokenType);
+            CheckKeywordOrder(data, expectedType);
 
-            yield return span;
+            parsedSpans.Add(data);
 
             if (source.Length > lastPipe)
             {
-                var invalidSpan = source.GetTextSpan(lastPipe);
+                TextSpan invalidSpan = span.From(lastPipe);
 
                 if (invalidSpan.Text.Length > 0)
-                    yield return new ParsedSpan(lineNumber, TokenType.Parameter, invalidSpan, Errors.Invalid);
+                    parsedSpans.Add(new ParsedSpan(lineNumber, TokenType.Parameter, invalidSpan, Errors.Invalid));
             }
 
 
             if (token == TokenType.ItemRow)
-                yield break;
+                return parsedSpans;
 
-            var columns = RegExpr.Columns.Matches(source);
+            MatchCollection columns = RegExpr.Columns.Matches(source);
 
-            var duplicates = columns.Cast<Match>()
+            List<Match> duplicates = columns.Cast<Match>()
                 .GroupBy(a => a.Value.Trim().ToLower())
                 .SelectMany(a => a.Skip(1))
                 .ToList();
 
-            foreach (var duplicate in duplicates)
+            foreach (Match duplicate in duplicates)
             {
-                var value = duplicate.Value.GetTextSpan();
-                yield return new ParsedSpan(lineNumber, TokenType.HeaderRow, duplicate.Index + value.Start, value.Text,string.Format(Errors.DuplicateValue,"Column",value.Text));
+                TextSpan value = duplicate.Value.GetTextSpan();
+                parsedSpans.Add(new ParsedSpan(lineNumber, TokenType.HeaderRow, duplicate.Index + value.Start, value.Text,string.Format(Errors.DuplicateValue,"Column",value.Text)));
             }
+            return parsedSpans;
         }
 
-        internal override TokenType PrimaryType => TokenType.HeaderRow | TokenType.ItemRow;
+        protected override TokenType PrimaryType => TokenType.HeaderRow | TokenType.ItemRow;
+
+        protected override TokenType? NextType { get; set; }
     }
 }

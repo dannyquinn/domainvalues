@@ -11,9 +11,9 @@ namespace DomainValues.Test.ParsingTests
         {
             Assert.AreEqual(expected.Count(),test.Count(), "Count");
 
-            foreach (var t in test)
+            foreach (ParsedSpan t in test)
             {
-                var ex = expected.SingleOrDefault(a => a.Start == t.Start);
+                ParsedSpan ex = expected.SingleOrDefault(a => a.Start == t.Start);
 
                 Assert.IsNotNull(ex, $"No token at position {t.Start}");
 
@@ -22,9 +22,9 @@ namespace DomainValues.Test.ParsingTests
                 Assert.AreEqual(ex.LineNumber,t.LineNumber,"Line Number");
 
                 Assert.AreEqual( ex.Errors.Count,t.Errors.Count,"Error count");
-                foreach (var error in t.Errors)
+                foreach (Error error in t.Errors)
                 {
-                    var exErr = ex.Errors.SingleOrDefault(a => a.Message.Equals(error.Message));
+                    Error exErr = ex.Errors.SingleOrDefault(a => a.Message.Equals(error.Message));
 
 
                     Assert.IsNotNull(exErr, $"No error '{error.Message}'");

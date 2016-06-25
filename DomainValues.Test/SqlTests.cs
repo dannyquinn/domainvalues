@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using DomainValues.Model;
 using DomainValues.Processing;
 using DomainValues.Util;
 using NUnit.Framework;
@@ -12,15 +14,15 @@ namespace DomainValues.Test
         [Test]
         public void ValidInputNoErrors()
         {
-            var test = @"table dbo.test
+            string test = @"table dbo.test
                 key id
                 data 
                     | id | testcol |
                     | 1  | value   |";
 
-            var output = GetData(test);
+            string output = GetData(test);
 
-            var expected =
+            string expected =
                 "MERGE dbo.test AS TARGET\r\n" +
                 "USING\r\n" +
                 "(\r\n" +
@@ -57,15 +59,15 @@ namespace DomainValues.Test
         [Test]
         public void AllDbColumnsAreKeysDontIncludeUpdate()
         {
-            var test = @"table dbo.test
+            string test = @"table dbo.test
                 key id testcol
                 data 
                     | id | testcol |
                     | 1  | value   |";
 
-            var output = GetData(test);
+            string output = GetData(test);
 
-            var expected =
+            string expected =
                 "MERGE dbo.test AS TARGET\r\n"+
                 "USING\r\n" +
                 "(\r\n" +
@@ -100,15 +102,15 @@ namespace DomainValues.Test
         [Test]
         public void DontIncludeNonDbColumns()
         {
-            var test = @"table dbo.test
+            string test = @"table dbo.test
                 key id
                 data 
                     | id | testcol | nondb* |
                     | 1  | value   | thing  |";
 
-            var output = GetData(test);
+            string output = GetData(test);
 
-            var expected =
+            string expected =
                 "MERGE dbo.test AS TARGET\r\n" +
                 "USING\r\n" +
                 "(\r\n" +
@@ -145,13 +147,13 @@ namespace DomainValues.Test
         [Test]
         public void DefaultNullSpaceOptions()
         {
-            var test = @"table dbo.test
+            string test = @"table dbo.test
                 key id
                 data 
                     | id | col1 | col2   | col3  | col4 | col5  |
                     | 1  |      | $space | $null |      | data  |";
 
-            var output = GetData(test);
+            string output = GetData(test);
 
             Assert.IsTrue(output.Contains("(N'1', null, N'', N'$null', null, N'data')"));
         }
@@ -159,7 +161,7 @@ namespace DomainValues.Test
         [Test]
         public void SpaceAsDefaultOption()
         {
-            var test = @"
+            string test = @"
                 space as default 
 
                 table dbo.test
@@ -168,7 +170,7 @@ namespace DomainValues.Test
                     | id | col1 | col2   | col3  | col4 | col5  |
                     | 1  |      | $space | $null |      | data  |";
 
-            var output = GetData(test);
+            string output = GetData(test);
 
             Assert.IsTrue(output.Contains("(N'1', N'', N'$space', null, N'', N'data')"),output);
         }
@@ -176,7 +178,7 @@ namespace DomainValues.Test
         [Test]
         public void NullAsAndSpaceAsAreCustomValues()
         {
-            var test = @"
+            string test = @"
                 null as $space
                 space as $null 
 
@@ -186,7 +188,7 @@ namespace DomainValues.Test
                     | id | col1 | col2   | col3  | col4 | col5  |
                     | 1  |      | $space | $null |      | data  |";
 
-            var output = GetData(test);
+            string output = GetData(test);
 
             Assert.IsTrue(output.Contains("(N'1', N'', null, N'', N'', N'data')"), output);
         }
@@ -194,7 +196,7 @@ namespace DomainValues.Test
         [Test]
         public void NullAsAndSpaceAsAreSameValue()
         {
-            var test = @"
+            string test = @"
                 null as test
                 space as test
 
@@ -204,19 +206,19 @@ namespace DomainValues.Test
                     | id | col1 | col2   | col3  | col4 | col5  |
                     | 1  |      | $space | $null |      | data  |";
 
-            var error = Scanner.GetSpans(test, true).SelectMany(a=>a.Errors).Single();
+            Error error = Scanner.GetSpans(test, true).SelectMany(a=>a.Errors).Single();
 
             Assert.AreEqual(Errors.NullAsSpaceAs, error.Message);
         }
 
         private string GetData(string source)
         {
-            var spans = Scanner.GetSpans(source, true);
+            List<ParsedSpan> spans = Scanner.GetSpans(source, true);
 
             if (spans.Any(a => a.Errors.Any()))
                 return "Error";
 
-            var content = SpansToContent.Convert(spans);
+            ContentGenerator content = SpansToContent.Convert(spans);
 
             return Encoding.UTF8.GetString(content.GetSqlBytes());
         }

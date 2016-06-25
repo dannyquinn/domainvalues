@@ -14,9 +14,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void HeaderRowIsRecognised()
         {
-            var output = new RowParser().ParseLine(0, "|A|B|C|", TokenType.HeaderRow).Single();
+            ParsedSpan output = new RowParser().ParseLine(0, "|A|B|C|", TokenType.HeaderRow).Single();
 
-            var expectedOutput = new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|");
+            ParsedSpan expectedOutput = new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|");
 
             AreEqual(expectedOutput,output);
         }
@@ -24,9 +24,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void ItemRowIsRecognised()
         {
-            var output = new RowParser().ParseLine(0,"|1|2|3|",TokenType.ItemRow).Single();
+            ParsedSpan output = new RowParser().ParseLine(0,"|1|2|3|",TokenType.ItemRow).Single();
 
-            var expectedOutput = new ParsedSpan(0,TokenType.ItemRow,0,"|1|2|3|");
+            ParsedSpan expectedOutput = new ParsedSpan(0,TokenType.ItemRow,0,"|1|2|3|");
 
             AreEqual(expectedOutput,output);
         }
@@ -34,9 +34,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void HeaderRowDuplicateValues()
         {
-            var output = new RowParser().ParseLine(0,"|A|B|C|A|",TokenType.HeaderRow).ToList();
+            List<ParsedSpan> output = new RowParser().ParseLine(0,"|A|B|C|A|",TokenType.HeaderRow).ToList();
 
-            var expectedOutput = new List<ParsedSpan>
+            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|A|"),
                 new ParsedSpan(0, TokenType.HeaderRow, 7, "A",string.Format(Errors.DuplicateValue,"Column","A"))
@@ -48,9 +48,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void HeaderRowDuplicateValuesIgnoreCase()
         {
-            var output = new RowParser().ParseLine(0, "|A|B|C|a|", TokenType.HeaderRow).ToList();
+            List<ParsedSpan> output = new RowParser().ParseLine(0, "|A|B|C|a|", TokenType.HeaderRow).ToList();
 
-            var expectedOutput = new List<ParsedSpan>
+            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|a|"),
                 new ParsedSpan(0, TokenType.HeaderRow, 7, "a", string.Format(Errors.DuplicateValue,"Column","a"))
@@ -62,9 +62,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void HeaderRowTextOutsideOfPipeInvalid()
         {
-            var output = new RowParser().ParseLine(0, "|A|B|C|test", TokenType.HeaderRow).ToList();
+            List<ParsedSpan> output = new RowParser().ParseLine(0, "|A|B|C|test", TokenType.HeaderRow).ToList();
 
-            var expectedOutput = new List<ParsedSpan>
+            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|"),
                 new ParsedSpan(0, TokenType.Parameter, 7, "test", Errors.Invalid)
@@ -76,9 +76,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void HeaderRowTextOutsideOfPipeInvalidEscaped()
         {
-            var output = new RowParser().ParseLine(0, @"|A|B|C|test\|", TokenType.HeaderRow).ToList();
+            List<ParsedSpan> output = new RowParser().ParseLine(0, @"|A|B|C|test\|", TokenType.HeaderRow).ToList();
 
-            var expectedOutput = new List<ParsedSpan>
+            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.HeaderRow, 0, "|A|B|C|"),
                 new ParsedSpan(0, TokenType.Parameter, 7, @"test\|", Errors.Invalid)
@@ -90,9 +90,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void ItemRowTextOutsideOfPipeInvalidEscaped()
         {
-            var output = new RowParser().ParseLine(0, @"|A|B|C|test\|", TokenType.ItemRow).ToList();
+            List<ParsedSpan> output = new RowParser().ParseLine(0, @"|A|B|C|test\|", TokenType.ItemRow).ToList();
 
-            var expectedOutput = new List<ParsedSpan>
+            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.ItemRow, 0, "|A|B|C|"),
                 new ParsedSpan(0, TokenType.Parameter, 7, @"test\|", Errors.Invalid)
@@ -103,9 +103,9 @@ namespace DomainValues.Test.ParsingTests
 
         public void ItemRowTextOutsideOfPipeInvalid()
         {
-            var output = new RowParser().ParseLine(0, "|A|B|C|test", TokenType.ItemRow).ToList();
+            List<ParsedSpan> output = new RowParser().ParseLine(0, "|A|B|C|test", TokenType.ItemRow).ToList();
 
-            var expectedOutput = new List<ParsedSpan>
+            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.ItemRow, 0, "|A|B|C|"),
                 new ParsedSpan(0, TokenType.Parameter, 7, "test", Errors.Invalid)
@@ -117,9 +117,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void RowLineStarting()
         {
-            var output = new RowParser().ParseLine(0, "  |", TokenType.HeaderRow).Single();
+            ParsedSpan output = new RowParser().ParseLine(0, "  |", TokenType.HeaderRow).Single();
 
-            var expectedOutput = new ParsedSpan(0,TokenType.HeaderRow,2,"|");
+            ParsedSpan expectedOutput = new ParsedSpan(0,TokenType.HeaderRow,2,"|");
 
             AreEqual(expectedOutput,output);
         }
@@ -127,29 +127,21 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void NextTokenShouldBeItemRow()
         {
-            var parser = new RowParser();
+            RowParser parser = new RowParser();
 
-            var output =parser.ParseLine(0,"|1|",TokenType.HeaderRow).Single();
+            ParsedSpan output =parser.ParseLine(0,"|1|",TokenType.HeaderRow).Single();
 
-            Assert.AreEqual(TokenType.ItemRow,parser.NextTokenType);
+            Assert.AreEqual(TokenType.ItemRow,parser.NextExpectedToken);
         }
 
         [Test]
         public void NextTokenShouldBeItemRowOrTableOrData()
         {
-            var parser = new RowParser();
+            RowParser parser = new RowParser();
 
-            var output = parser.ParseLine(0, "|1|", TokenType.ItemRow).Single();
+            ParsedSpan output = parser.ParseLine(0, "|1|", TokenType.ItemRow).Single();
 
-            Assert.AreEqual(TokenType.Table | TokenType.Data|TokenType.ItemRow,parser.NextTokenType);
-        }
-
-        [Test]
-        public void RowParserPrimaryType()
-        {
-            var parser = new RowParser();
-
-            Assert.AreEqual(TokenType.HeaderRow | TokenType.ItemRow, parser.PrimaryType);
+            Assert.AreEqual(TokenType.Table | TokenType.Data|TokenType.ItemRow,parser.NextExpectedToken);
         }
     }
 }

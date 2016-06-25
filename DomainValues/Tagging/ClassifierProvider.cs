@@ -13,6 +13,7 @@ namespace DomainValues.Tagging
     {
         private readonly IClassificationTypeRegistryService _typeRegistry;
         private readonly IClassificationFormatMapService _formatMap;
+
         [ImportingConstructor]
         public ClassifierProvider(IClassificationTypeRegistryService typeRegistry,IClassificationFormatMapService formatMap)
         {

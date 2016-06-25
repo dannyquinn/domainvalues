@@ -34,7 +34,7 @@ namespace DomainValues.Generation
             FileNamespace = wszDefaultNamespace;
             CodeGeneratorProgress = pGenerateProgress;
 
-            var bytes = GenerateCode(bstrInputFileContents);
+            byte[] bytes = GenerateCode(bstrInputFileContents);
 
             if (bytes == null)
             {
@@ -43,7 +43,7 @@ namespace DomainValues.Generation
                 return VSConstants.E_FAIL;
             }
 
-            var outputLength = bytes.Length;
+            int outputLength = bytes.Length;
             rgbOutputFileContents[0] = Marshal.AllocCoTaskMem(outputLength);
             Marshal.Copy(bytes, 0, rgbOutputFileContents[0], outputLength);
             pcbOutput = (uint)outputLength;

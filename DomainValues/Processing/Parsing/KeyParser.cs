@@ -8,50 +8,33 @@ namespace DomainValues.Processing.Parsing
 {
     internal class KeyParser : ParserBase
     {
-        internal override IEnumerable<ParsedSpan> ParseLine(int lineNumber, string source, TokenType? expectedTokenType)
+        protected override IEnumerable<ParsedSpan> GetParamTokens(int lineNumber, TextSpan span)
         {
-            NextTokenType = TokenType.Data | TokenType.Enum;
+            List<TextSpan> parameters = Regex.Matches(span.Text, @"\S+")
+                .Cast<Match>()
+                .Select(a => new TextSpan(span.Start + a.Index, a.Value))
+                .ToList();
 
-            var span = source.GetTextSpan();
+            List<TextSpan> duplicates = parameters
+                .GroupBy(a => a.Text.ToLower())
+                .SelectMany(a => a.Skip(1))
+                .ToList();
 
-            if (!IsValid(span, 3))
+            foreach (TextSpan parameter in parameters)
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.Invalid);
-                yield break;
-            }
+                ParsedSpan parsedSpan = new ParsedSpan(lineNumber,TokenType.Key | TokenType.Parameter,parameter);
 
-            var key = new ParsedSpan(lineNumber, TokenType.Key, span.Start, span.Text.Substring(0, 3));
-
-            if (span.Text.Length == 3 || string.IsNullOrWhiteSpace(span.Text.Substring(4)))
-            {
-                key.Errors.Add(new Error(string.Format(Errors.ExpectsParams,"Key"), false));
-            }
-
-            CheckOrder(key, expectedTokenType);
-
-            yield return key;
-
-            if (span.Text.Length <= 4)
-                yield break;
-
-            var param = source.GetTextSpan(span.Start + 3);
-
-            var matches = Regex.Matches(param.Text, @"\S+", RegexOptions.Compiled);
-
-            var duplicates = matches.Cast<Match>().GroupBy(a => a.Value.ToLower()).SelectMany(a => a.Skip(1)).ToList();
-
-            foreach (Match match in matches)
-            {
-                var spanVar = new ParsedSpan(lineNumber, TokenType.Key | TokenType.Variable, param.Start + match.Index, match.Value);
-
-                if (duplicates.Contains(match))
+                if (duplicates.Any(a=>a.Start==parameter.Start && a.Text == parameter.Text)) 
                 {
-                    spanVar.Errors.Add(new Error(string.Format(Errors.DuplicateValue,"Key" ,match.Value), false));
+                    parsedSpan.Errors.Add(new Error(string.Format(Errors.DuplicateValue,"Key",parameter.Text)));
                 }
-                yield return spanVar;
+                yield return parsedSpan;
             }
         }
 
-        internal override TokenType PrimaryType => TokenType.Key;
+        protected override TokenType PrimaryType => TokenType.Key;
+        protected override TokenType? NextType { get; set; } = TokenType.Data | TokenType.Enum;
+        protected override bool HasParams => true;
+        protected override int KeywordLength => 3;
     }
 }

@@ -21,7 +21,7 @@ namespace DomainValues.Command
         }
         public int Exec(ref Guid pguidCmdGroup, uint nCmdId, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
-            var hResult = Next.Exec(pguidCmdGroup, nCmdId, nCmdexecopt, pvaIn, pvaOut);
+            int hResult = Next.Exec(pguidCmdGroup, nCmdId, nCmdexecopt, pvaIn, pvaOut);
 
             if (!ErrorHandler.Succeeded(hResult))
                 return hResult;

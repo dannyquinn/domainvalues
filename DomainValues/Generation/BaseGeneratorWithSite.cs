@@ -25,9 +25,9 @@ namespace DomainValues.Generation
                 throw new COMException("object is not sited",VSConstants.E_FAIL);
             }
 
-            var pUnknownPointer = Marshal.GetIUnknownForObject(_site);
+            IntPtr pUnknownPointer = Marshal.GetIUnknownForObject(_site);
 
-            var intPointer = IntPtr.Zero;
+            IntPtr intPointer = IntPtr.Zero;
             Marshal.QueryInterface(pUnknownPointer, ref riid, out intPointer);
 
             if (intPointer == IntPtr.Zero)
@@ -81,7 +81,7 @@ namespace DomainValues.Generation
 
         protected ProjectItem GetProjectItem()
         {
-            var p = GetService(typeof(ProjectItem));
+            object p = GetService(typeof(ProjectItem));
             Debug.Assert(p != null, "Unable to get ProjectItem");
             return (ProjectItem)p;
         }

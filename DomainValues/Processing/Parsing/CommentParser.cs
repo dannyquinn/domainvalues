@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DomainValues.Model;
 using DomainValues.Util;
 
@@ -6,13 +7,13 @@ namespace DomainValues.Processing.Parsing
 {
     internal class CommentParser : ParserBase
     {
-        internal override IEnumerable<ParsedSpan> ParseLine(int lineNumber, string source, TokenType? expectedTokenType)
+        public override List<ParsedSpan> ParseLine(int lineNumber, string source,TokenType? expectedType)
         {
-            NextTokenType = expectedTokenType;
+            NextExpectedToken = expectedType;
 
-            yield return new ParsedSpan(lineNumber, TokenType.Comment, source.GetTextSpan());
+            return new[] {new ParsedSpan(lineNumber, TokenType.Comment, source.GetTextSpan())}.ToList();
         }
 
-        internal override TokenType PrimaryType => TokenType.Comment;
+        protected override TokenType PrimaryType => TokenType.Comment;
     }
 }

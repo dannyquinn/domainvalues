@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using DomainValues.Model;
@@ -8,38 +9,24 @@ namespace DomainValues.Processing.Parsing
 {
     internal class EnumParser : ParserBase
     {
-        internal override IEnumerable<ParsedSpan> ParseLine(int lineNumber, string source, TokenType? expectedTokenType)
+        public override List<ParsedSpan> ParseLine(int lineNumber, string source,TokenType? expectedType)
         {
-            NextTokenType = TokenType.Template;
+            List<ParsedSpan> spans =  base.ParseLine(lineNumber, source,expectedType);
 
-            var span = source.GetTextSpan();
-
-            if (!IsValid(span, 4))
+            if (spans.Count > 1 && spans.All(a => a.Type != (TokenType.Enum | TokenType.Parameter)))
             {
-                yield return new ParsedSpan(lineNumber, TokenType.Parameter, span,Errors.Invalid);
-                yield break;
+                spans.Single(a=>a.Type==PrimaryType).Errors.Add(new Error(Errors.EnumNoName));
             }
+            return spans;
+        }
 
-            var enu = new ParsedSpan(lineNumber, TokenType.Enum, span.Start, span.Text.Substring(0, 4));
+        protected override IEnumerable<ParsedSpan> GetParamTokens(int lineNumber, TextSpan span)
+        {
+            IEnumerable<TextSpan> parameters = Regex.Matches(span.Text, @"\S+")
+                .Cast<Match>()
+                .Select(a => new TextSpan(a.Index+span.Start, a.Value));
 
-            if (span.Text.Length == 4 || string.IsNullOrWhiteSpace(span.Text.Substring(4)))
-            {
-                enu.Errors.Add(new Error(Errors.EnumParam, false));
-            }
-
-            CheckOrder(enu, expectedTokenType);
-
-            if (span.Text.Length <= 4)
-            {
-                yield return enu;
-                yield break;
-            }
-
-            var param = source.GetTextSpan(span.Start + 4);
-
-            var matches = Regex.Matches(param.Text, @"\w+").Cast<Match>().Select(a => new TextSpan(a.Index, a.Value));
-
-            var allowed = new Dictionary<TokenType, List<string>>()
+            Dictionary<TokenType, List<string>> knownTokens = new Dictionary<TokenType, List<string>>
             {
                 {TokenType.AccessType, new List<string> {"public", "internal"}},
                 {TokenType.BaseType, new List<string> {"byte", "sbyte", "short", "int16", "ushort", "int", "int32", "uint", "long", "int64", "ulong"}},
@@ -48,42 +35,50 @@ namespace DomainValues.Processing.Parsing
 
             TokenType flags = TokenType.AccessType | TokenType.BaseType | TokenType.FlagsAttribute | TokenType.Parameter;
 
-            foreach (var match in matches)
+            foreach (TextSpan parameter in parameters)
             {
                 bool found = false;
-                foreach (var type in allowed)
-                {
-                    if (type.Value.Contains(match.Text.ToLower()))
-                    {
-                        found = true;
-                        if ((flags & type.Key) == 0)
-                        {
-                            yield return new ParsedSpan(lineNumber, type.Key, match.Start + param.Start, match.Text, string.Format(Errors.EnumDuplicate,type.Key));
-                            continue;
-                        }
-                        flags = flags ^ type.Key;
 
-                        yield return new ParsedSpan(lineNumber, type.Key, match.Start + param.Start, match.Text);
-                        break;
+                foreach (KeyValuePair<TokenType, List<string>> type in knownTokens)
+                {
+                    if (!type.Value.Contains(parameter.Text, StringComparer.CurrentCultureIgnoreCase))
+                        continue;
+
+                    found = true;
+
+                    ParsedSpan parsedSpan = new ParsedSpan(lineNumber,type.Key,parameter);
+
+                    if ((flags & type.Key) == 0)
+                    {
+                        parsedSpan.Errors.Add(new Error(string.Format(Errors.EnumDuplicate, type.Key)));
                     }
+                    else
+                    {
+                        flags = flags ^ type.Key;
+                    }
+                    yield return parsedSpan;
+
+                    break;
                 }
                 if (found)
                     continue;
 
+                ParsedSpan paramSpan = new ParsedSpan(lineNumber,TokenType.Enum | TokenType.Parameter,parameter);
                 if ((flags & TokenType.Parameter) == 0)
                 {
-                    yield return new ParsedSpan(lineNumber, TokenType.Enum | TokenType.Parameter, match.Start + param.Start, match.Text,Errors.Invalid);
-                    continue;
+                    paramSpan.Errors.Add(new Error(Errors.Invalid));
                 }
-                flags = flags ^ TokenType.Parameter;
-                yield return new ParsedSpan(lineNumber, TokenType.Enum | TokenType.Parameter, match.Start + param.Start, match.Text);
+                else
+                {
+                    flags = flags ^ TokenType.Parameter;
+                }
+                yield return paramSpan;
             }
-            if ((flags & TokenType.Parameter) != 0)
-                enu.Errors.Add(new Error(Errors.EnumNoName, false));
-
-            yield return enu;
         }
 
-        internal override TokenType PrimaryType => TokenType.Enum;
+        protected override TokenType PrimaryType => TokenType.Enum;
+        protected override TokenType? NextType { get; set; } = TokenType.Template;
+        protected override bool HasParams => true;
+        protected override int KeywordLength => 4;
     }
 }

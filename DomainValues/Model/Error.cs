@@ -2,6 +2,9 @@
 {
     internal class Error
     {
+        public Error(string message) : this(message, false)
+        {
+        }
         public Error(string message,bool outputWindowOnly)
         {
             Message = message;

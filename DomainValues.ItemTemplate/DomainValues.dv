@@ -1,7 +1,7 @@
 ﻿# $itemname$
 
 Table dbo.$itemname$
-	Key <$itemname$ID>
+	Key $itemname$ID
 	Data 
 		| $itemname$ID | $itemname$Desc |
 		| $itemname$_1 | $itemname$_One |

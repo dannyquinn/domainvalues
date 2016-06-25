@@ -14,6 +14,7 @@ namespace DomainValues.Tagging
     {
         private readonly ITextDocumentFactoryService _textDocumentFactoryService;
 
+        [ImportingConstructor]
         public ErrorProvider(ITextDocumentFactoryService textDocumentFactoryService)
         {
             _textDocumentFactoryService = textDocumentFactoryService;

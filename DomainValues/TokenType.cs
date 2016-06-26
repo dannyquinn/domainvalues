@@ -22,6 +22,6 @@ namespace DomainValues
         EnumInit        = 1 << 14,
         NullAs          = 1 << 15,
         SpaceAs         = 1 << 16,
-//      CopySql         = 1 << 17
+        CopySql         = 1 << 17
     }
 }

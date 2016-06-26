@@ -16,7 +16,7 @@ namespace DomainValues.Processing
 
             int lineCount = -1;
 
-            TokenType? expectedType = TokenType.Table | TokenType.NullAs | TokenType.SpaceAs;
+            TokenType? expectedType = TokenType.Table | TokenType.NullAs | TokenType.SpaceAs | TokenType.CopySql;
 
             using (StringReader sr = new StringReader(source))
             {
@@ -68,7 +68,8 @@ namespace DomainValues.Processing
             {"enum",new EnumParser() },
             {"template",new TemplateParser() },
             {"null as", new NullAsParser() },
-            {"space as",new SpaceAsParser() }
+            {"space as",new SpaceAsParser() },
+            {"copy sql to",new CopySqlParser() }
         };
     }
 }

@@ -56,13 +56,13 @@ namespace DomainValues.Test.ParsingTests
         }
 
         [Test]
-        public void NextTokenShouldBeTable()
+        public void NextTokenShouldBeTableOrCopySql()
         {
             SpaceAsParser parser = new SpaceAsParser();
 
             ParsedSpan output = parser.ParseLine(0, "space as", TokenType.SpaceAs).Single();
 
-            Assert.AreEqual(TokenType.Table , parser.NextExpectedToken);
+            Assert.AreEqual(TokenType.Table |TokenType.CopySql, parser.NextExpectedToken);
         }
     }
 }

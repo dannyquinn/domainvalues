@@ -26,6 +26,13 @@ namespace DomainValues.Processing
                 content.UpdateSpaceAs(spaceAs.Text);
             }
 
+            ParsedSpan copySql = spans.FirstOrDefault(a => a.Type == (TokenType.CopySql | TokenType.Parameter));
+
+            if (copySql != null)
+            {
+                content.CopySql = copySql.Text;
+            }
+
             foreach (List<ParsedSpan> block in spans.GetStatementBlocks())
             {
                 content.AddBlock(GetBlock(block));

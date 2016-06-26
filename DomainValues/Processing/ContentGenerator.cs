@@ -19,6 +19,7 @@ namespace DomainValues.Processing
         public ContentGenerator()
         {
             _blocks = new List<DataBlock>();
+            CopySql = string.Empty;
         }
 
         public void UpdateNullAs(string nullAs)
@@ -51,6 +52,8 @@ namespace DomainValues.Processing
 
 
         }
+
+        public string CopySql { get; set; }
         public void AddBlock(DataBlock block) => _blocks.Add(block);
 
         public byte[] GetEnumBytes(CodeDomProvider provider, string fileNamespace)

@@ -23,7 +23,7 @@ namespace DomainValues.Processing
                     .Select(a => a.ToLower())
                     .ToList();
 
-                CheckRowLengths(block);
+                CheckRowLengths(columns.Count,block);
 
                 CheckKeyVariables(columns, block.Where(a => a.Type == (TokenType.Key | TokenType.Parameter)));
                 CheckEnumVariables(columns, block.Where(a => (a.Type & (TokenType.EnumMember | TokenType.EnumDesc | TokenType.EnumInit)) != 0));
@@ -77,21 +77,17 @@ namespace DomainValues.Processing
             }
         }
 
-        internal static void CheckRowLengths(List<ParsedSpan> spans)
+        internal static void CheckRowLengths(int headerCount, List<ParsedSpan> spans)
         {
             IOrderedEnumerable<ParsedSpan> itemRows = spans
                 .Where(a => a.Type == TokenType.HeaderRow || a.Type == TokenType.ItemRow)
                 .OrderBy(a => a.LineNumber);
 
-            ParsedSpan firstHeader = itemRows.First();
-
-            int pipeCount = firstHeader.Text.ToCharArray().Count(a => a == '|');
-
             foreach (ParsedSpan itemRow in itemRows.Skip(1).Where(a => !a.Errors.Any()))
             {
-                int rowPipeCount = itemRow.Text.ToCharArray().Count(a => a == '|');
-
-                if (rowPipeCount != pipeCount)
+                var rowCount = itemRow.Text.GetColumns().Count();
+                
+                if (rowCount != headerCount)
                     itemRow.Errors.Add(new Error(Errors.RowCountMismatch, false));
             }
         }

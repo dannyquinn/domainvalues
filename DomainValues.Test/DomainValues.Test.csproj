@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ParsingTests\BlockValidationTests.cs" />
     <Compile Include="ParsingTests\CommentTests.cs" />
+    <Compile Include="ParsingTests\CopySqlTests.cs" />
     <Compile Include="ParsingTests\DataTests.cs" />
     <Compile Include="ParsingTests\EndOfFileTests.cs" />
     <Compile Include="ParsingTests\EnumTests.cs" />

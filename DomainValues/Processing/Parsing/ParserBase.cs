@@ -57,6 +57,6 @@ namespace DomainValues.Processing.Parsing
         protected virtual TokenType? NextType { get; set; }
         public TokenType? NextExpectedToken { get; protected set; }
         protected virtual int KeywordLength { get; set; }
-        protected virtual bool HasParams { get; } = false;
+        protected virtual bool HasParams => true;
     }
 }

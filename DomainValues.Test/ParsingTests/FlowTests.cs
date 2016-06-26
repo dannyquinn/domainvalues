@@ -38,7 +38,7 @@ namespace DomainValues.Test.ParsingTests
 
             Error output = Scanner.GetSpans(test, true).SelectMany(a => a.Errors).Single();
 
-            Assert.AreEqual(string.Format(Errors.UnexpectedKeyword, "Key", "Table, NullAs, SpaceAs"), output.Message);
+            Assert.AreEqual(string.Format(Errors.UnexpectedKeyword, "Key", "Table, NullAs, SpaceAs, CopySql"), output.Message);
         }
 
         [Test]

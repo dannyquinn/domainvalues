@@ -11,8 +11,7 @@ namespace DomainValues.Processing.Parsing
     internal class SpaceAsParser : ParserBase
     {
         protected override TokenType PrimaryType => TokenType.SpaceAs;
-        protected override TokenType? NextType { get; set; } = TokenType.Table;
-        protected override bool HasParams => true;
+        protected override TokenType? NextType { get; set; } = TokenType.Table | TokenType.CopySql;
         protected override int KeywordLength => 8;
     }
 }

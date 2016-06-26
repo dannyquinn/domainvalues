@@ -108,6 +108,9 @@ namespace DomainValues.Tagging
             {TokenType.SpaceAs, DvContent.DvKeyword},
             {TokenType.SpaceAs | TokenType.Parameter, DvContent.DvText},
 
+            {TokenType.CopySql,DvContent.DvKeyword },
+            {TokenType.CopySql | TokenType.Parameter,DvContent.DvText },
+
             {TokenType.Table, DvContent.DvKeyword},
             {TokenType.Table | TokenType.Parameter, DvContent.DvText},
 

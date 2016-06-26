@@ -211,12 +211,56 @@ namespace DomainValues.Test
             Assert.AreEqual(Errors.NullAsSpaceAs, error.Message);
         }
 
+        [Test]
+        public void SingleQuotesAreDoubled()
+        {
+            string test = @"
+                table dbo.test
+                key id
+                data 
+                    | id | col1        |
+                    | 1  | TestStrin'g |";
+
+            string output = GetData(test);
+
+            Assert.IsTrue(output.Contains("(N'1', N'TestStrin''g')"),output);
+        }
+
+        [Test]
+        public void EscapedPipeIsUnescaped()
+        {
+            string test = @"
+                table dbo.test
+                key id
+                data 
+                    | id | col1         |
+                    | 1  | TestStrin\|g |";
+
+            string output = GetData(test);
+
+            Assert.IsTrue(output.Contains("(N'1', N'TestStrin|g')"),output);
+        }
+
+        [Test]
+        public void EscapedEscapedPipeIsNotUnescaped()
+        {
+            string test = @"
+                table dbo.test
+                key id
+                data 
+                    | id | col1           |
+                    | 1  | TestStrin\\\|g |";
+
+            string output = GetData(test);
+
+            Assert.IsTrue(output.Contains(@"(N'1', N'TestStrin\|g')"), output);
+        }
         private string GetData(string source)
         {
             List<ParsedSpan> spans = Scanner.GetSpans(source, true);
 
             if (spans.Any(a => a.Errors.Any()))
-                return "Error";
+                return spans.SelectMany(a => a.Errors.Select(b => b.Message)).Aggregate((a, b) => $"{a}\r\n{b}");
 
             ContentGenerator content = SpansToContent.Convert(spans);
 

@@ -39,7 +39,6 @@ namespace DomainValues.Processing.Parsing
 
         protected override TokenType PrimaryType => TokenType.Template;
         protected override TokenType? NextType { get; set; } = TokenType.Data;
-        protected override bool HasParams => true;
         protected override int KeywordLength => 8;
     }
 }

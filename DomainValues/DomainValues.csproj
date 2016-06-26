@@ -63,6 +63,7 @@
     <Compile Include="Model\TextSpan.cs" />
     <Compile Include="Processing\ContentGenerator.cs" />
     <Compile Include="Processing\Parsing\CommentParser.cs" />
+    <Compile Include="Processing\Parsing\CopySqlParser.cs" />
     <Compile Include="Processing\Parsing\DataParser.cs" />
     <Compile Include="Processing\Parsing\EnumParser.cs" />
     <Compile Include="Processing\Parsing\KeyParser.cs" />

@@ -62,9 +62,11 @@ namespace DomainValues.Generation
                     Solution solution = (GetProject().DTE).Solution;
 
                     ProjectItem item = solution.FindProjectItem(content.CopySql);
-
+                    
                     if (item != null)
                     {
+                        item.ProjectItems.Cast<ProjectItem>().SingleOrDefault(a => a.Name == $"{projectItem.Name}.sql")?.Delete();
+
                         var copyFile = string.Concat(item.Properties.Item("FullPath").Value, new FileInfo(InputFilePath).Name, ".sql");
 
                         using (FileStream fileStream = File.Create(copyFile))
@@ -72,10 +74,9 @@ namespace DomainValues.Generation
                             fileStream.Write(sqlBytes, 0, sqlBytes.Length);
                             fileStream.Close();
                         }
-                        var copyItem = item.ProjectItems.AddFromFile(copyFile);
 
-                        copyItem.Properties.Item("BuildAction").Value = "None";
-
+                        item.ProjectItems.AddFromFile(copyFile).Properties.Item("BuildAction").Value="None";
+                        
                         RemoveOldFiles(projectItem, codeProvider, enumCreated, item);
 
                         return sqlBytes;
@@ -85,7 +86,7 @@ namespace DomainValues.Generation
             else
             {
                 sqlBytes = Encoding.UTF8.GetBytes("Error Generating Output");
-                
+
             }
 
             RemoveOldFiles(projectItem, codeProvider, enumCreated, null);

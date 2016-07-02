@@ -4,6 +4,7 @@
     <Identity Id="DomainValues.77cd1080-b87f-4f98-8c55-2651ad93083e" Version="1.0" Language="en-US" Publisher="Danny Quinn" />
     <DisplayName>DomainValues</DisplayName>
     <Description xml:space="preserve">Generate SQL merge statements and optionally enumerations from a template</Description>
+    <License>LICENSE.txt</License>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />

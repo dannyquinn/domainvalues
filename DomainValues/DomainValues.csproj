@@ -170,6 +170,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Debug.txt" />
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Util\Errors.resx">

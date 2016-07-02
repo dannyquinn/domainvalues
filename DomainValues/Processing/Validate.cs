@@ -10,6 +10,9 @@ namespace DomainValues.Processing
     {
         internal static void CheckBlocks(List<ParsedSpan> spans)
         {
+            if (!spans.Any())
+                return;
+
             CheckNullAsSpaceAs(spans);
 
             foreach (List<ParsedSpan> block in spans.GetStatementBlocks())

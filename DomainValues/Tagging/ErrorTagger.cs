@@ -5,13 +5,14 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using System.Linq;
+using System.Windows;
 using DomainValues.Model;
 using DomainValues.Processing;
 using Microsoft.VisualStudio.Text.Adornments;
 
 namespace DomainValues.Tagging
 {
-    internal sealed class ErrorTagger : SimpleTagger<ErrorTag>, IDisposable
+    internal sealed class ErrorTagger : SimpleTagger<ErrorTag>
     {
         private readonly ITextBuffer _buffer;
         private readonly IWpfTextView _view;
@@ -24,7 +25,7 @@ namespace DomainValues.Tagging
             _errorListProvider = errorListProvider;
             _textDocument = textDocument;
 
-            _buffer.Changed += TextBuffer_Changed;
+            WeakEventManager<ITextBuffer,TextContentChangedEventArgs>.AddHandler(buffer,"Changed",TextBuffer_Changed);
 
             UpdateTagSpans();
         }
@@ -96,11 +97,6 @@ namespace DomainValues.Tagging
             ITextSnapshotLine line = _view.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(task.Line);
             SnapshotPoint point = new SnapshotPoint(line.Snapshot, line.Start.Position + task.Column);
             _view.Caret.MoveTo(point);
-        }
-
-        public void Dispose()
-        {
-            _buffer.Changed -= TextBuffer_Changed;
         }
     }
 }

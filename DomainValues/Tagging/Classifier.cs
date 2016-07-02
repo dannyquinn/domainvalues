@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using DomainValues.Model;
 using DomainValues.Processing;
 using Microsoft.VisualStudio.Text;
@@ -22,8 +23,8 @@ namespace DomainValues.Tagging
             _buffer = buffer;
             _typeRegistry = typeRegistry;
             _formatMap = formatMap;
-
-            _buffer.Changed += TextBuffer_Changed;
+            WeakEventManager<ITextBuffer,TextContentChangedEventArgs>.AddHandler(buffer,"Changed",TextBuffer_Changed);
+            
             VSColorTheme.ThemeChanged += VSColorTheme_ThemeChanged;
 
             _classifications = new[]
@@ -140,7 +141,7 @@ namespace DomainValues.Tagging
         public void Dispose()
         {
             VSColorTheme.ThemeChanged -= VSColorTheme_ThemeChanged;
-            _buffer.Changed -= TextBuffer_Changed;
         }
+        
     }
 }

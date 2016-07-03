@@ -19,12 +19,6 @@ namespace DomainValues
 
         public const string DvFileExtension = ".dv";
 
-        public const string DvKeyword = "domainvalues.keyword";
-        public const string DvVariable = "domainvalues.variable";
-        public const string DvComment = "domainvalues.comment";
-        public const string DvText = "domainvalues.text";
-        public const string DvHeaderRow = "domainvalues.headerrow";
-
         public const string SingleFileGeneratorGuid = "B85060CC-947E-471B-B521-712C7193DEDA";
     }
 }

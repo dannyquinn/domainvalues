@@ -1,62 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using DomainValues.Model;
 using DomainValues.Processing;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text.Tagging;
-using Microsoft.VisualStudio.PlatformUI;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Formatting;
 
 namespace DomainValues.Tagging
 {
-    internal sealed class Classifier : SimpleTagger<ClassificationTag>,IDisposable
+    internal sealed class Classifier : SimpleTagger<ClassificationTag>
     {
         private readonly ITextBuffer _buffer;
         private readonly IClassificationTypeRegistryService _typeRegistry;
         private readonly IClassificationFormatMapService _formatMap;
-        private readonly string[] _classifications;
+       
         internal Classifier(IClassificationTypeRegistryService typeRegistry,IClassificationFormatMapService formatMap,ITextBuffer buffer) : base(buffer)
         {
             _buffer = buffer;
             _typeRegistry = typeRegistry;
             _formatMap = formatMap;
             WeakEventManager<ITextBuffer,TextContentChangedEventArgs>.AddHandler(buffer,"Changed",TextBuffer_Changed);
-            
-            VSColorTheme.ThemeChanged += VSColorTheme_ThemeChanged;
-
-            _classifications = new[]
-            {
-                DvContent.DvKeyword,
-                DvContent.DvComment,
-                DvContent.DvHeaderRow,
-                DvContent.DvText,
-                DvContent.DvVariable
-            };
 
             UpdateTagSpans();
-        }
-
-        private void VSColorTheme_ThemeChanged(ThemeChangedEventArgs e)
-        {
-            IWpfTextView view = _buffer.Properties.GetProperty(typeof(IWpfTextView)) as IWpfTextView;
-
-            IClassificationFormatMap format = _formatMap.GetClassificationFormatMap(view);
-
-            format.BeginBatchUpdate();
-            
-            foreach (string classification in _classifications)
-            {
-                IClassificationType classificationType = _typeRegistry.GetClassificationType(classification);
-
-                TextFormattingRunProperties property = format.GetTextProperties(classificationType);
-
-                format.SetTextProperties(classificationType,property.SetForeground(ClassifierColor.GetColor(classification)));
-            }
-
-            format.EndBatchUpdate();
         }
 
         private void TextBuffer_Changed(object sender, TextContentChangedEventArgs e)
@@ -101,47 +67,41 @@ namespace DomainValues.Tagging
 
         private static readonly Dictionary<TokenType, string> TokenToClassification = new Dictionary<TokenType, string>
         {
-            {TokenType.Comment, DvContent.DvComment},
+            {TokenType.Comment, PredefinedClassificationTypeNames.Comment},
 
-            {TokenType.NullAs, DvContent.DvKeyword},
-            {TokenType.NullAs | TokenType.Parameter, DvContent.DvText},
+            {TokenType.NullAs, PredefinedClassificationTypeNames.Keyword},
+            {TokenType.NullAs | TokenType.Parameter, PredefinedClassificationTypeNames.Literal},
 
-            {TokenType.SpaceAs, DvContent.DvKeyword},
-            {TokenType.SpaceAs | TokenType.Parameter, DvContent.DvText},
+            {TokenType.SpaceAs, PredefinedClassificationTypeNames.Keyword},
+            {TokenType.SpaceAs | TokenType.Parameter, PredefinedClassificationTypeNames.Literal},
 
-            {TokenType.CopySql,DvContent.DvKeyword },
-            {TokenType.CopySql | TokenType.Parameter,DvContent.DvText },
+            {TokenType.CopySql,PredefinedClassificationTypeNames.Keyword },
+            {TokenType.CopySql | TokenType.Parameter,PredefinedClassificationTypeNames.Literal },
 
-            {TokenType.Table, DvContent.DvKeyword},
-            {TokenType.Table | TokenType.Parameter, DvContent.DvText},
+            {TokenType.Table, PredefinedClassificationTypeNames.Keyword},
+            {TokenType.Table | TokenType.Parameter, PredefinedClassificationTypeNames.Literal},
 
-            {TokenType.Key, DvContent.DvKeyword},
-            {TokenType.Key | TokenType.Parameter, DvContent.DvVariable},
+            {TokenType.Key, PredefinedClassificationTypeNames.Keyword},
+            {TokenType.Key | TokenType.Parameter, PredefinedClassificationTypeNames.String},
 
-            {TokenType.Enum, DvContent.DvKeyword},
-            {TokenType.Enum | TokenType.Parameter, DvContent.DvText},
-            {TokenType.AccessType, DvContent.DvKeyword},
-            {TokenType.BaseType, DvContent.DvKeyword},
-            {TokenType.FlagsAttribute, DvContent.DvKeyword},
+            {TokenType.Enum, PredefinedClassificationTypeNames.Keyword},
+            {TokenType.Enum | TokenType.Parameter, PredefinedClassificationTypeNames.Literal},
+            {TokenType.AccessType, PredefinedClassificationTypeNames.Keyword},
+            {TokenType.BaseType, PredefinedClassificationTypeNames.Keyword},
+            {TokenType.FlagsAttribute, PredefinedClassificationTypeNames.Keyword},
 
-            {TokenType.Template, DvContent.DvKeyword},
-            {TokenType.EnumDesc, DvContent.DvVariable},
-            {TokenType.EnumMember, DvContent.DvVariable},
-            {TokenType.EnumInit, DvContent.DvVariable},
+            {TokenType.Template,  PredefinedClassificationTypeNames.Keyword},
+            {TokenType.EnumDesc, PredefinedClassificationTypeNames.String},
+            {TokenType.EnumMember,PredefinedClassificationTypeNames.String},
+            {TokenType.EnumInit, PredefinedClassificationTypeNames.String},
 
-            {TokenType.Data, DvContent.DvKeyword},
+            {TokenType.Data,  PredefinedClassificationTypeNames.Keyword},
 
-            {TokenType.HeaderRow, DvContent.DvHeaderRow},
+            {TokenType.HeaderRow, PredefinedClassificationTypeNames.String},
 
-            {TokenType.ItemRow, DvContent.DvText},
+            {TokenType.ItemRow,PredefinedClassificationTypeNames.Literal},
 
-            {TokenType.Parameter, DvContent.DvText},
+            {TokenType.Parameter, PredefinedClassificationTypeNames.Literal},
         };
-
-        public void Dispose()
-        {
-            VSColorTheme.ThemeChanged -= VSColorTheme_ThemeChanged;
-        }
-        
     }
 }

@@ -4,7 +4,7 @@ A Visual Studio extension for generating TSQL merge statements and optionally, e
 
 Intended to store domain values (or static data) for a database project.
 
-*This project is still in development - more information will be added soon.*
+Download the vsix from the [Visual Studio Gallery](https://visualstudiogallery.msdn.microsoft.com/41adddea-6410-4e5f-b36b-a8c31146d6ab?SRC=Home)
 
 **Features**
 
@@ -15,6 +15,8 @@ Intended to store domain values (or static data) for a database project.
 - Add multiple definitions to a file
 - Options for handling nulls and spaces
 - Supports composite database keys
+
+More information can be found on the [Wiki](https://github.com/dannyquinn/domainvalues/wiki)
 
 **Examples**
 

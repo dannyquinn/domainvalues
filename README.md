@@ -22,7 +22,7 @@ Intended to store domain values (or static data) for a database project.
 
 The example above generates a new file with the content below.
 
-![Sample](img/SQL1.png)
+![Sample](img/Sql1.png)
 
 If you also want to generate an enumeration add two extra lines to the template.
 

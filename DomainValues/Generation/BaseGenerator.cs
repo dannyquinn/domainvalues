@@ -74,7 +74,7 @@ namespace DomainValues.Generation
         {
             CodeGeneratorProgress?.GeneratorError(0, level, message, line, column);
         }
-        protected virtual void GenerateWaring(uint level, string message, uint line, uint column)
+        protected virtual void GenerateWarning(uint level, string message, uint line, uint column)
         {
             CodeGeneratorProgress?.GeneratorError(1, level, message, line, column);
         }

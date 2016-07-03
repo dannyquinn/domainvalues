@@ -62,24 +62,38 @@ namespace DomainValues.Generation
                     Solution solution = (GetProject().DTE).Solution;
 
                     ProjectItem item = solution.FindProjectItem(content.CopySql);
-                    
+
+
                     if (item != null)
                     {
                         item.ProjectItems.Cast<ProjectItem>().SingleOrDefault(a => a.Name == $"{projectItem.Name}.sql")?.Delete();
 
-                        var copyFile = string.Concat(item.Properties.Item("FullPath").Value, new FileInfo(InputFilePath).Name, ".sql");
+                        var targetPath = item.Properties.Item("FullPath").Value.ToString();
 
-                        using (FileStream fileStream = File.Create(copyFile))
+                        // Ensure the item is a folder.
+                        if (Directory.Exists(targetPath))
                         {
-                            fileStream.Write(sqlBytes, 0, sqlBytes.Length);
-                            fileStream.Close();
-                        }
+                            var copyFile = string.Concat(targetPath, new FileInfo(InputFilePath).Name, ".sql");
 
-                        item.ProjectItems.AddFromFile(copyFile).Properties.Item("BuildAction").Value="None";
-                        
+                            using (FileStream fileStream = File.Create(copyFile))
+                            {
+                                fileStream.Write(sqlBytes, 0, sqlBytes.Length);
+                                fileStream.Close();
+                            }
+
+                            item.ProjectItems.AddFromFile(copyFile).Properties.Item("BuildAction").Value = "None";
+                        }
+                        else
+                        {
+                            GeneratorError(1, $"{content.CopySql} is not a folder", 0, 0);
+                        }
                         RemoveOldFiles(projectItem, codeProvider, enumCreated, item);
 
                         return sqlBytes;
+                    }
+                    else
+                    {
+                        GeneratorError(1,$"Could not find {content.CopySql} for copy operation",0,0);
                     }
                 }
             }

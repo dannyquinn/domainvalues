@@ -14,24 +14,24 @@ Intended to store domain values (or static data) for a database project.
 - Works with C# and VB project types
 - Add multiple definitions to a file
 - Options for handling nulls and spaces
-- Composite database keys
+- Supports composite database keys
 
 **Examples**
 
-![Sample](img/DV_Template1.png)
+![Sample](img/Template1.png)
 
 The example above generates a new file with the content below.
 
-![Sample](img/DV_SQL1.png)
+![Sample](img/Sql1.png)
 
 If you also want to generate an enumeration add two extra lines to the template.
 
-![Sample](img/DV_Template2.png)
+![Sample](img/Enum1.png)
 
 Creates an additional file in either VB or C# depending on the project type.
 
-![Sample](img/DV_Enum1.png)
+![Sample](img/Enum2.png)
 
 Keep related data together by adding more templates to the file.
 
-![Sample](img/DV_Template3.png)
+![Sample](img/Template2.png)

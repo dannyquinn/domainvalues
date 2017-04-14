@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="DomainValues.77cd1080-b87f-4f98-8c55-2651ad93083e" Version="1.0" Language="en-US" Publisher="Danny Quinn" />
+    <Identity Id="DomainValues.77cd1080-b87f-4f98-8c55-2651ad93083e" Version="1.1" Language="en-US" Publisher="Danny Quinn" />
     <DisplayName>DomainValues</DisplayName>
     <Description xml:space="preserve">Generate SQL merge statements and optionally enumerations from a template</Description>
     <MoreInfo>https://github.com/dannyquinn/domainvalues/wiki</MoreInfo>
@@ -12,6 +12,8 @@
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0,15.0]" />
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[14.0,15.0]" />
+    <InstallationTarget Id="Microsoft.VisualStudio.Enterprise" Version="[14.0,15.0]" />
   </Installation>
   <Prerequisites>
     <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />

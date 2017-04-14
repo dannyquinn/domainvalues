@@ -11,8 +11,11 @@
     <Tags>SQL, Enum, Code Generation, Static Data, Domain Values</Tags>
   </Metadata>
   <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0,15.0]" />
   </Installation>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
   </Dependencies>

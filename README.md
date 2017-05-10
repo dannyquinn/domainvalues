@@ -26,7 +26,7 @@ The example above generates a new file with the content below.
 
 ![Sample](img/Sql1.png)
 
-If you also want to generate an enumeration add two extra lines to the template.
+You can also generate an enumeration by adding two more lines to the template.
 
 ![Sample](img/Enum1.png)
 

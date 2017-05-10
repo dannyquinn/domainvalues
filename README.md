@@ -1,4 +1,4 @@
-##Domain Values Extension
+## Domain Values Extension
 
 A Visual Studio extension for generating TSQL merge statements and optionally, enumerations from a template.
 

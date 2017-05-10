@@ -16,7 +16,7 @@ Download the vsix from the [Visual Studio Gallery](https://visualstudiogallery.m
 - Options for handling nulls and spaces
 - Supports composite database keys
 
-More information can be found on the [Wiki](https://github.com/dannyquinn/domainvalues/wiki)
+More information can be found on the [Wiki Pages](https://github.com/dannyquinn/domainvalues/wiki)
 
 **Examples**
 

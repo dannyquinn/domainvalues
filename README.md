@@ -1,39 +1,111 @@
-## Domain Values Extension
+## Domain Values Extension for Visual Studio
 
-A Visual Studio extension for generating TSQL merge statements and optionally, enumerations from a template.
+[![Build status](https://ci.appveyor.com/api/projects/status/uobgrdh8dkaolofn?svg=true)](https://ci.appveyor.com/project/dannyquinn/domainvalues)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.txt)
 
-Intended to store domain values (or static data) for a database project.
 
-Download the vsix from the [Visual Studio Gallery](https://visualstudiogallery.msdn.microsoft.com/41adddea-6410-4e5f-b36b-a8c31146d6ab?SRC=Home)
+Download this extension from the [VSGallery](https://marketplace.visualstudio.com/items?itemName=DannyQuinn.DomainValues) or get the [CI build](http://vsixgallery.com/author/danny%20quinn).
 
-**Features**
+See the [change log](CHANGELOG.md) for changes and road map.
 
-- Syntax Highlighting 
-- Validation 
+--------------------------------------------
+
+An extension that makes synchronising database lookup values and enumerations easier.
+
+### Features
+
+- Syntax Highlighting
+- Validation
 - Automatic alignment of tabular data
-- Works with C# and VB project types
-- Add multiple definitions to a file
-- Options for handling nulls and spaces
-- Supports composite database keys
+- Works with C# and Visual Basic project types
+- Multiple definitions per file 
+- Options for nulls and empty strings
+- Supports single and composite database keys
 
-More information can be found on the [Wiki Pages](https://github.com/dannyquinn/domainvalues/wiki)
 
-**Examples**
+### Prerequisites
 
-![Sample](img/Template1.png)
+- Visual Studio 2017 with extension development component
 
-The example above generates a new file with the content below.
+### Get the code
 
-![Sample](img/Sql1.png)
+- Clone this repo: `git clone https://github.com/dannyquinn/domainvalues.git`
+- Open solution and ensure that the project named DomainValues is the startup project.
+- Open the project properties for DomainValues and select the debug tab.
+- Set the start up program to devenv.exe (e.g. `C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.exe`).
+- Set the command line arguments to `/rootsuffix Exp`
+- Save the project and press F5 or choose the menu command Debug > Start Debugging.
+- An experimental instance of Visual Studio will launched with the extension loaded.
 
-You can also generate an enumeration by adding two more lines to the template.
+### Quick Start 
 
-![Sample](img/Enum1.png)
+In Visual Studio, open a C# or Visual Basic project and open the *Add New Item* dialog.
 
-Creates an additional file in either VB or C# depending on the project type.
+![Dialog](images/Dialog.png)
 
-![Sample](img/Enum2.png)
+In the *Data* section, select the **Domain values** item template, rename the file to Product.dv and then click Add.
 
-Keep related data together by adding more templates to the file.
+A basic file is created from the template using the file name supplied.
 
-![Sample](img/Template2.png)
+![Editor1](images/Editor1.png)
+
+<!--The [details page](DETAIL.md) covers the syntax, options and validation rules in more detail.-->
+
+In the above example, the file is intened to populate the dbo.Product table.  
+
+After the Data keyword the column names are listed separated by the pipe character and each subsequent line represents one row of data.  As more lines or columns are added the table automatically formats to keep the columns aligned.
+
+The ProductID column also appears next to the *Key* keyword and so will be used to determine if a row should be created, updated or deleted.
+
+In the solution explorer, just under the newly created Product.dv file is a second file named Product.dv.sql.  This contains the sql statement generated from the contents of product.dv.  
+
+Every time the file is saved the sql file will be updated.  
+
+To add an enum to the project using the same values, replace the text in Product.dv with the following...
+
+```
+Table dbo.Product
+    Key ProductID 
+    Enum Products 
+    Template ProductName = ProductID 
+    Data 
+        | ProductID | ProductName |
+        | 1         | ProductA    |
+        | 2         | ProductB    |
+```
+
+When the file is saved another file will appear.  This contains the enumeration code and the language is determined by the project type.
+
+![Editor2](images/Editor2.png)
+
+Open the Product.dv.cs file to view the enumeration.
+
+![Editor3](images/Editor3.png)
+
+The enum base type and access modifer can be changed, descriptions can be added to each member and the [Flags] attribute can be added.  These options are covered on the [details page](DETAIL.md).
+
+#### Using the generated sql file with a database project
+
+Add a database project and create a product table and a post deployment script as below.
+
+![Editor4](images/Editor4.png)
+
+Build the solution and then right click the database project and select publish.  
+
+Add the connection info and click the publish button.
+
+Once complete the data from the products.dv file will be in the product table.
+
+![SQl1](images/Sql1.png)
+
+To keep all the database assets in the database project, use the *Copy sql to* command in the Product.dv file.  
+
+The file can be copied to any folder in the solution (the folder must already exist).  
+
+![Editor5](images/Editor5.png)
+
+The copied file will be updated anytime a change is made.
+
+----------------------------------------
+
+<!-- More information on the [details page](DETAIL.md). -->

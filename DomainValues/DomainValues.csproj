@@ -212,13 +212,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Debug.txt" />
+    <Content Include="dv.pkgdef">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Template1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Resources\DomainValuesIcon.png">
       <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\DomainValuesPreview.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

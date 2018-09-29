@@ -41,13 +41,13 @@ An extension that makes synchronizing database lookup values and enumerations ea
 
 In Visual Studio, open a C# or Visual Basic project and open the *Add New Item* dialog.
 
-![Dialog](images/Dialog.png)
+![Dialog](Images/Dialog.png)
 
 In the *Data* section, select the **Domain values** item template, rename the file to Product.dv and then click Add.
 
 A basic file is created from the template using the file name supplied.
 
-![Editor1](images/Editor1.png)
+![Editor1](Images/Editor1.png)
 
 <!--The [details page](DETAIL.md) covers the syntax, options and validation rules in more detail.-->
 
@@ -76,11 +76,11 @@ Table dbo.Product
 
 When the file is saved another file will appear.  This contains the enumeration code and the language is determined by the project type.
 
-![Editor2](images/Editor2.png)
+![Editor2](Images/Editor2.png)
 
 Open the Product.dv.cs file to view the enumeration.
 
-![Editor3](images/Editor3.png)
+![Editor3](Images/Editor3.png)
 
 The enum base type and access modifier can be changed, descriptions can be added to each member and the [Flags] attribute can be added.  These options are covered on the [details page](DETAIL.md).
 
@@ -88,7 +88,7 @@ The enum base type and access modifier can be changed, descriptions can be added
 
 Add a database project and create a product table and a post deployment script as below.
 
-![Editor4](images/Editor4.png)
+![Editor4](Images/Editor4.png)
 
 Build the solution and then right click the database project and select publish.  
 
@@ -96,13 +96,13 @@ Add the connection info and click the publish button.
 
 Once complete the data from the products.dv file will be in the product table.
 
-![SQl1](images/Sql1.png)
+![SQl1](Images/Sql1.png)
 
 To keep all the database assets in the database project, use the *Copy sql to* command in the Product.dv file.  
 
 The file can be copied to any folder in the solution (the folder must already exist).  
 
-![Editor5](images/Editor5.png)
+![Editor5](Images/Editor5.png)
 
 The copied file will be updated anytime a change is made.
 

@@ -7,8 +7,8 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 
 ## Road map
 
-- [x] Update projects to 2017 format.
-- [x] Replaced default icons.
+- [ ] Add format document menu command and key binding.
+
 
 Features that have a checkmark are complete and available for
 download in the [CI build](http://vsixgallery.com/author/danny%20quinn).
@@ -17,6 +17,11 @@ download in the [CI build](http://vsixgallery.com/author/danny%20quinn).
 
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
+
+### 1.2
+
+- [x] Update projects to 2017 format.
+- [x] Replaced default icons.
 
 ### 1.1
 

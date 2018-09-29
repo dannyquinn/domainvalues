@@ -96,7 +96,7 @@ Add the connection info and click the publish button.
 
 Once complete the data from the products.dv file will be in the product table.
 
-![SQl1](Images/Sql1.png)
+![SQl1](Images/sql1.png)
 
 To keep all the database assets in the database project, use the *Copy sql to* command in the Product.dv file.  
 

@@ -49,13 +49,13 @@ A basic file is created from the template using the file name supplied.
 
 ![Editor1](Images/Editor1.png)
 
-<!--The [details page](DETAIL.md) covers the syntax, options and validation rules in more detail.-->
-
 In the above example, the file is intended to populate the dbo.Product table.  
 
 After the Data keyword the column names are listed separated by the pipe character and each subsequent line represents one row of data.  As more lines or columns are added the table automatically formats to keep the columns aligned.
 
 The ProductID column also appears next to the *Key* keyword and so will be used to determine if a row should be created, updated or deleted.
+
+See [Basic Syntax](https://github.com/dannyquinn/domainvalues/wiki/Basic-Syntax) in the wiki for more information.
 
 In the solution explorer, just under the newly created Product.dv file is a second file named Product.dv.sql.  This contains the sql statement generated from the contents of product.dv.  
 
@@ -74,7 +74,7 @@ Table dbo.Product
         | 2         | ProductB    |
 ```
 
-When the file is saved another file will appear.  This contains the enumeration code and the language is determined by the project type.
+When the file is saved another file will appear.  This contains the enumeration code and the language is determined by the project type.  See [Enumerations](https://github.com/dannyquinn/domainvalues/wiki/Enumerations) in the wiki for more information.
 
 ![Editor2](Images/Editor2.png)
 
@@ -82,7 +82,7 @@ Open the Product.dv.cs file to view the enumeration.
 
 ![Editor3](Images/Editor3.png)
 
-The enum base type and access modifier can be changed, descriptions can be added to each member and the [Flags] attribute can be added.  These options are covered on the [details page](DETAIL.md).
+The enum base type and access modifier can be changed, descriptions can be added to each member and the [Flags] attribute can be added.  
 
 #### Using the generated sql file with a database project
 
@@ -108,4 +108,4 @@ The copied file will be updated anytime a change is made.
 
 ----------------------------------------
 
-<!-- More information on the [details page](DETAIL.md). -->
+[See the wiki pages for more information](https://github.com/dannyquinn/domainvalues/wiki)

@@ -74,7 +74,7 @@ Table dbo.Product
         | 2         | ProductB    |
 ```
 
-When the file is saved another file will appear.  This contains the enumeration code and the language is determined by the project type.  See [Enumerations](https://github.com/dannyquinn/domainvalues/wiki/Enumerations) in the wiki for more information.
+When the file is saved another file will appear.  This contains the enumeration code and the language is determined by the project type.  
 
 ![Editor2](Images/Editor2.png)
 
@@ -83,6 +83,8 @@ Open the Product.dv.cs file to view the enumeration.
 ![Editor3](Images/Editor3.png)
 
 The enum base type and access modifier can be changed, descriptions can be added to each member and the [Flags] attribute can be added.  
+
+See [Enumerations](https://github.com/dannyquinn/domainvalues/wiki/Enumerations) in the wiki for more information.
 
 #### Using the generated sql file with a database project
 

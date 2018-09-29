@@ -10,7 +10,7 @@ See the [change log](CHANGELOG.md) for changes and road map.
 
 --------------------------------------------
 
-An extension that makes synchronising database lookup values and enumerations easier.
+An extension that makes synchronizing database lookup values and enumerations easier.
 
 ### Features
 
@@ -51,7 +51,7 @@ A basic file is created from the template using the file name supplied.
 
 <!--The [details page](DETAIL.md) covers the syntax, options and validation rules in more detail.-->
 
-In the above example, the file is intened to populate the dbo.Product table.  
+In the above example, the file is intended to populate the dbo.Product table.  
 
 After the Data keyword the column names are listed separated by the pipe character and each subsequent line represents one row of data.  As more lines or columns are added the table automatically formats to keep the columns aligned.
 
@@ -82,7 +82,7 @@ Open the Product.dv.cs file to view the enumeration.
 
 ![Editor3](images/Editor3.png)
 
-The enum base type and access modifer can be changed, descriptions can be added to each member and the [Flags] attribute can be added.  These options are covered on the [details page](DETAIL.md).
+The enum base type and access modifier can be changed, descriptions can be added to each member and the [Flags] attribute can be added.  These options are covered on the [details page](DETAIL.md).
 
 #### Using the generated sql file with a database project
 

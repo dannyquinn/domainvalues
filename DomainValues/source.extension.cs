@@ -9,7 +9,7 @@ namespace DomainValues
     {
         public const string Id = "DomainValues.77cd1080-b87f-4f98-8c55-2651ad93083e";
         public const string Name = "DomainValues";
-        public const string Description = @"Generate SQL merge statements and optionally enumerations from a template";
+        public const string Description = @"An extension that makes synchronizing database lookup values and enumerations easier.";
         public const string Language = "en-US";
         public const string Version = "1.12";
         public const string Author = "Danny Quinn";

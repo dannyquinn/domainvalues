@@ -3,7 +3,7 @@
     <Metadata>
         <Identity Id="DomainValues.77cd1080-b87f-4f98-8c55-2651ad93083e" Version="1.12" Language="en-US" Publisher="Danny Quinn" />
         <DisplayName>DomainValues</DisplayName>
-        <Description xml:space="preserve">Generate SQL merge statements and optionally enumerations from a template</Description>
+        <Description xml:space="preserve">An extension that makes synchronizing database lookup values and enumerations easier.</Description>
         <MoreInfo>https://github.com/dannyquinn/domainvalues/wiki</MoreInfo>
         <License>LICENSE.txt</License>
         <GettingStartedGuide>https://github.com/dannyquinn/domainvalues/wiki/Getting-Started</GettingStartedGuide>

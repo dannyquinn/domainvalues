@@ -11,6 +11,9 @@ namespace DomainValues.Util
 
         internal static IEnumerable<List<ParsedSpan>> GetStatementBlocks(this List<ParsedSpan> source)
         {
+            if (!source.Any())
+                yield break;
+
             List<int> range = source
                 .Where(a => a.Type == TokenType.Table)
                 .Select(a => a.LineNumber)

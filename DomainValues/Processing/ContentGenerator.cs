@@ -149,12 +149,12 @@ namespace DomainValues.Processing
 
         public byte[] GetSqlBytes()
         {
-            if (!_blocks.Any())
-                return null;
-
             StringBuilder sb = new StringBuilder();
 
             AddHeader(sb);
+
+            if (!_blocks.Any())
+                return Encoding.UTF8.GetBytes(sb.ToString());
 
             foreach (DataBlock block in _blocks)
             {

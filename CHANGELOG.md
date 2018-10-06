@@ -18,6 +18,10 @@ download in the [CI build](http://vsixgallery.com/author/danny%20quinn).
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
+### 1.3
+
+- [x] BugFix - Saving Empty Document causes "Sequence contains no elements" exception.
+
 ### 1.2
 
 - [x] Update projects to 2017 format.

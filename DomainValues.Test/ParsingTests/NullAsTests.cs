@@ -34,6 +34,16 @@ namespace DomainValues.Test.ParsingTests
         }
 
         [Test]
+        public void NullAsWithTabIsRecognised()
+        {
+            ParsedSpan output = new NullAsParser().ParseLine(0, " null as\t   ", TokenType.NullAs).Single();
+
+            ParsedSpan expected = new ParsedSpan(0, TokenType.NullAs, 1, "null as", string.Format(Errors.ExpectsParam, "NullAs"));
+
+            AreEqual(expected, output);
+        }
+
+        [Test]
         public void NullAsWithParamIsRecognised()
         {
             List<ParsedSpan> output = new NullAsParser().ParseLine(0," null as test  ",TokenType.NullAs).ToList();
@@ -45,6 +55,20 @@ namespace DomainValues.Test.ParsingTests
             };
 
             AreEqual(expected,output);
+        }
+
+        [Test]
+        public void NullAsWithParamSeparatedByTabIsRecognised()
+        {
+            List<ParsedSpan> output = new NullAsParser().ParseLine(0, " null as\ttest  ", TokenType.NullAs).ToList();
+
+            List<ParsedSpan> expected = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.NullAs, 1, "null as"),
+                new ParsedSpan(0, TokenType.NullAs | TokenType.Parameter, 9, "test")
+            };
+
+            AreEqual(expected, output);
         }
 
         [Test]

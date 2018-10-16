@@ -32,6 +32,16 @@ namespace DomainValues.Test.ParsingTests
         }
 
         [Test]
+        public void TableWithTabIsRecognised()
+        {
+            ParsedSpan output = new TableParser().ParseLine(0," table\t",TokenType.Table).Single();
+
+            ParsedSpan expectedOutput = new ParsedSpan(0,TokenType.Table,1,"table",string.Format(Errors.ExpectsParam,"Table"));
+
+            AreEqual(expectedOutput,output);
+        }
+
+        [Test]
         public void TableWithParamIsRecognised()
         {
             List<ParsedSpan> output = new TableParser().ParseLine(0, " table  dbo.test  ", TokenType.Table).ToList();
@@ -45,6 +55,19 @@ namespace DomainValues.Test.ParsingTests
             AreEqual(expectedOutput,output);
         }
 
+        [Test]
+        public void TableWithParamSeparatedByTabIsRecognised()
+        {
+            List<ParsedSpan> output = new TableParser().ParseLine(0," table\tdbo.test ", TokenType.Table).ToList();
+
+            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.Table, 1, "table"),
+                new ParsedSpan(0, TokenType.Table | TokenType.Parameter, 7, "dbo.test")
+            };
+
+            AreEqual(expectedOutput,output);
+        }
         [Test]
         public void WordStartingWithTableIsNotRecognised()
         {

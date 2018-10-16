@@ -11,9 +11,12 @@ namespace DomainValues.Processing.Parsing
             List<ParsedSpan> parsedSpans = new List<ParsedSpan>();
             TextSpan span = source.GetTextSpan();
 
-            if (span.Length > KeywordLength && span.Text.Substring(KeywordLength, 1) != " ")
+            if (span.Length > KeywordLength &&
+                span.Text.Substring(KeywordLength, 1) != " " &&
+                span.Text.Substring(KeywordLength, 1) != "\t"
+                )
             {
-                parsedSpans.Add(new ParsedSpan(lineNumber,TokenType.Parameter,span,Errors.Invalid));
+                parsedSpans.Add(new ParsedSpan(lineNumber, TokenType.Parameter, span, Errors.Invalid));
                 return parsedSpans;
             }
             ParsedSpan tokenSpan = new ParsedSpan(lineNumber,PrimaryType,span.To(KeywordLength));

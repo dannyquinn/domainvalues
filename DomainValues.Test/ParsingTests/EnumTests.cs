@@ -32,6 +32,16 @@ namespace DomainValues.Test.ParsingTests
         }
 
         [Test]
+        public void EnumWithTabIsRecognised()
+        {
+            ParsedSpan output = new EnumParser().ParseLine(0, " enum\t ", TokenType.Enum).Single();
+
+            ParsedSpan expected = new ParsedSpan(0, TokenType.Enum, 1, "enum", string.Format(Errors.ExpectsParam, "Enum"));
+
+            AreEqual(expected, output);
+        }
+
+        [Test]
         public void EnumWithParamIsRecognised()
         {
             List<ParsedSpan> output = new EnumParser().ParseLine(0, " enum  test", TokenType.Enum).ToList();
@@ -40,6 +50,20 @@ namespace DomainValues.Test.ParsingTests
             {
                 new ParsedSpan(0, TokenType.Enum, 1, "enum"),
                 new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 7, "test")
+            };
+
+            AreEqual(expected, output);
+        }
+
+        [Test]
+        public void EnumWithParamSeparatedByTabIsRecognised()
+        {
+            List<ParsedSpan> output = new EnumParser().ParseLine(0, " enum\ttest", TokenType.Enum).ToList();
+
+            List<ParsedSpan> expected = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.Enum, 1, "enum"),
+                new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 6, "test")
             };
 
             AreEqual(expected, output);

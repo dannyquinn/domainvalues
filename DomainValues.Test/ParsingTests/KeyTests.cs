@@ -32,6 +32,16 @@ namespace DomainValues.Test.ParsingTests
         }
 
         [Test]
+        public void KeyWithTabIsRecognised()
+        {
+            ParsedSpan output = new KeyParser().ParseLine(0, " key\t  ", TokenType.Key).Single();
+
+            ParsedSpan expectedOutput = new ParsedSpan(0, TokenType.Key, 1, "key", string.Format(Errors.ExpectsParam, "Key"));
+
+            AreEqual(expectedOutput, output);
+        }
+
+        [Test]
         public void KeyWithParamIsRecognised()
         {
             List<ParsedSpan> output = new KeyParser().ParseLine(0, " key  id  ", TokenType.Key).ToList();
@@ -43,6 +53,20 @@ namespace DomainValues.Test.ParsingTests
             };
 
             AreEqual(expectedOutput,output);
+        }
+
+        [Test]
+        public void KeyWithParamSeparatedByTabIsRecognised()
+        {
+            List<ParsedSpan> output = new KeyParser().ParseLine(0, " key\tid  ", TokenType.Key).ToList();
+
+            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.Key, 1, "key"),
+                new ParsedSpan(0, TokenType.Key | TokenType.Parameter, 5, "id")
+            };
+
+            AreEqual(expectedOutput, output);
         }
 
         [Test]

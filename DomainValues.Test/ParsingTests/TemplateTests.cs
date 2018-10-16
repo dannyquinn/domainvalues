@@ -32,6 +32,16 @@ namespace DomainValues.Test.ParsingTests
         }
 
         [Test]
+        public void TemplateWithTabIsRecognised()
+        {
+            ParsedSpan output = new TemplateParser().ParseLine(0, "template\t   ", TokenType.Template).Single();
+
+            ParsedSpan expected = new ParsedSpan(0, TokenType.Template, 0, "template", string.Format(Errors.ExpectsParam, "Template"));
+
+            AreEqual(expected, output);
+        }
+
+        [Test]
         public void TemplateWithParamIsRecognised()
         {
             List<ParsedSpan> output = new TemplateParser().ParseLine(0, "template test", TokenType.Template).ToList();
@@ -43,6 +53,20 @@ namespace DomainValues.Test.ParsingTests
             };
 
             AreEqual(expected,output);
+        }
+
+        [Test]
+        public void TemplateWithParamSeparatedByTabIsRecognised()
+        {
+            List<ParsedSpan> output = new TemplateParser().ParseLine(0, "template\ttest", TokenType.Template).ToList();
+
+            List<ParsedSpan> expected = new List<ParsedSpan>
+            {
+                new ParsedSpan(0, TokenType.Template, 0, "template"),
+                new ParsedSpan(0, TokenType.EnumMember, 9, "test")
+            };
+
+            AreEqual(expected, output);
         }
 
         [Test]

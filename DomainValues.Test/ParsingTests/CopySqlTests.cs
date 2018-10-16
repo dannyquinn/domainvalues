@@ -33,6 +33,16 @@ namespace DomainValues.Test.ParsingTests
         }
 
         [Test]
+        public void CopySqlWithTabIsRecognised()
+        {
+            ParsedSpan output = new CopySqlParser().ParseLine(0, "copy sql to\t", TokenType.CopySql).Single();
+
+            ParsedSpan expected = new ParsedSpan(0,TokenType.CopySql,0,"copy sql to",string.Format(Errors.ExpectsParam,"CopySql"));
+
+            AreEqual(expected,output);
+        }
+
+        [Test]
         public void CopySqlWithParamIsRecognised()
         {
             List<ParsedSpan> output = new CopySqlParser().ParseLine(0,"copy sql to  test",TokenType.CopySql).ToList();
@@ -44,6 +54,20 @@ namespace DomainValues.Test.ParsingTests
             };
 
             AreEqual(expected,output);
+        }
+
+        [Test]
+        public void CopySqlWithParamSeparatedByTabIsRecognised()
+        {
+            List<ParsedSpan> output = new CopySqlParser().ParseLine(0,"copy sql to\ttest",TokenType.CopySql).ToList();
+
+            List<ParsedSpan> expected = new List<ParsedSpan>
+            {
+                new ParsedSpan(0,TokenType.CopySql,0,"copy sql to"),
+                new ParsedSpan(0,TokenType.CopySql | TokenType.Parameter,12,"test")
+            };
+
+            AreEqual(expected, output);
         }
 
         [Test]

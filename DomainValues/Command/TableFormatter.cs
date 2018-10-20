@@ -19,26 +19,30 @@ namespace DomainValues.Command
 
             int lineNumber = point.GetContainingLine().LineNumber;
 
-            List<ITextSnapshotLine> textLines = view.TextBuffer.CurrentSnapshot.Lines.ToList();
+            int blockStart = lineNumber, blockEnd = lineNumber;
 
-            int tableStartIndex = textLines
-                .Select((text, index) => new { text, index })
-                .Where(a => a.index <= lineNumber)
-                .OrderByDescending(a => a.index)
-                .TakeWhile(a => a.text.GetText().TrimStart().StartsWith("|"))
-                .Min(a => a.index);
+            while (blockStart > 0)
+            {
+                var text = view.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(--blockStart).GetText().TrimStart();
 
-            int tableEndIndex = textLines
-                .Select((text, index) => new { text, index })
-                .Where(a => a.index >= lineNumber)
-                .OrderBy(a => a.index)
-                .TakeWhile(a => a.text.GetText().TrimStart().StartsWith("|"))
-                .Max(a => a.index);
+                if (text.StartsWith("table", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    break;
+                }
+            }
 
-            if (tableStartIndex == tableEndIndex)
-                return;
+            while (blockEnd < view.TextBuffer.CurrentSnapshot.LineCount-1)
+            {
+                var text = view.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(++blockEnd).GetText().TrimStart();
 
-            List<ITextSnapshotLine> lines = textLines.Skip(tableStartIndex).Take(tableEndIndex - tableStartIndex + 1).ToList();
+                if (text.StartsWith("table", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    break;
+                }
+            }
+            
+            List<ITextSnapshotLine> lines = view.TextBuffer.CurrentSnapshot.Lines
+                .Where(a => a.LineNumber >= blockStart && a.LineNumber <= blockEnd && a.GetText().TrimStart().StartsWith("|")).ToList();
 
             List<List<Tuple<Span, string>>> lineColumns = lines.Select(a => GetColumns(a.Extent)).ToList();
 

@@ -59,6 +59,8 @@ See [Basic Syntax](https://github.com/dannyquinn/domainvalues/wiki/Basic-Syntax)
 
 In the solution explorer, just under the newly created Product.dv file is a second file named Product.dv.sql.  This contains the sql statement generated from the contents of product.dv.  
 
+*If the project type is Visual Basic, the file will not display automatically.  To see the file in a VB project click the show all files icon in the solution explorer.*
+
 Every time the file is saved the sql file will be updated.  
 
 To add an enum to the project using the same values, replace the text in Product.dv with the following...

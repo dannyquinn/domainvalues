@@ -7,8 +7,12 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 
 ## Road map
 
-- [ ] Add format document menu command and key binding.
 
+- [x] Table alignment - now aligns all rows in a block.
+- [x] Text is not coloured correctly when a tab is used between keyword and parameter.
+- [ ] Support Format Document (Ctrl+K, Ctrl+D)
+- [ ] Support Comments from toolbar (Ctrl+K, Ctrl+C / Ctrl+U)
+- [ ] "Copy Sql To" fails on projects using new format.
 
 Features that have a checkmark are complete and available for
 download in the [CI build](http://vsixgallery.com/author/danny%20quinn).

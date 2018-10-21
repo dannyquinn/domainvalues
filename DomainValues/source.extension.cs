@@ -11,7 +11,7 @@ namespace DomainValues
         public const string Name = "DomainValues";
         public const string Description = @"An extension that makes synchronizing database lookup values and enumerations easier.";
         public const string Language = "en-US";
-        public const string Version = "1.3";
+        public const string Version = "1.4";
         public const string Author = "Danny Quinn";
         public const string Tags = "SQL, Enum, Code Generation, Static Data, Domain Values";
     }

@@ -30,10 +30,12 @@ namespace DomainValues.Command
 
             _errorListProvider = view.TextBuffer.Properties.GetOrCreateSingletonProperty(() => new ErrorListProvider(_serviceProvider));
 
+            var formatter = view.TextBuffer.Properties.GetOrCreateSingletonProperty(() => new Formatter(view));
+
             if (_errorListProvider == null)
                 return;
 
-            CommandFilter filter = new CommandFilter(view);
+            CommandFilter filter = new CommandFilter(formatter);
 
             IOleCommandTarget next;
 

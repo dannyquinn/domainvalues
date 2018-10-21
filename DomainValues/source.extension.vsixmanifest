@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="DomainValues.77cd1080-b87f-4f98-8c55-2651ad93083e" Version="1.3" Language="en-US" Publisher="Danny Quinn" />
+        <Identity Id="DomainValues.77cd1080-b87f-4f98-8c55-2651ad93083e" Version="1.4" Language="en-US" Publisher="Danny Quinn" />
         <DisplayName>DomainValues</DisplayName>
         <Description xml:space="preserve">An extension that makes synchronizing database lookup values and enumerations easier.</Description>
         <MoreInfo>https://github.com/dannyquinn/domainvalues/wiki</MoreInfo>

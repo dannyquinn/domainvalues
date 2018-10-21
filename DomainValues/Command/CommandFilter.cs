@@ -2,18 +2,18 @@
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Text.Editor;
 
 namespace DomainValues.Command
 {
     internal sealed class CommandFilter : IOleCommandTarget
     {
-        public CommandFilter(IWpfTextView textView)
+        private readonly Formatter _formatter;
+
+        public CommandFilter(Formatter formatter)
         {
-            TextView = textView;
+            _formatter = formatter;
         }
 
-        public IWpfTextView TextView { get; }
         public IOleCommandTarget Next { get; set; }
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
@@ -31,7 +31,7 @@ namespace DomainValues.Command
 
             if (GetTypeChar(pvaIn).Equals('|'))
             {
-               TableFormatter.Align(TextView);
+               _formatter.AlignTable();
             }
             return hResult;
         }

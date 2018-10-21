@@ -133,7 +133,7 @@ namespace DomainValues.Command
             if (_codeDomProvider != null)
                 return _codeDomProvider;
 
-            var provider = GetService(typeof(SVSMDCodeDomProvider)) as IVSMDCodeDomProvider;
+            IVSMDCodeDomProvider provider = GetService(typeof(SVSMDCodeDomProvider)) as IVSMDCodeDomProvider;
 
             if (provider!=null)
             {

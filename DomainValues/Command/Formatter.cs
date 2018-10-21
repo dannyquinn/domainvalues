@@ -68,7 +68,7 @@ namespace DomainValues.Command
             List<ITextSnapshotLine> lines = _view.TextBuffer.CurrentSnapshot.Lines
                 .Where(a => a.LineNumber >= blockStart && a.LineNumber <= blockEnd && a.GetText().TrimStart().StartsWith("|")).ToList();
 
-            List<List<(Span span, string text)>> lineColumns = lines.Select(a => GetColumns(a.Extent)).ToList();
+            List<List<Tuple<Span, string>>> lineColumns = lines.Select(a => GetColumns(a.Extent)).ToList();
 
             int maxColumns = lineColumns.Max(a => a.Count);
 
@@ -79,24 +79,24 @@ namespace DomainValues.Command
 
             for (int column = 0; column < maxColumns; column++)
             {
-                List<List<(Span span, string text)>> cols = lineColumns.Where(a => a.Count >= column + 1).ToList();
-                int maxColLen = cols.Max(a => a[column].text.Length);
+                List<List<Tuple<Span, string>>> cols = lineColumns.Where(a => a.Count >= column + 1).ToList();
+                int maxColLen = cols.Max(a => a[column].Item2.Length);
 
-                foreach (List<(Span span, string text)> col in cols)
+                foreach (List<Tuple<Span, string>> col in cols)
                 {
-                    string currentText = col[column].text;
+                    string currentText = col[column].Item2;
 
                     string newText = $" {currentText}{new string(' ', maxColLen - currentText.Length)} ";
 
-                    edit.Replace(col[column].span, newText);
+                    edit.Replace(col[column].Item1, newText);
                 }
 
             }
         }
-        private static List<(Span span, string text)> GetColumns(SnapshotSpan span)
+        private static List<Tuple<Span, string>> GetColumns(SnapshotSpan span)
         {
             return RegExpr.Columns.Matches(span.GetText()).Cast<Match>()
-                .Select(a => (new Span(span.Start + a.Index, a.Length), a.Value.Trim()))
+                .Select(a => Tuple.Create(new Span(span.Start + a.Index, a.Length), a.Value.Trim()))
                 .ToList();
         }
         private static bool LineQualifies(SnapshotPoint point)

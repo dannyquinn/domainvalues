@@ -19,6 +19,7 @@ namespace DomainValues
 
         public const string DvFileExtension = ".dv";
 
+        public const string SingleFileGeneratorName = "DomainValuesSingleFileGenerator";
         public const string SingleFileGeneratorGuid = "B85060CC-947E-471B-B521-712C7193DEDA";
     }
 }

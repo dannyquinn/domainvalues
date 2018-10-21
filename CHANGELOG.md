@@ -10,7 +10,6 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 - [x] Table alignment - now aligns all rows in a block.
 - [x] Text is not coloured correctly when a tab is used between keyword and parameter.
 - [x] Removed reference to System in item templates to prevent error when using new project format.
-- [x] Use TextTemplating.VSHost package for SingleFileGenerator.
 - [x] Added support for comments from toolbar or keybindings.
 - [x] Added support for Format Document and Format Selection.
 

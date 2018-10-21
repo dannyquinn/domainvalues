@@ -5,24 +5,26 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using DomainValues.Command.SingleFileBaseGenerator;
 using DomainValues.Model;
 using DomainValues.Processing;
 using EnvDTE;
-using Microsoft.VisualStudio.Designer.Interfaces;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TextTemplating.VSHost;
+using Microsoft.VisualStudio.Shell;
+using VSLangProj80;
 
 namespace DomainValues.Command
 {
+
+    [ComVisible(true)]
     [Guid(DvContent.SingleFileGeneratorGuid)]
-    [ProvideCodeGenerator(typeof(SingleFileGenerator),DvContent.SingleFileGeneratorName,"C# Domain Values Generator",true,ProjectSystem = ProvideCodeGeneratorAttribute.CSharpProjectGuid)]
-    [ProvideCodeGenerator(typeof(SingleFileGenerator),DvContent.SingleFileGeneratorName,"VB Domain Values Generator",true,ProjectSystem = ProvideCodeGeneratorAttribute.VisualBasicProjectGuid)]
-    [ProvideCodeGeneratorExtension(DvContent.SingleFileGeneratorName,DvContent.DvFileExtension)]
-    public class SingleFileGenerator : BaseCodeGeneratorWithSite
+    [CodeGeneratorRegistrationWithFileExtension(typeof(DomainValuesSingleFileGenerator), "C# Domain Values Generator", vsContextGuids.vsContextGuidVCSProject, GeneratesDesignTimeSource = true, FileExtension = DvContent.DvFileExtension)]
+    [CodeGeneratorRegistrationWithFileExtension(typeof(DomainValuesSingleFileGenerator), "VB Domain Values Generator", vsContextGuids.vsContextGuidVBProject, GeneratesDesignTimeSource = true, FileExtension = DvContent.DvFileExtension)]
+    [ProvideObject(typeof(DomainValuesSingleFileGenerator))]
+    public class DomainValuesSingleFileGenerator : BaseGeneratorWithSite
     {
-        public override string GetDefaultExtension() => $"{DvContent.DvFileExtension}.sql";
+        protected override string GetDefaultExtension() => $"{DvContent.DvFileExtension}.sql";
         
-        protected override byte[] GenerateCode(string inputFileName, string inputFileContent)
+        protected override byte[] GenerateCode(string inputFileContent)
         {
             ProjectItem projectItem = GetProjectItem();
             CodeDomProvider codeProvider = GetCodeProvider();
@@ -55,7 +57,7 @@ namespace DomainValues.Command
 
                 if (!string.IsNullOrWhiteSpace(content.CopySql))
                 {
-                    Solution solution = (GetProjectItem().ContainingProject.DTE).Solution;
+                    Solution solution = (GetProject().DTE).Solution;
 
                     ProjectItem item = solution.FindProjectItem(content.CopySql);
 
@@ -81,7 +83,7 @@ namespace DomainValues.Command
                         }
                         else
                         {
-                            GeneratorErrorCallback(true,1, $"{content.CopySql} is not a folder", 0, 0);
+                            GeneratorError(1, $"{content.CopySql} is not a folder", 0, 0);
                         }
                         RemoveOldFiles(projectItem, codeProvider, enumCreated, item);
 
@@ -89,7 +91,7 @@ namespace DomainValues.Command
                     }
                     else
                     {
-                        GeneratorErrorCallback(true,1,$"Could not find {content.CopySql} for copy operation",0,0);
+                        GeneratorError(1,$"Could not find {content.CopySql} for copy operation",0,0);
                     }
                 }
             }
@@ -128,30 +130,6 @@ namespace DomainValues.Command
                 item.Delete();
             }
         }
-        protected virtual CodeDomProvider GetCodeProvider()
-        {
-            if (_codeDomProvider != null)
-                return _codeDomProvider;
-
-            IVSMDCodeDomProvider provider = GetService(typeof(SVSMDCodeDomProvider)) as IVSMDCodeDomProvider;
-
-            if (provider!=null)
-            {
-                _codeDomProvider = provider.CodeDomProvider as CodeDomProvider;
-            }
-            else
-            {
-                //In the case where no language specific CodeDom is available, fall back to C# 
-                _codeDomProvider = CodeDomProvider.CreateProvider("CSharp");
-            }
-            return _codeDomProvider;
-        }
-
-        private CodeDomProvider _codeDomProvider;
-
-        protected ProjectItem GetProjectItem()
-        {
-            return (ProjectItem)GetService(typeof(ProjectItem));
-        }
+        
     }
 }

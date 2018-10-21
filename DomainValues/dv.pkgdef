@@ -1,10 +1,2 @@
 ﻿[$RootKey$\ShellFileAssociations\.dv]
 "DefaultIconMoniker"="KnownMonikers.DatabaseConfigurationFile"
-
-; New single file generator doesn't seem to work with VB is VS2015.
-; Added this to complete the extension registration.
-
-[$RootKey$\Generators]
-[$RootKey$\Generators\{164b10b9-b200-11d0-8c61-00a0c91e29d5}]
-[$RootKey$\Generators\{164b10b9-b200-11d0-8c61-00a0c91e29d5}\.dv]
-@="DomainValuesSingleFileGenerator"

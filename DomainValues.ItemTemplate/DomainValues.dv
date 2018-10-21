@@ -1,8 +1,13 @@
 ﻿# $itemname$
 
 Table dbo.$itemname$
-	Key $itemname$ID
+	Key ID
+#	Enum $itemname$
+#	Template [Description] Name = ID
 	Data 
-		| $itemname$ID | $itemname$Desc |
-		| $itemname$_1 | $itemname$_One |
-		| $itemname$_2 | $itemname$_Two |
+		| ID | Name      | Description |
+		| 1  | ItemOne   | FirstItem   |
+		| 2  | ItemTwo   | SecondItem  |
+	Data
+		| ID | Name      | Description |
+		| 3  | ItemThree | ThirdItem   |

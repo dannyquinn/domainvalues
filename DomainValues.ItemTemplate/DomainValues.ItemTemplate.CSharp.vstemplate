@@ -2,7 +2,7 @@
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
     <Name>Domain values</Name>
-    <Description>Generate SQL merge statements and optionally enumerations from a template</Description>
+    <Description>Makes synchronizing database lookup values and enumerations easier.</Description>
     <Icon>DomainValues.ItemTemplate.ico</Icon>
     <TemplateID>53050a94-e027-49e4-be78-e4dfbb0bfae2</TemplateID>
     <ProjectType>CSharp</ProjectType>

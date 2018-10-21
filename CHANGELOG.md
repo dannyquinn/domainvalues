@@ -7,9 +7,9 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 
 ## Road map
 
-
 - [x] Table alignment - now aligns all rows in a block.
 - [x] Text is not coloured correctly when a tab is used between keyword and parameter.
+- [x] Removed reference to System in item templates to prevent error when using new project format.
 - [ ] Support Format Document (Ctrl+K, Ctrl+D)
 - [ ] Support Comments from toolbar (Ctrl+K, Ctrl+C / Ctrl+U)
 - [ ] "Copy Sql To" fails on projects using new format.

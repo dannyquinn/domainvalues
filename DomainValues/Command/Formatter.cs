@@ -17,6 +17,57 @@ namespace DomainValues.Command
             _view = view;
         }
 
+        public void CommentSelection()
+        {
+            int start, end;
+
+            GetSelectionLines(out start, out end);
+
+            using (ITextEdit edit = _view.TextBuffer.CreateEdit())
+            {
+                while (start <= end)
+                {
+                    var line = _view.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(start);
+
+                    edit.Insert(line.Start, "#");
+
+                    start++;
+                }
+
+                if (edit.HasEffectiveChanges)
+                    edit.Apply();
+            }
+
+        }
+
+        public void RemoveCommentSelection()
+        {
+            int start, end;
+
+            GetSelectionLines(out start,out end);
+
+            using (ITextEdit edit = _view.TextBuffer.CreateEdit())
+            {
+                while (start <= end)
+                {
+                    var line = _view.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(start);
+
+                    var text = line.GetText();
+
+                    if (text.StartsWith("#"))
+                    {
+                        Span span = new Span(line.Start.Position+text.IndexOf('#'),1);
+
+                        edit.Replace(span, string.Empty);
+                    }
+
+                    start++;
+                }
+                if (edit.HasEffectiveChanges)
+                    edit.Apply();
+            }
+        }
+
         public void AlignTable()
         {
             // Separated from align rows in preparation for the FormatDocument logic.
@@ -93,12 +144,28 @@ namespace DomainValues.Command
 
             }
         }
+
+        private void GetSelectionLines(out int start, out int end)
+        {
+            if (_view.Selection.IsEmpty)
+            {
+                int lineNumber = _view.Caret.Position.BufferPosition.GetContainingLine().LineNumber;
+
+                start = end = lineNumber;
+                return;
+            }
+
+            start = _view.Selection.Start.Position.GetContainingLine().LineNumber;
+            end = _view.Selection.End.Position.GetContainingLine().LineNumber;
+        }
+
         private static List<Tuple<Span, string>> GetColumns(SnapshotSpan span)
         {
             return RegExpr.Columns.Matches(span.GetText()).Cast<Match>()
                 .Select(a => Tuple.Create(new Span(span.Start + a.Index, a.Length), a.Value.Trim()))
                 .ToList();
         }
+
         private static bool LineQualifies(SnapshotPoint point)
         {
             string lineText = point.GetContainingLine().GetText();

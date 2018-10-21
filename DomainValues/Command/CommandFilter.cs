@@ -17,10 +17,36 @@ namespace DomainValues.Command
         public IOleCommandTarget Next { get; set; }
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
-            return Next.QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
+            if (pguidCmdGroup!=VSConstants.VSStd2K)
+                return Next.QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
+
+            switch (prgCmds[0].cmdID)
+            {
+                case (uint)VSConstants.VSStd2KCmdID.COMMENT_BLOCK:
+                case (uint)VSConstants.VSStd2KCmdID.UNCOMMENT_BLOCK:
+                    prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_SUPPORTED | (uint)OLECMDF.OLECMDF_ENABLED;
+                    return VSConstants.S_OK;
+                default:
+                    return Next.QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
+            }
         }
         public int Exec(ref Guid pguidCmdGroup, uint nCmdId, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
+            if (pguidCmdGroup == VSConstants.VSStd2K)
+            {
+                if (nCmdId == (uint) VSConstants.VSStd2KCmdID.COMMENT_BLOCK)
+                {
+                    _formatter.CommentSelection();
+                    return VSConstants.S_OK;
+                }
+
+                if (nCmdId == (int) VSConstants.VSStd2KCmdID.UNCOMMENT_BLOCK)
+                {
+                    _formatter.RemoveCommentSelection();
+                    return VSConstants.S_OK;
+                }
+            }
+
             int hResult = Next.Exec(pguidCmdGroup, nCmdId, nCmdexecopt, pvaIn, pvaOut);
 
             if (!ErrorHandler.Succeeded(hResult))

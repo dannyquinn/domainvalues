@@ -144,6 +144,8 @@ namespace DomainValues.Command
 
                     int index = lineToken.Start + lineToken.Text.Length;
 
+                    bool lastTokenWasEnumDesc = false;
+
                     foreach (ParsedSpan token in lineTokens.Skip(1))
                     {
                         string wantedText = " ";
@@ -157,7 +159,11 @@ namespace DomainValues.Command
                                 wantedText = " [";
                                 break;
                             case TokenType.EnumMember:
-                                wantedText = "] ";
+                                if (lastTokenWasEnumDesc)
+                                {
+                                    wantedText = "] ";
+                                }
+
                                 break;
                         }
 
@@ -169,6 +175,8 @@ namespace DomainValues.Command
 
                             edit.Replace(span, wantedText);
                         }
+
+                        lastTokenWasEnumDesc = token.Type == TokenType.EnumDesc;
 
                         index = token.Start + token.Text.Length;
                     }

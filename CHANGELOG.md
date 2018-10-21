@@ -7,9 +7,9 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 
 ## Road map
 
+- [ ] Visual Studio 2019 support
 - [ ] Better support for new project format
 - [ ] Type objects for retrieving values
-- [ ] Visual Studio 2019 support
 
 Features that have a checkmark are complete and available for
 download in the [CI build](http://vsixgallery.com/author/danny%20quinn).

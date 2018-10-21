@@ -11,8 +11,9 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 - [x] Text is not coloured correctly when a tab is used between keyword and parameter.
 - [x] Removed reference to System in item templates to prevent error when using new project format.
 - [x] Use TextTemplating.VSHost package for SingleFileGenerator.
+- [x] Added support for comments from toolbar or keybindings.
 - [ ] Support Format Document (Ctrl+K, Ctrl+D)
-- [ ] Support Comments from toolbar (Ctrl+K, Ctrl+C / Ctrl+U)
+
 
 Features that have a checkmark are complete and available for
 download in the [CI build](http://vsixgallery.com/author/danny%20quinn).

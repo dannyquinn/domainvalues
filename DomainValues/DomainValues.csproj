@@ -56,7 +56,6 @@
   <ItemGroup>
     <Compile Include="Command\CommandFilter.cs" />
     <Compile Include="Command\Formatter.cs" />
-    <Compile Include="Command\TableFormatter.cs" />
     <Compile Include="Command\VsTextViewCreationListener.cs" />
     <Compile Include="DvContent.cs" />
     <Compile Include="Command\SingleFileGenerator.cs" />

@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.PlatformUI;
 
 namespace DomainValues.Command
 {
@@ -24,6 +25,8 @@ namespace DomainValues.Command
             {
                 case (uint)VSConstants.VSStd2KCmdID.COMMENT_BLOCK:
                 case (uint)VSConstants.VSStd2KCmdID.UNCOMMENT_BLOCK:
+                case (uint)VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
+                case (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION:
                     prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_SUPPORTED | (uint)OLECMDF.OLECMDF_ENABLED;
                     return VSConstants.S_OK;
                 default:
@@ -43,6 +46,16 @@ namespace DomainValues.Command
                 if (nCmdId == (int) VSConstants.VSStd2KCmdID.UNCOMMENT_BLOCK)
                 {
                     _formatter.RemoveCommentSelection();
+                    return VSConstants.S_OK;
+                }
+                if (nCmdId == (int)VSConstants.VSStd2KCmdID.FORMATDOCUMENT)
+                {
+                    _formatter.FormatDocument();
+                    return VSConstants.S_OK;
+                }
+                if (nCmdId == (int)VSConstants.VSStd2KCmdID.FORMATSELECTION)
+                {
+                    _formatter.FormatSelection();
                     return VSConstants.S_OK;
                 }
             }

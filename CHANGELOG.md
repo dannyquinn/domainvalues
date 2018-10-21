@@ -12,8 +12,7 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 - [x] Removed reference to System in item templates to prevent error when using new project format.
 - [x] Use TextTemplating.VSHost package for SingleFileGenerator.
 - [x] Added support for comments from toolbar or keybindings.
-- [ ] Support Format Document (Ctrl+K, Ctrl+D)
-
+- [x] Added support for Format Document and Format Selection.
 
 Features that have a checkmark are complete and available for
 download in the [CI build](http://vsixgallery.com/author/danny%20quinn).

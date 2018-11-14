@@ -53,11 +53,15 @@ namespace DomainValues.Command
 
                     enumCreated = true;
                 }
-                sqlBytes = content.GetSqlBytes();
+                Solution solution = (GetProject().DTE).Solution;
+
+                var relativePath = InputFilePath.Remove(0,Path.GetDirectoryName(solution.FullName).Length);
+
+                sqlBytes = content.GetSqlBytes(relativePath);
 
                 if (!string.IsNullOrWhiteSpace(content.CopySql))
                 {
-                    Solution solution = (GetProject().DTE).Solution;
+                    
 
                     ProjectItem item = solution.FindProjectItem(content.CopySql);
 

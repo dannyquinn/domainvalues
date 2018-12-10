@@ -7,10 +7,10 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 
 ## Road map
 
-- [ ] Visual Studio 2019 support
+
 - [ ] Better support for new project format
 - [ ] Type objects for retrieving values
-- [x] Path of generator file appears in sql output (comment).
+
 
 Features that have a checkmark are complete and available for
 download in the [CI build](http://vsixgallery.com/author/danny%20quinn).
@@ -20,6 +20,10 @@ download in the [CI build](http://vsixgallery.com/author/danny%20quinn).
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
+### 1.5
+
+- [x] Visual Studio 2019 support
+
 ### 1.4
 
 - [x] Table alignment - now aligns all rows in a block.
@@ -28,6 +32,7 @@ on the official Visual Studio extension gallery.
 - [x] Support for *Format Selection* (Ctrl+K, Ctrl+F).
 - [x] Fix - Text is not coloured correctly when a tab is used between keyword and parameter.
 - [x] Fix - Removed reference to System in item templates to prevent error when using new project format.
+- [x] Path of generator file appears in sql output (comment).
 
 ### 1.3
 

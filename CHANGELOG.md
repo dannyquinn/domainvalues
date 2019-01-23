@@ -8,8 +8,7 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 ## Road map
 
 
-- [ ] Better support for new project format
-- [ ] Type objects for retrieving values
+- [x] Better support for new project format
 
 
 Features that have a checkmark are complete and available for

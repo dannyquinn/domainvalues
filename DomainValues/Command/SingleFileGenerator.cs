@@ -10,6 +10,7 @@ using DomainValues.Model;
 using DomainValues.Processing;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using VSLangProj80;
 
 namespace DomainValues.Command
@@ -23,7 +24,7 @@ namespace DomainValues.Command
     public class DomainValuesSingleFileGenerator : BaseGeneratorWithSite
     {
         protected override string GetDefaultExtension() => $"{DvContent.DvFileExtension}.sql";
-        
+
         protected override byte[] GenerateCode(string inputFileContent)
         {
             ProjectItem projectItem = GetProjectItem();
@@ -41,49 +42,70 @@ namespace DomainValues.Command
 
                 if (enumBytes != null)
                 {
-
                     string enumFilename = $"{InputFilePath}.{codeProvider.FileExtension}";
 
-                    using (FileStream fileStream = File.Create(enumFilename))
+                    FileMode fileMode = File.Exists(enumFilename) ? FileMode.Truncate : FileMode.Create;
+
+                    using (FileStream fs = new FileStream(enumFilename, fileMode, FileAccess.ReadWrite, FileShare.ReadWrite))
                     {
-                        fileStream.Write(enumBytes, 0, enumBytes.Length);
-                        fileStream.Close();
+                        fs.Write(enumBytes, 0, enumBytes.Length);
+                        fs.Close();
                     }
-                    projectItem.ProjectItems.AddFromFile(enumFilename);
+
+                    if (fileMode == FileMode.Create)
+                    {
+                        projectItem.ProjectItems.AddFromFile(enumFilename);
+
+                        var moniker = GetProject().Properties.Item("TargetFrameworkMoniker").Value.ToString();
+
+                        if (moniker.Contains(".NETStandard"))
+                        {
+                            IVsSolution vsSolution = (IVsSolution)GetService(typeof(SVsSolution));
+                            vsSolution.GetProjectOfUniqueName(GetProject().UniqueName, out IVsHierarchy hierarchy);
+                            IVsBuildPropertyStorage storage = hierarchy as IVsBuildPropertyStorage;
+
+                            if (storage != null)
+                            {
+                                hierarchy.ParseCanonicalName(enumFilename, out uint itemId);
+                                storage.SetItemAttribute(itemId, "AutoGen", "True");
+                                storage.SetItemAttribute(itemId, "DesignTime", "True");
+                                storage.SetItemAttribute(itemId, "DependentUpon", projectItem.Name);
+                            }
+                        }
+                    }
 
                     enumCreated = true;
                 }
+
                 Solution solution = (GetProject().DTE).Solution;
 
-                var relativePath = InputFilePath.Remove(0,Path.GetDirectoryName(solution.FullName).Length);
+                var relativePath = InputFilePath.Remove(0, Path.GetDirectoryName(solution.FullName).Length);
 
                 sqlBytes = content.GetSqlBytes(relativePath);
 
                 if (!string.IsNullOrWhiteSpace(content.CopySql))
                 {
-                    
-
                     ProjectItem item = solution.FindProjectItem(content.CopySql);
-
 
                     if (item != null)
                     {
-                        item.ProjectItems.Cast<ProjectItem>().SingleOrDefault(a => a.Name == $"{projectItem.Name}.sql")?.Delete();
-
                         var targetPath = item.Properties.Item("FullPath").Value.ToString();
 
                         // Ensure the item is a folder.
                         if (Directory.Exists(targetPath))
                         {
-                            var copyFile = string.Concat(targetPath, new FileInfo(InputFilePath).Name, ".sql");
+                            var copyFile = string.Concat(targetPath, $"{projectItem.Name}.sql");
 
-                            using (FileStream fileStream = File.Create(copyFile))
+                            FileMode fileMode = File.Exists(copyFile) ? FileMode.Truncate : FileMode.Create;
+
+                            using (FileStream fileStream = new FileStream(copyFile, fileMode, FileAccess.Write, FileShare.ReadWrite))
                             {
                                 fileStream.Write(sqlBytes, 0, sqlBytes.Length);
                                 fileStream.Close();
                             }
 
-                            item.ProjectItems.AddFromFile(copyFile).Properties.Item("BuildAction").Value = "None";
+                            if (fileMode == FileMode.Create)
+                                item.ProjectItems.AddFromFile(copyFile).Properties.Item("BuildAction").Value = "None";
                         }
                         else
                         {
@@ -95,7 +117,7 @@ namespace DomainValues.Command
                     }
                     else
                     {
-                        GeneratorError(1,$"Could not find {content.CopySql} for copy operation",0,0);
+                        GeneratorError(1, $"Could not find {content.CopySql} for copy operation", 0, 0);
                     }
                 }
             }
@@ -134,6 +156,6 @@ namespace DomainValues.Command
                 item.Delete();
             }
         }
-        
+
     }
 }

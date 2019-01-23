@@ -61,12 +61,17 @@ namespace DomainValues.Command
                         if (moniker.Contains(".NETStandard"))
                         {
                             IVsSolution vsSolution = (IVsSolution)GetService(typeof(SVsSolution));
-                            vsSolution.GetProjectOfUniqueName(GetProject().UniqueName, out IVsHierarchy hierarchy);
+
+                            IVsHierarchy hierarchy;
+
+                            vsSolution.GetProjectOfUniqueName(GetProject().UniqueName, out hierarchy);
+
                             IVsBuildPropertyStorage storage = hierarchy as IVsBuildPropertyStorage;
 
                             if (storage != null)
                             {
-                                hierarchy.ParseCanonicalName(enumFilename, out uint itemId);
+                                uint itemId;
+                                hierarchy.ParseCanonicalName(enumFilename, out itemId);
                                 storage.SetItemAttribute(itemId, "AutoGen", "True");
                                 storage.SetItemAttribute(itemId, "DesignTime", "True");
                                 storage.SetItemAttribute(itemId, "DependentUpon", projectItem.Name);

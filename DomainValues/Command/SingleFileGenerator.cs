@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -31,136 +32,136 @@ namespace DomainValues.Command
             CodeDomProvider codeProvider = GetCodeProvider();
             List<ParsedSpan> spans = Scanner.GetSpans(inputFileContent, true);
 
-            byte[] sqlBytes;
-            bool enumCreated = false;
+            string originalName = GetLastKnownFileName(projectItem);
 
-            if (!spans.Any(a => a.Errors.Any()))
+            if (!originalName.Equals(projectItem.Name, StringComparison.InvariantCultureIgnoreCase))
+                RemoveOrphanedItem(projectItem, $"{originalName}.{codeProvider.FileExtension}");
+
+            if (spans.Any(a => a.Errors.Any()))
+                return Encoding.UTF8.GetBytes("Error Generating Content");
+
+            ContentGenerator content = SpansToContent.Convert(spans);
+
+            byte[] enumBytes = content.GetEnumBytes(codeProvider, FileNamespace);
+
+            if (enumBytes != null)
             {
-                ContentGenerator content = SpansToContent.Convert(spans);
-
-                byte[] enumBytes = content.GetEnumBytes(codeProvider, FileNamespace);
-
-                if (enumBytes != null)
-                {
-                    string enumFilename = $"{InputFilePath}.{codeProvider.FileExtension}";
-
-                    FileMode fileMode = File.Exists(enumFilename) ? FileMode.Truncate : FileMode.Create;
-
-                    using (FileStream fs = new FileStream(enumFilename, fileMode, FileAccess.ReadWrite, FileShare.ReadWrite))
-                    {
-                        fs.Write(enumBytes, 0, enumBytes.Length);
-                        fs.Close();
-                    }
-
-                    if (fileMode == FileMode.Create)
-                    {
-                        projectItem.ProjectItems.AddFromFile(enumFilename);
-
-                        var moniker = GetProject().Properties.Item("TargetFrameworkMoniker").Value.ToString();
-
-                        if (moniker.Contains(".NETStandard"))
-                        {
-                            IVsSolution vsSolution = (IVsSolution)GetService(typeof(SVsSolution));
-
-                            IVsHierarchy hierarchy;
-
-                            vsSolution.GetProjectOfUniqueName(GetProject().UniqueName, out hierarchy);
-
-                            IVsBuildPropertyStorage storage = hierarchy as IVsBuildPropertyStorage;
-
-                            if (storage != null)
-                            {
-                                uint itemId;
-                                hierarchy.ParseCanonicalName(enumFilename, out itemId);
-                                storage.SetItemAttribute(itemId, "AutoGen", "True");
-                                storage.SetItemAttribute(itemId, "DesignTime", "True");
-                                storage.SetItemAttribute(itemId, "DependentUpon", projectItem.Name);
-                            }
-                        }
-                    }
-
-                    enumCreated = true;
-                }
-
-                Solution solution = (GetProject().DTE).Solution;
-
-                var relativePath = InputFilePath.Remove(0, Path.GetDirectoryName(solution.FullName).Length);
-
-                sqlBytes = content.GetSqlBytes(relativePath);
-
-                if (!string.IsNullOrWhiteSpace(content.CopySql))
-                {
-                    ProjectItem item = solution.FindProjectItem(content.CopySql);
-
-                    if (item != null)
-                    {
-                        var targetPath = item.Properties.Item("FullPath").Value.ToString();
-
-                        // Ensure the item is a folder.
-                        if (Directory.Exists(targetPath))
-                        {
-                            var copyFile = string.Concat(targetPath, $"{projectItem.Name}.sql");
-
-                            FileMode fileMode = File.Exists(copyFile) ? FileMode.Truncate : FileMode.Create;
-
-                            using (FileStream fileStream = new FileStream(copyFile, fileMode, FileAccess.Write, FileShare.ReadWrite))
-                            {
-                                fileStream.Write(sqlBytes, 0, sqlBytes.Length);
-                                fileStream.Close();
-                            }
-
-                            if (fileMode == FileMode.Create)
-                                item.ProjectItems.AddFromFile(copyFile).Properties.Item("BuildAction").Value = "None";
-                        }
-                        else
-                        {
-                            GeneratorError(1, $"{content.CopySql} is not a folder", 0, 0);
-                        }
-                        RemoveOldFiles(projectItem, codeProvider, enumCreated, item);
-
-                        return sqlBytes;
-                    }
-                    else
-                    {
-                        GeneratorError(1, $"Could not find {content.CopySql} for copy operation", 0, 0);
-                    }
-                }
-            }
-            else
-            {
-                sqlBytes = Encoding.UTF8.GetBytes("Error Generating Output");
-
+                CreateEnumFile(codeProvider, enumBytes, projectItem);
             }
 
-            RemoveOldFiles(projectItem, codeProvider, enumCreated, null);
+            Solution solution = projectItem.ContainingProject.DTE.Solution;
+
+            var relativePath = InputFilePath.Remove(0, Path.GetDirectoryName(solution.FullName)?.Length ?? 0);
+
+            byte[] sqlBytes = content.GetSqlBytes(relativePath);
+
+            if (string.IsNullOrWhiteSpace(content.CopySql))
+                return sqlBytes;
+
+            ProjectItem copyLocation = solution.FindProjectItem(content.CopySql);
+
+            if (copyLocation == null)
+            {
+                GeneratorError(1, $"Could not find {content.CopySql} for copy operation", 0, 0);
+                return sqlBytes;
+            }
+
+            var targetPath = copyLocation.Properties.Item("FullPath").Value.ToString();
+
+            if (!Directory.Exists(targetPath))
+            {
+                GeneratorError(1, $"{content.CopySql} is not a folder", 0, 0);
+                return sqlBytes;
+            }
+
+            if (!projectItem.Name.Equals(originalName, StringComparison.InvariantCultureIgnoreCase))
+                RemoveOrphanedItem(copyLocation, $"{originalName}.sql");
+
+            string copyFile = $"{targetPath}{projectItem.Name}.sql";
+
+            if (WriteFile(copyFile, sqlBytes))
+                copyLocation.ProjectItems.AddFromFile(copyFile)
+                    .Properties.Item("BuildAction").Value = "None";
 
             return sqlBytes;
         }
 
-        private void RemoveOldFiles(ProjectItem projectItem, CodeDomProvider codeProvider, bool enumCreated, ProjectItem copyLocation)
+        private static bool WriteFile(string path, byte[] content)
         {
-            foreach (ProjectItem item in projectItem.ProjectItems)
+            FileMode fileMode = File.Exists(path) ? FileMode.Truncate : FileMode.Create;
+
+            using (FileStream fs = new FileStream(path, fileMode, FileAccess.Write, FileShare.ReadWrite))
             {
-                if (item.Name.Equals($"{projectItem.Name}.sql", StringComparison.CurrentCultureIgnoreCase))
+                fs.Write(content,0,content.Length);
+                fs.Close();
+            }
+
+            return fileMode == FileMode.Create;
+        }
+        private void CreateEnumFile(CodeDomProvider codeProvider, byte[] enumBytes, ProjectItem projectItem)
+        {
+            string enumFileName = $"{InputFilePath}.{codeProvider.FileExtension}";
+
+            if (!WriteFile(enumFileName, enumBytes))
+                return;
+
+            projectItem.ProjectItems.AddFromFile(enumFileName);
+
+            var moniker = projectItem.ContainingProject.Properties.Item("TargetFrameworkMoniker").Value.ToString();
+
+            if (!moniker.Contains(".NETStandard") && !moniker.Contains(".NETCoreApp"))
+                return;
+
+            IVsSolution soln = (IVsSolution) Package.GetGlobalService(typeof(SVsSolution));
+
+            soln.GetProjectOfUniqueName(projectItem.ContainingProject.UniqueName, out IVsHierarchy hierarchy);
+
+            IVsBuildPropertyStorage storage = hierarchy as IVsBuildPropertyStorage;
+
+            if (storage == null)
+                return;
+
+            hierarchy.ParseCanonicalName(enumFileName, out uint itemId);
+            storage.SetItemAttribute(itemId, "AutoGen", "True");
+            storage.SetItemAttribute(itemId, "DependentUpon", projectItem.Name);
+        }
+        private static void RemoveOrphanedItem(ProjectItem parent, string name)
+        {
+            if (parent.ProjectItems.Count == 0)
+                return;
+
+            foreach (ProjectItem child in parent.ProjectItems)
+            {
+                if (!child.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                     continue;
-
-                if (enumCreated && item.Name.Equals($"{projectItem.Name}.{codeProvider.FileExtension}", StringComparison.CurrentCultureIgnoreCase))
-                    continue;
-
-                if (copyLocation != null)
-                {
-                    foreach (ProjectItem copyItem in copyLocation.ProjectItems)
-                    {
-                        if (copyItem.Name.Equals(item.Name, StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            copyItem.Delete();
-                        }
-                    }
-                }
-
-                item.Delete();
+                child.Delete();
+                break;
             }
         }
 
+        private static string GetLastKnownFileName(ProjectItem item)
+        {
+            string name = item.Name;
+
+            IVsSolution solution = (IVsSolution) Package.GetGlobalService(typeof(SVsSolution));
+
+            solution.GetProjectOfUniqueName(item.ContainingProject.UniqueName, out IVsHierarchy hierarchy);
+
+            IVsBuildPropertyStorage storage = hierarchy as IVsBuildPropertyStorage;
+
+            if (storage == null)
+                return name;
+
+            hierarchy.ParseCanonicalName(item.FileNames[0], out uint itemId);
+
+            storage.GetItemAttribute(itemId, "LastKnownName", out string originalName);
+
+            if (originalName == name)
+                return name;
+
+            storage.SetItemAttribute(itemId, "LastKnownName", name);
+
+            return originalName;
+        }
     }
 }

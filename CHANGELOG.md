@@ -8,7 +8,8 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 ## Road map
 
 
-- [x] Better support for new project format
+- [x] Renaming file was buggy in .NET Stanadrd/Core projects.
+- [x] Enum did not appear as child of dv file in .NET Standard/Core projects.
 
 
 Features that have a checkmark are complete and available for

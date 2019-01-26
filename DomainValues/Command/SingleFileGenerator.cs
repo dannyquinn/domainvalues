@@ -156,7 +156,7 @@ namespace DomainValues.Command
 
             storage.GetItemAttribute(itemId, "LastKnownName", out string originalName);
 
-            if (originalName == name)
+            if (string.IsNullOrWhiteSpace(originalName) || originalName == name)
                 return name;
 
             storage.SetItemAttribute(itemId, "LastKnownName", name);

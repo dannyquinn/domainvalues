@@ -8,8 +8,7 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 ## Road map
 
 
-- [x] Renaming file was buggy in .NET Stanadrd/Core projects.
-- [x] Enum did not appear as child of dv file in .NET Standard/Core projects.
+- [ ] Nothing current
 
 
 Features that have a checkmark are complete and available for
@@ -19,6 +18,11 @@ download in the [CI build](http://vsixgallery.com/author/danny%20quinn).
 
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
+
+### 1.6
+
+- [x] Renaming file was buggy in .NET Stanadrd/Core projects.
+- [x] Enum did not appear as child of dv file in .NET Standard/Core projects.
 
 ### 1.5
 

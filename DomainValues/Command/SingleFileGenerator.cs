@@ -156,12 +156,12 @@ namespace DomainValues.Command
 
             storage.GetItemAttribute(itemId, "LastKnownName", out string originalName);
 
-            if (string.IsNullOrWhiteSpace(originalName) || originalName == name)
+            if (originalName == name)
                 return name;
-
+            
             storage.SetItemAttribute(itemId, "LastKnownName", name);
 
-            return originalName;
+            return string.IsNullOrWhiteSpace(originalName) ? name : originalName;
         }
     }
 }

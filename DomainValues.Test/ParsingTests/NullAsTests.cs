@@ -64,7 +64,7 @@ namespace DomainValues.Test.ParsingTests
 
             List<ParsedSpan> expected = new List<ParsedSpan>
             {
-                new ParsedSpan(0, TokenType.NullAs, 3, "null as"),
+                new ParsedSpan(0, TokenType.NullAs, 1, "null as"),
                 new ParsedSpan(0, TokenType.NullAs | TokenType.Parameter, 9, "test")
             };
 

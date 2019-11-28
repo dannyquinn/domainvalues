@@ -21,7 +21,7 @@ on the official Visual Studio extension gallery.
 
 ### 1.7
 
-- [ ] Fix - Removing enum definition didn't delete the generated .cs file
+- [x] Fix - Removing enum definition didn't delete the generated .cs file
 
 ### 1.6
 

@@ -48,6 +48,14 @@ namespace DomainValues.Command
             {
                 CreateEnumFile(codeProvider, enumBytes, projectItem);
             }
+            else
+            {
+                foreach (ProjectItem item in projectItem.ProjectItems)
+                {
+                    if (item.Name.EndsWith(".cs"))
+                        item.Delete();
+                }
+            }
 
             Solution solution = projectItem.ContainingProject.DTE.Solution;
 

@@ -19,6 +19,10 @@ download in the [CI build](http://vsixgallery.com/author/danny%20quinn).
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
+### 1.7
+
+- [ ] Fix - Removing enum definition didn't delete the generated .cs file
+
 ### 1.6
 
 - [x] Renaming file was buggy in .NET Stanadrd/Core projects.

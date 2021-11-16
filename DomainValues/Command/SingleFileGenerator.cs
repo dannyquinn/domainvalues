@@ -157,8 +157,7 @@ namespace DomainValues.Command
 
             IVsSolution solution = (IVsSolution) Package.GetGlobalService(typeof(SVsSolution));
 
-            IVsHierarchy hierarchy;
-            solution.GetProjectOfUniqueName(item.ContainingProject.UniqueName, out hierarchy);
+            solution.GetProjectOfUniqueName(item.ContainingProject.UniqueName, out IVsHierarchy hierarchy);
 
             IVsBuildPropertyStorage storage = hierarchy as IVsBuildPropertyStorage;
 

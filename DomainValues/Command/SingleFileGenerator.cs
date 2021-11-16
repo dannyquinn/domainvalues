@@ -94,7 +94,7 @@ namespace DomainValues.Command
             return sqlBytes;
         }
 
-        private static bool WriteFile(string path, byte[] content) 
+        private static bool WriteFile(string path, byte[] content)
         {
             FileMode fileMode = File.Exists(path) ? FileMode.Truncate : FileMode.Create;
 
@@ -121,19 +121,15 @@ namespace DomainValues.Command
                 return;
 
             IVsSolution soln = (IVsSolution) Package.GetGlobalService(typeof(SVsSolution));
-            
-            IVsHierarchy hierarchy;
 
-            soln.GetProjectOfUniqueName(projectItem.ContainingProject.UniqueName, out hierarchy);
+            soln.GetProjectOfUniqueName(projectItem.ContainingProject.UniqueName, out IVsHierarchy hierarchy);
 
             IVsBuildPropertyStorage storage = hierarchy as IVsBuildPropertyStorage;
 
             if (storage == null)
                 return;
-            
-            uint itemId;
 
-            hierarchy.ParseCanonicalName(enumFileName, out itemId);
+            hierarchy.ParseCanonicalName(enumFileName, out uint itemId);
             storage.SetItemAttribute(itemId, "AutoGen", "True");
             storage.SetItemAttribute(itemId, "DependentUpon", projectItem.Name);
         }
@@ -164,12 +160,9 @@ namespace DomainValues.Command
             if (storage == null)
                 return name;
 
-            uint itemId;
+            hierarchy.ParseCanonicalName(item.FileNames[0], out uint itemId);
 
-            hierarchy.ParseCanonicalName(item.FileNames[0], out itemId);
-
-            string originalName;
-            storage.GetItemAttribute(itemId, "LastKnownName", out originalName);
+            storage.GetItemAttribute(itemId, "LastKnownName", out string originalName);
 
             if (originalName == name)
                 return name;

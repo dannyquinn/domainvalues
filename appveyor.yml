@@ -6,9 +6,9 @@ install:
 before_build:
   - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
   - ps: Vsix-TokenReplacement DomainValues\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
+  - nuget restore 
 
 build_script:
-  - nuget restore -Verbosity quiet
   - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
 
 after_test:

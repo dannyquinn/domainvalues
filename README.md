@@ -8,6 +8,8 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 
 See the [change log](CHANGELOG.md) for changes and road map.
 
+This version is compatible with Visual Studio 2015, 2017 & 2019.  For Visual Studio 2022 [use domainvalues64](https://github.com/dannyquinn/domainvalues64).
+
 --------------------------------------------
 
 An extension that makes synchronizing database lookup values and enumerations easier.

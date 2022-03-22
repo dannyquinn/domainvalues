@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainValues", "DomainValues\DomainValues.csproj", "{1D1C8EB9-6911-46E3-8DEA-301D06322042}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainValues.ItemTemplate", "DomainValues.ItemTemplate\DomainValues.ItemTemplate.csproj", "{583F24E5-0DAF-4775-9408-15B699BA9260}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainValues.Test", "DomainValues.Test\DomainValues.Test.csproj", "{857380BF-7CA5-4F51-8CBB-716533FFAC0F}"
@@ -13,19 +11,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		build.yml = build.yml
 		CHANGELOG.md = CHANGELOG.md
+		dv.pkgdef = dv.pkgdef
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainValues.16.0", "DomainValues.16.0\DomainValues.16.0.csproj", "{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DomainValues.Shared", "DomainValues.Shared\DomainValues.Shared.shproj", "{1E66D9D8-1DBE-4066-BF6D-5BD8ADAC3DD3}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		DomainValues.Shared\DomainValues.Shared.projitems*{1e66d9d8-1dbe-4066-bf6d-5bd8adac3dd3}*SharedItemsImports = 13
+		DomainValues.Shared\DomainValues.Shared.projitems*{78e2bf30-2d9c-47f9-bdd5-5edfa3b0070d}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1D1C8EB9-6911-46E3-8DEA-301D06322042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D1C8EB9-6911-46E3-8DEA-301D06322042}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D1C8EB9-6911-46E3-8DEA-301D06322042}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D1C8EB9-6911-46E3-8DEA-301D06322042}.Release|Any CPU.Build.0 = Release|Any CPU
 		{583F24E5-0DAF-4775-9408-15B699BA9260}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{583F24E5-0DAF-4775-9408-15B699BA9260}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{583F24E5-0DAF-4775-9408-15B699BA9260}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -34,6 +37,10 @@ Global
 		{857380BF-7CA5-4F51-8CBB-716533FFAC0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{857380BF-7CA5-4F51-8CBB-716533FFAC0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{857380BF-7CA5-4F51-8CBB-716533FFAC0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

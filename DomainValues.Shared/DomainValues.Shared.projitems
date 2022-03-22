@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>1e66d9d8-1dbe-4066-bf6d-5bd8adac3dd3</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>DomainValues.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Command\AlignTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Command\CommentSelection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Command\UncommentSelection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\Errors.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DvContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DvFileExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Column.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\DataBlock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Error.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\ParsedSpan.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\TextSpan.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\TokenType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\ContentGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Parsers\CommentParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Parsers\CopySqlParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Parsers\DataParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Parsers\EnumParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Parsers\KeyParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Parsers\NullAsParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Parsers\ParserBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Parsers\RowParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Parsers\SpaceAsParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Parsers\TableParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Parsers\TemplateParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Scanner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\SpansToContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processing\Validate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tagging\Classifier.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tagging\ClassifierProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tagging\ErrorProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tagging\ErrorTagger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VsPackage.cs" />
+  </ItemGroup>
+</Project>

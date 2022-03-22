@@ -4,6 +4,9 @@
         <Identity Id="DomainValues.393db814-2cb9-41a7-af06-e39027d2773b" Version="1.0" Language="en-US" Publisher="Danny Quinn" />
         <DisplayName>DomainValues  2022</DisplayName>
         <Description xml:space="preserve">Makes synchronizing database lookup values and enumerations easier.</Description>
+        <License>LICENSE.txt</License>
+        <Icon>DomainValuesIcon.png</Icon>
+        <PreviewImage>DomainValuesPreview.png</PreviewImage>
         <Tags>SQL, Enum, Code Generation, Static Data, Domain Values</Tags>
     </Metadata>
     <Installation>

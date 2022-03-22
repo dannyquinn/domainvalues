@@ -75,6 +75,12 @@
       <Version>3.11.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DomainValues.16.0\DomainValues.16.0.csproj">
+      <Project>{78e2bf30-2d9c-47f9-bdd5-5edfa3b0070d}</Project>
+      <Name>DomainValues.16.0</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

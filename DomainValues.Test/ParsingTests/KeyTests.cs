@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DomainValues.Shared.Common;
+using DomainValues.Shared.Model;
+using DomainValues.Shared.Processing.Parsing;
 using NUnit.Framework;
 using static DomainValues.Test.ParsingTests.Util;
 
@@ -11,9 +14,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void KeyIsRecognised()
         {
-            ParsedSpan output = new KeyParser().ParseLine(0, "key", TokenType.Key).Single();
+            var output = new KeyParser().ParseLine(0, "key", TokenType.Key).Single();
 
-            ParsedSpan expectedOutput = new ParsedSpan(0,TokenType.Key, 0,"key",string.Format(Errors.ExpectsParam,"Key"));
+            var expectedOutput = new ParsedSpan(0,TokenType.Key, 0,"key",string.Format(Errors.ExpectsParam,"Key"));
 
             AreEqual(expectedOutput,output);
         }
@@ -21,9 +24,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void KeyWithSpacesIsRecognised()
         {
-            ParsedSpan output = new KeyParser().ParseLine(0, " key  ", TokenType.Key).Single();
+            var output = new KeyParser().ParseLine(0, " key  ", TokenType.Key).Single();
 
-            ParsedSpan expectedOutput = new ParsedSpan(0, TokenType.Key, 1, "key", string.Format(Errors.ExpectsParam, "Key"));
+            var expectedOutput = new ParsedSpan(0, TokenType.Key, 1, "key", string.Format(Errors.ExpectsParam, "Key"));
 
             AreEqual(expectedOutput,output);
         }
@@ -31,9 +34,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void KeyWithTabIsRecognised()
         {
-            ParsedSpan output = new KeyParser().ParseLine(0, " key\t  ", TokenType.Key).Single();
+            var output = new KeyParser().ParseLine(0, " key\t  ", TokenType.Key).Single();
 
-            ParsedSpan expectedOutput = new ParsedSpan(0, TokenType.Key, 1, "key", string.Format(Errors.ExpectsParam, "Key"));
+            var expectedOutput = new ParsedSpan(0, TokenType.Key, 1, "key", string.Format(Errors.ExpectsParam, "Key"));
 
             AreEqual(expectedOutput, output);
         }
@@ -41,9 +44,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void KeyWithParamIsRecognised()
         {
-            List<ParsedSpan> output = new KeyParser().ParseLine(0, " key  id  ", TokenType.Key).ToList();
+            var output = new KeyParser().ParseLine(0, " key  id  ", TokenType.Key).ToList();
 
-            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
+            var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Key, 1, "key"),
                 new ParsedSpan(0, TokenType.Key | TokenType.Parameter, 6, "id")
@@ -55,9 +58,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void KeyWithParamSeparatedByTabIsRecognised()
         {
-            List<ParsedSpan> output = new KeyParser().ParseLine(0, " key\tid  ", TokenType.Key).ToList();
+            var output = new KeyParser().ParseLine(0, " key\tid  ", TokenType.Key).ToList();
 
-            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
+            var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Key, 1, "key"),
                 new ParsedSpan(0, TokenType.Key | TokenType.Parameter, 5, "id")
@@ -69,9 +72,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void WordStartingWithKeyIsNotRecognised()
         {
-            ParsedSpan output = new KeyParser().ParseLine(0, "keytest", TokenType.Key).Single();
+            var output = new KeyParser().ParseLine(0, "keytest", TokenType.Key).Single();
 
-            ParsedSpan expectedOutput = new ParsedSpan(0,TokenType.Parameter, 0,"keytest", Errors.Invalid);
+            var expectedOutput = new ParsedSpan(0,TokenType.Parameter, 0,"keytest", Errors.Invalid);
 
             AreEqual(expectedOutput,output);
         }
@@ -79,9 +82,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void KeyWithTwoVariables()
         {
-            List<ParsedSpan> output = new KeyParser().ParseLine(0, "  key id id2", TokenType.Key).ToList();
+            var output = new KeyParser().ParseLine(0, "  key id id2", TokenType.Key).ToList();
 
-            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
+            var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0,TokenType.Key,2, "key"),
                 new ParsedSpan(0,TokenType.Parameter|TokenType.Key,6, "id"),
@@ -94,9 +97,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void DuplicateVariables()
         {
-            List<ParsedSpan> output = new KeyParser().ParseLine(0, "key id a id", TokenType.Key).ToList();
+            var output = new KeyParser().ParseLine(0, "key id a id", TokenType.Key).ToList();
 
-            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
+            var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Key, 0, "key"),
                 new ParsedSpan(0, TokenType.Key | TokenType.Parameter, 4, "id"),
@@ -110,9 +113,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void DuplicateVariablesIgnoreCase()
         {
-            List<ParsedSpan> output = new KeyParser().ParseLine(0, "key id a ID", TokenType.Key).ToList();
+            var output = new KeyParser().ParseLine(0, "key id a ID", TokenType.Key).ToList();
 
-            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
+            var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Key, 0, "key"),
                 new ParsedSpan(0, TokenType.Key | TokenType.Parameter, 4, "id"),
@@ -126,9 +129,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void NextTokenShouldBeData()
         {
-            KeyParser parser = new KeyParser();
+            var parser = new KeyParser();
 
-            ParsedSpan output = parser.ParseLine(0, "key", TokenType.Key).Single();
+            parser.ParseLine(0, "key", TokenType.Key).Single();
 
             Assert.AreEqual(TokenType.Data | TokenType.Enum, parser.NextExpectedToken);
         }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DomainValues.Model;
-using DomainValues.Processing;
-using DomainValues.Util;
+using DomainValues.Shared.Common;
+using DomainValues.Shared.Model;
+using DomainValues.Shared.Processing;
 using NUnit.Framework;
 
 namespace DomainValues.Test
@@ -13,16 +13,16 @@ namespace DomainValues.Test
         [Test]
         public void BasicBlock()
         {
-            string test = @"
+            var test = @"
                 table dbo.test
                 key id
                 data 
                     | id | test_col |
                     | 1  | test_val |";
 
-            DataBlock output = GetOutput(test).Single();
+            var output = GetOutput(test).Single();
 
-            DataBlock expected = new DataBlock("dbo.test");
+            var expected = new DataBlock("dbo.test");
 
             expected.Data.Add(new Column("id",true,true),new List<string> {"1"} );
             expected.Data.Add(new Column("test_col",false,true),new List<string> {"test_val"} );
@@ -33,7 +33,7 @@ namespace DomainValues.Test
         [Test]
         public void BlockWithEnum()
         {
-            string test = @"
+            var test = @"
                 table dbo.test
                 key id
                 enum testEnum internal byte flags 
@@ -42,9 +42,9 @@ namespace DomainValues.Test
                     | id | test_col | test_desc* |
                     | 1  | test_val | test_value |";
 
-            DataBlock output = GetOutput(test).Single();
+            var output = GetOutput(test).Single();
 
-            DataBlock expected = new DataBlock("dbo.test")
+            var expected = new DataBlock("dbo.test")
             {
                 EnumName = "testEnum",
                 IsEnumInternal = true,
@@ -64,7 +64,7 @@ namespace DomainValues.Test
         [Test]
         public void TwoBlocks()
         {
-            string test = @"
+            var test = @"
                 table dbo.test
                 key id 
                 data 
@@ -79,19 +79,19 @@ namespace DomainValues.Test
                     | 2     | value2 | 
             ";
 
-            List<DataBlock> output = GetOutput(test).ToList();
+            var output = GetOutput(test).ToList();
 
-            List<DataBlock> expected = new List<DataBlock>()
+            var expected = new List<DataBlock>()
             {
                 new DataBlock("dbo.test"),
                 new DataBlock("dbo.testTwo")
             };
 
-            DataBlock first = expected.Single(a => a.Table.Equals("dbo.test"));
+            var first = expected.Single(a => a.Table.Equals("dbo.test"));
             first.Data.Add(new Column("id", true, true), new List<string> {"1"});
             first.Data.Add(new Column("test_col", false, true), new List<string> {"test_val"});
 
-            DataBlock second = expected.Single(a => a.Table.Equals("dbo.testTwo"));
+            var second = expected.Single(a => a.Table.Equals("dbo.testTwo"));
             second.Data.Add(new Column("keyid", true, true), new List<string> {"1", "2"});
             second.Data.Add(new Column("test", false, true), new List<string> {"value1","value2"} );
 
@@ -111,11 +111,11 @@ namespace DomainValues.Test
             Assert.AreEqual(expected.EnumInitField,output.EnumInitField,"EnumInitField");
             Assert.AreEqual(expected.EnumMemberField,output.EnumMemberField,"EnumMemberField");
 
-            for (int i = 0; i < expected.Data.Count; i++)
+            for (var i = 0; i < expected.Data.Count; i++)
             {
                 Assert.AreEqual(expected.Data.Keys.ElementAt(i),output.Data.Keys.ElementAt(i));
 
-                for (int j = 0; j < expected.Data.Values.ElementAt(i).Count; j++)
+                for (var j = 0; j < expected.Data.Values.ElementAt(i).Count; j++)
                 {
                     Assert.AreEqual(expected.Data.Values.ElementAt(i)[j],output.Data.Values.ElementAt(i)[j]);
                 }
@@ -125,13 +125,13 @@ namespace DomainValues.Test
 
         private List<DataBlock> GetOutput(string source)
         {
-            List<DataBlock> blocks = new List<DataBlock>();
+            var blocks = new List<DataBlock>();
 
-            List<ParsedSpan> spans = Scanner.GetSpans(source, true);
+            var spans = Scanner.GetSpans(source, true);
 
             Assert.IsFalse(spans.Any(a=>a.Errors.Any()),"spans.Any(a=>a.Errors.Any())");
 
-            foreach (List<ParsedSpan> block in spans.GetStatementBlocks())
+            foreach (var block in spans.GetStatementBlocks())
             {
                 blocks.Add(SpansToContent.GetBlock(block));    
             }

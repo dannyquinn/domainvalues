@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DomainValues.Shared.Model;
 using NUnit.Framework;
 
 namespace DomainValues.Test.ParsingTests
@@ -10,9 +11,9 @@ namespace DomainValues.Test.ParsingTests
         {
             Assert.AreEqual(expected.Count(),test.Count(), "Count");
 
-            foreach (ParsedSpan t in test)
+            foreach (var t in test)
             {
-                ParsedSpan ex = expected.SingleOrDefault(a => a.Start == t.Start);
+                var ex = expected.SingleOrDefault(a => a.Start == t.Start);
 
                 Assert.IsNotNull(ex, $"No token at position {t.Start}");
 
@@ -21,9 +22,9 @@ namespace DomainValues.Test.ParsingTests
                 Assert.AreEqual(ex.LineNumber,t.LineNumber,"Line Number");
 
                 Assert.AreEqual( ex.Errors.Count,t.Errors.Count,"Error count");
-                foreach (Error error in t.Errors)
+                foreach (var error in t.Errors)
                 {
-                    Error exErr = ex.Errors.SingleOrDefault(a => a.Message.Equals(error.Message));
+                    var exErr = ex.Errors.SingleOrDefault(a => a.Message.Equals(error.Message));
 
 
                     Assert.IsNotNull(exErr, $"No error '{error.Message}'");

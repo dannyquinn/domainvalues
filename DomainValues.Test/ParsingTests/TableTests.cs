@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DomainValues.Shared.Common;
+using DomainValues.Shared.Model;
+using DomainValues.Shared.Processing.Parsing;
 using NUnit.Framework;
 using static DomainValues.Test.ParsingTests.Util;
 
@@ -11,9 +14,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void TableIsRecognised()
         {
-            ParsedSpan output = new TableParser().ParseLine(0, "  table", TokenType.Table).Single();
+            var output = new TableParser().ParseLine(0, "  table", TokenType.Table).Single();
 
-            ParsedSpan expectedOutput = new ParsedSpan(0, TokenType.Table, 2, "table", string.Format(Errors.ExpectsParam,"Table"));
+            var expectedOutput = new ParsedSpan(0, TokenType.Table, 2, "table", string.Format(Errors.ExpectsParam,"Table"));
 
             AreEqual(expectedOutput,output);
         }
@@ -21,9 +24,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void TableWithSpacesIsRecognised()
         {
-            ParsedSpan output = new TableParser().ParseLine(0," table  ",TokenType.Table).Single();
+            var output = new TableParser().ParseLine(0," table  ",TokenType.Table).Single();
 
-            ParsedSpan expectedOutput = new ParsedSpan(0,TokenType.Table, 1,"table",string.Format(Errors.ExpectsParam,"Table"));
+            var expectedOutput = new ParsedSpan(0,TokenType.Table, 1,"table",string.Format(Errors.ExpectsParam,"Table"));
 
             AreEqual(expectedOutput,output);
         }
@@ -31,9 +34,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void TableWithTabIsRecognised()
         {
-            ParsedSpan output = new TableParser().ParseLine(0," table\t",TokenType.Table).Single();
+            var output = new TableParser().ParseLine(0," table\t",TokenType.Table).Single();
 
-            ParsedSpan expectedOutput = new ParsedSpan(0,TokenType.Table,1,"table",string.Format(Errors.ExpectsParam,"Table"));
+            var expectedOutput = new ParsedSpan(0,TokenType.Table,1,"table",string.Format(Errors.ExpectsParam,"Table"));
 
             AreEqual(expectedOutput,output);
         }
@@ -41,7 +44,7 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void TableWithParamIsRecognised()
         {
-            List<ParsedSpan> output = new TableParser().ParseLine(0, " table  dbo.test  ", TokenType.Table).ToList();
+            var output = new TableParser().ParseLine(0, " table  dbo.test  ", TokenType.Table).ToList();
 
             List<ParsedSpan> expectedOutput = new List<ParsedSpan>
             {
@@ -55,9 +58,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void TableWithParamSeparatedByTabIsRecognised()
         {
-            List<ParsedSpan> output = new TableParser().ParseLine(0," table\tdbo.test ", TokenType.Table).ToList();
+            var output = new TableParser().ParseLine(0," table\tdbo.test ", TokenType.Table).ToList();
 
-            List<ParsedSpan> expectedOutput = new List<ParsedSpan>
+            var expectedOutput = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Table, 1, "table"),
                 new ParsedSpan(0, TokenType.Table | TokenType.Parameter, 7, "dbo.test")
@@ -68,9 +71,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void WordStartingWithTableIsNotRecognised()
         {
-            ParsedSpan output = new TableParser().ParseLine(0,"  tabletest ",TokenType.Table).Single();
+            var output = new TableParser().ParseLine(0,"  tabletest ",TokenType.Table).Single();
 
-            ParsedSpan expectedOutput = new ParsedSpan(0,TokenType.Parameter,2,"tabletest", Errors.Invalid);
+            var expectedOutput = new ParsedSpan(0,TokenType.Parameter,2,"tabletest", Errors.Invalid);
 
             AreEqual(expectedOutput,output);
         }
@@ -78,9 +81,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void NextTokenShouldBeKey()
         {
-            TableParser parser = new TableParser();
+            var parser = new TableParser();
 
-            ParsedSpan output =  parser.ParseLine(0, "table", TokenType.Table).Single();
+            parser.ParseLine(0, "table", TokenType.Table).Single();
 
             Assert.AreEqual(TokenType.Key,parser.NextExpectedToken);
         }

@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DomainValues.Shared.Common;
+using DomainValues.Shared.Model;
+using DomainValues.Shared.Processing.Parsing;
 using NUnit.Framework;
 using static DomainValues.Test.ParsingTests.Util;
 
@@ -11,9 +14,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void EnumIsRecognised()
         {
-            ParsedSpan output = new EnumParser().ParseLine(0, "enum", TokenType.Enum).Single();
+            var output = new EnumParser().ParseLine(0, "enum", TokenType.Enum).Single();
 
-            ParsedSpan expected = new ParsedSpan(0, TokenType.Enum, 0, "enum", string.Format(Errors.ExpectsParam,"Enum"));
+            var expected = new ParsedSpan(0, TokenType.Enum, 0, "enum", string.Format(Errors.ExpectsParam,"Enum"));
 
             AreEqual(expected, output);
         }
@@ -21,9 +24,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void EnumWithSpaceIsRecognised()
         {
-            ParsedSpan output = new EnumParser().ParseLine(0, " enum  ", TokenType.Enum).Single();
+            var output = new EnumParser().ParseLine(0, " enum  ", TokenType.Enum).Single();
 
-            ParsedSpan expected = new ParsedSpan(0, TokenType.Enum, 1, "enum",string.Format(Errors.ExpectsParam,"Enum"));
+            var expected = new ParsedSpan(0, TokenType.Enum, 1, "enum",string.Format(Errors.ExpectsParam,"Enum"));
 
             AreEqual(expected, output);
         }
@@ -31,9 +34,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void EnumWithTabIsRecognised()
         {
-            ParsedSpan output = new EnumParser().ParseLine(0, " enum\t ", TokenType.Enum).Single();
+            var output = new EnumParser().ParseLine(0, " enum\t ", TokenType.Enum).Single();
 
-            ParsedSpan expected = new ParsedSpan(0, TokenType.Enum, 1, "enum", string.Format(Errors.ExpectsParam, "Enum"));
+            var expected = new ParsedSpan(0, TokenType.Enum, 1, "enum", string.Format(Errors.ExpectsParam, "Enum"));
 
             AreEqual(expected, output);
         }
@@ -41,9 +44,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void EnumWithParamIsRecognised()
         {
-            List<ParsedSpan> output = new EnumParser().ParseLine(0, " enum  test", TokenType.Enum).ToList();
+            var output = new EnumParser().ParseLine(0, " enum  test", TokenType.Enum).ToList();
 
-            List<ParsedSpan> expected = new List<ParsedSpan>
+            var expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Enum, 1, "enum"),
                 new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 7, "test")
@@ -55,9 +58,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void EnumWithParamSeparatedByTabIsRecognised()
         {
-            List<ParsedSpan> output = new EnumParser().ParseLine(0, " enum\ttest", TokenType.Enum).ToList();
+            var output = new EnumParser().ParseLine(0, " enum\ttest", TokenType.Enum).ToList();
 
-            List<ParsedSpan> expected = new List<ParsedSpan>
+            var expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Enum, 1, "enum"),
                 new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 6, "test")
@@ -69,9 +72,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void WordStartingWithEnumIsNotRecognised()
         {
-            ParsedSpan output = new EnumParser().ParseLine(0, " enumtest", TokenType.Enum).Single();
+            var output = new EnumParser().ParseLine(0, " enumtest", TokenType.Enum).Single();
 
-            ParsedSpan expected = new ParsedSpan(0, TokenType.Parameter, 1, "enumtest",Errors.Invalid);
+            var expected = new ParsedSpan(0, TokenType.Parameter, 1, "enumtest",Errors.Invalid);
 
             AreEqual(expected, output);
         }
@@ -79,9 +82,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void NextTokenShouldBeTemplate()
         {
-            EnumParser parser = new EnumParser();
+            var parser = new EnumParser();
 
-            ParsedSpan output = parser.ParseLine(0, "enum", TokenType.Enum).Single();
+            parser.ParseLine(0, "enum", TokenType.Enum).Single();
 
             Assert.AreEqual(TokenType.Template, parser.NextExpectedToken);
         }
@@ -89,9 +92,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void EnumRecognisesKeywords()
         {
-            List<ParsedSpan> output = new EnumParser().ParseLine(0, "enum test internal byte flags", TokenType.Enum).ToList();
+            var output = new EnumParser().ParseLine(0, "enum test internal byte flags", TokenType.Enum).ToList();
 
-            List<ParsedSpan> expected = new List<ParsedSpan>()
+            var expected = new List<ParsedSpan>()
             {
                 new ParsedSpan(0, TokenType.Enum, 0, "enum"),
                 new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 5, "test"),
@@ -106,9 +109,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void EnumRecognisedParamIsMissingWhenKeywordsUsed()
         {
-            List<ParsedSpan> output = new EnumParser().ParseLine(0, "enum internal", TokenType.Enum).ToList();
+            var output = new EnumParser().ParseLine(0, "enum internal", TokenType.Enum).ToList();
 
-            List<ParsedSpan> expected = new List<ParsedSpan>
+            var expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Enum, 0, "enum", Errors.EnumNoName),
                 new ParsedSpan(0, TokenType.AccessType, 5, "internal")
@@ -120,9 +123,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void EnumDuplicateAccessType()
         {
-            List<ParsedSpan> output = new EnumParser().ParseLine(0, "enum test internal public", TokenType.Enum).ToList();
+            var output = new EnumParser().ParseLine(0, "enum test internal public", TokenType.Enum).ToList();
 
-            List<ParsedSpan> expected = new List<ParsedSpan>
+            var expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Enum, 0, "enum"),
                 new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 5, "test"),
@@ -136,9 +139,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void EnumDuplicateBaseType()
         {
-            List<ParsedSpan> output = new EnumParser().ParseLine(0, "enum test byte int", TokenType.Enum).ToList();
+            var output = new EnumParser().ParseLine(0, "enum test byte int", TokenType.Enum).ToList();
 
-            List<ParsedSpan> expected = new List<ParsedSpan>
+            var expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Enum, 0, "enum"),
                 new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 5, "test"),
@@ -152,9 +155,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void EnumDuplicateFlags()
         {
-            List<ParsedSpan> output = new EnumParser().ParseLine(0, "enum test flags flags", TokenType.Enum).ToList();
+            var output = new EnumParser().ParseLine(0, "enum test flags flags", TokenType.Enum).ToList();
 
-            List<ParsedSpan> expected = new List<ParsedSpan>
+            var expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Enum, 0, "enum"),
                 new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 5, "test"),
@@ -168,9 +171,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void EnumDuplicateName()
         {
-            List<ParsedSpan> output = new EnumParser().ParseLine(0, "enum test internal test2", TokenType.Enum).ToList();
+            var output = new EnumParser().ParseLine(0, "enum test internal test2", TokenType.Enum).ToList();
 
-            List<ParsedSpan> expected = new List<ParsedSpan>
+            var expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Enum, 0, "enum"),
                 new ParsedSpan(0, TokenType.Enum | TokenType.Parameter, 5, "test"),
@@ -184,9 +187,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void EnumOrderIsNotImportant()
         {
-            List<ParsedSpan> output = new EnumParser().ParseLine(0, "enum internal byte test flags", TokenType.Enum).ToList();
+            var output = new EnumParser().ParseLine(0, "enum internal byte test flags", TokenType.Enum).ToList();
 
-            List<ParsedSpan> expected = new List<ParsedSpan>
+            var expected = new List<ParsedSpan>
             {
                 new ParsedSpan(0, TokenType.Enum, 0, "enum"),
                 new ParsedSpan(0, TokenType.AccessType, 5, "internal"),

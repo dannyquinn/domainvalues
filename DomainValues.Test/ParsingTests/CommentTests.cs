@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using DomainValues.Shared.Model;
+using DomainValues.Shared.Processing.Parsing;
 using NUnit.Framework;
 using static DomainValues.Test.ParsingTests.Util;
 
@@ -10,9 +12,9 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void ParseCommentLine()
         {
-            ParsedSpan output = new CommentParser().ParseLine(0, "  #comment", TokenType.Table).Single();
+            var output = new CommentParser().ParseLine(0, "  #comment", TokenType.Table).Single();
 
-            ParsedSpan expectedOutput = new ParsedSpan(0, TokenType.Comment, 2, "#comment");
+            var expectedOutput = new ParsedSpan(0, TokenType.Comment, 2, "#comment");
 
             AreEqual(expectedOutput,output);            
         }
@@ -20,13 +22,13 @@ namespace DomainValues.Test.ParsingTests
         [Test]
         public void NextTokenIsSameAsPassedIn()
         {
-            CommentParser parser = new CommentParser();
+            var parser = new CommentParser();
 
-            ParsedSpan output = parser.ParseLine(0, "#", TokenType.Data).Single();
+            parser.ParseLine(0, "#", TokenType.Data).Single();
 
             Assert.AreEqual(parser.NextExpectedToken, TokenType.Data);
 
-            output = parser.ParseLine(0, "#", TokenType.Table).Single();
+            parser.ParseLine(0, "#", TokenType.Table).Single();
 
             Assert.AreEqual(parser.NextExpectedToken, TokenType.Table);
         }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31702.278
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainValues.ItemTemplate", "DomainValues.ItemTemplate\DomainValues.ItemTemplate.csproj", "{583F24E5-0DAF-4775-9408-15B699BA9260}"
 EndProject
@@ -19,28 +19,53 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainValues.16.0", "Domain
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DomainValues.Shared", "DomainValues.Shared\DomainValues.Shared.shproj", "{1E66D9D8-1DBE-4066-BF6D-5BD8ADAC3DD3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainValues.17.0", "DomainValues.17.0\DomainValues.17.0.csproj", "{62D553DF-2430-4863-8DCF-23648E9322E5}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		DomainValues.Shared\DomainValues.Shared.projitems*{1e66d9d8-1dbe-4066-bf6d-5bd8adac3dd3}*SharedItemsImports = 13
+		DomainValues.Shared\DomainValues.Shared.projitems*{62d553df-2430-4863-8dcf-23648e9322e5}*SharedItemsImports = 4
 		DomainValues.Shared\DomainValues.Shared.projitems*{78e2bf30-2d9c-47f9-bdd5-5edfa3b0070d}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{583F24E5-0DAF-4775-9408-15B699BA9260}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{583F24E5-0DAF-4775-9408-15B699BA9260}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{583F24E5-0DAF-4775-9408-15B699BA9260}.Debug|x86.ActiveCfg = Debug|x86
+		{583F24E5-0DAF-4775-9408-15B699BA9260}.Debug|x86.Build.0 = Debug|x86
 		{583F24E5-0DAF-4775-9408-15B699BA9260}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{583F24E5-0DAF-4775-9408-15B699BA9260}.Release|Any CPU.Build.0 = Release|Any CPU
+		{583F24E5-0DAF-4775-9408-15B699BA9260}.Release|x86.ActiveCfg = Release|x86
+		{583F24E5-0DAF-4775-9408-15B699BA9260}.Release|x86.Build.0 = Release|x86
 		{857380BF-7CA5-4F51-8CBB-716533FFAC0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{857380BF-7CA5-4F51-8CBB-716533FFAC0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{857380BF-7CA5-4F51-8CBB-716533FFAC0F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{857380BF-7CA5-4F51-8CBB-716533FFAC0F}.Debug|x86.Build.0 = Debug|Any CPU
 		{857380BF-7CA5-4F51-8CBB-716533FFAC0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{857380BF-7CA5-4F51-8CBB-716533FFAC0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{857380BF-7CA5-4F51-8CBB-716533FFAC0F}.Release|x86.ActiveCfg = Release|Any CPU
+		{857380BF-7CA5-4F51-8CBB-716533FFAC0F}.Release|x86.Build.0 = Release|Any CPU
 		{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}.Debug|x86.Build.0 = Debug|Any CPU
 		{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}.Release|x86.ActiveCfg = Release|Any CPU
+		{78E2BF30-2D9C-47F9-BDD5-5EDFA3B0070D}.Release|x86.Build.0 = Release|Any CPU
+		{62D553DF-2430-4863-8DCF-23648E9322E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62D553DF-2430-4863-8DCF-23648E9322E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62D553DF-2430-4863-8DCF-23648E9322E5}.Debug|x86.ActiveCfg = Debug|x86
+		{62D553DF-2430-4863-8DCF-23648E9322E5}.Debug|x86.Build.0 = Debug|x86
+		{62D553DF-2430-4863-8DCF-23648E9322E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62D553DF-2430-4863-8DCF-23648E9322E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62D553DF-2430-4863-8DCF-23648E9322E5}.Release|x86.ActiveCfg = Release|x86
+		{62D553DF-2430-4863-8DCF-23648E9322E5}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

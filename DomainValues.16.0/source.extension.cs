@@ -8,7 +8,7 @@ namespace DomainValues._16._0
     internal sealed partial class Vsix
     {
         public const string Id = "DomainValues.77cd1080-b87f-4f98-8c55-2651ad93083e";
-        public const string Name = "DomainValues";
+        public const string Name = "DomainValues 2019";
         public const string Description = @"Makes synchronizing database lookup values and enumerations easier.";
         public const string Language = "en-US";
         public const string Version = "1.8";

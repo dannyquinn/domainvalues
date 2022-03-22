@@ -9,7 +9,7 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 
 
 - [ ] Update to work with Visual Studio 2022 
-- [ ] Move core logic into a shared project 
+- [x] Move core logic into a shared project 
 
 Features that have a checkmark are complete and available for
 download in the [CI build](http://vsixgallery.com/author/danny%20quinn).

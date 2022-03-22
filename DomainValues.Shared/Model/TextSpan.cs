@@ -11,7 +11,7 @@ namespace DomainValues.Shared.Model
         }
         public TextSpan(int start,string text)
         {
-            Span span = GetExtent(text);
+            var span = GetExtent(text);
             Start = start+span.Start;
             Text = text.Substring(span.Start,span.Length);
         }
@@ -21,30 +21,30 @@ namespace DomainValues.Shared.Model
 
         public TextSpan From(int index)
         {
-            Span span = GetExtent(Text.Substring(index));
+            var span = GetExtent(Text.Substring(index));
 
             return new TextSpan(Start+span.Start+index,Text.Substring(span.Start+index));
         }
 
         public TextSpan To(int length)
         {
-            Span span = GetExtent(Text.Substring(0, length));
+            var span = GetExtent(Text.Substring(0, length));
 
             return new TextSpan(Start,Text.Substring(span.Start,span.Length));
         }
 
         private Span GetExtent(string text)
         {
-            Predicate<char> charPredicate = a => !(new[] {'\t', '\r', '\n', ' '}).Any(c => c == a);
+            bool charPredicate(char a) => !(new[] { '\t', '\r', '\n', ' ' }).Any(c => c == a);
 
-            char[] chars = text.ToCharArray();
+            var chars = text.ToCharArray();
 
-            int start = Array.FindIndex(chars, charPredicate);
+            var start = Array.FindIndex(chars, charPredicate);
 
             if (start == -1)
                 return new Span(0, 0);
 
-            int end = Array.FindLastIndex(chars, charPredicate);
+            var end = Array.FindLastIndex(chars, charPredicate);
 
             return new Span(start,end-start+1);
         }

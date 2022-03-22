@@ -56,7 +56,7 @@ namespace DomainValues.Shared.Processing
         public string CopySql { get; set; }
         public void AddBlock(DataBlock block) => _blocks.Add(block);
 
-        public byte[] GetEnumBytes(CodeDomProvider provider, string fileNamespace)
+        public string GetEnumCode(CodeDomProvider provider, string fileNamespace)
         {
             if (_blocks.All(a => string.IsNullOrWhiteSpace(a.EnumName)))
                 return null;
@@ -120,7 +120,7 @@ namespace DomainValues.Shared.Processing
                         }
                         catch
                         {
-                            return Encoding.UTF8.GetBytes($"// Error Generating Output.  Failed to convert value {enumInit.Key.Text}({enumInit.Value.ElementAt(i)}) to type {block.EnumBaseType} on enum {block.EnumName}.");
+                            return $"// Error Generating Output.  Failed to convert value {enumInit.Key.Text}({enumInit.Value.ElementAt(i)}) to type {block.EnumBaseType} on enum {block.EnumName}.";
                         }
                     }
 
@@ -143,18 +143,18 @@ namespace DomainValues.Shared.Processing
             {
                 provider.GenerateCodeFromCompileUnit(code, writer, options);
                 writer.Flush();
-                return Encoding.UTF8.GetBytes(writer.ToString());
+                return writer.ToString();
             }
         }
 
-        public byte[] GetSqlBytes(string path)
+        public string GetSqlCode(string path)
         {
             StringBuilder sb = new StringBuilder();
 
             AddHeader(sb,path);
 
             if (!_blocks.Any())
-                return Encoding.UTF8.GetBytes(sb.ToString());
+                return sb.ToString();
 
             foreach (DataBlock block in _blocks)
             {
@@ -175,7 +175,7 @@ namespace DomainValues.Shared.Processing
                 sb.AppendLine();
             }
 
-            return Encoding.UTF8.GetBytes(sb.ToString());
+            return sb.ToString();
         }
 
         private static void AddHeader(StringBuilder sb,string path)

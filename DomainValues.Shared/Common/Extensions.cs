@@ -1,8 +1,15 @@
-﻿using DomainValues.Shared.Model;
+﻿using Community.VisualStudio.Toolkit;
+using DomainValues.Shared.Model;
+using EnvDTE;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Solution = Community.VisualStudio.Toolkit.Solution;
+using Task = System.Threading.Tasks.Task;
 
 namespace DomainValues.Shared.Common
 {
@@ -21,6 +28,60 @@ namespace DomainValues.Shared.Common
             var end = textView.Selection.End.Position.GetContainingLine().LineNumber;
 
             return (start, end);
+        }
+
+        public static ProjectItem AsProjectItem(this PhysicalFile physicalFile)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            physicalFile.GetItemInfo(out var hierarchy, out var itemId, out var _);
+
+            hierarchy.GetProperty(itemId, (int)__VSHPROPID.VSHPROPID_ExtObject, out var objProjectItem);
+
+            return objProjectItem as ProjectItem;
+        }
+
+        public static async Task SetAsChildItemAsync(this PhysicalFile file, PhysicalFile parent)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            var projectItem = parent.AsProjectItem();
+
+            if (projectItem.ContainingProject.Properties.Item("TargetFrameworkMoniker").Value.ToString().Contains(".NETFramework"))
+            {
+                projectItem.ProjectItems.AddFromFile(file.FullPath);
+            }
+            else
+            {
+                await file.TrySetAttributeAsync("DependentUpon", parent.Text);
+            }
+        }
+
+        public static void SetProperty(this PhysicalFile physicalFile, string propertyName, string propertyValue)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            var projectItem = physicalFile.AsProjectItem();
+
+            projectItem.Properties.Item(propertyName).Value = propertyValue;
+        }
+
+        public static Solution GetSolution(this SolutionItem solutionItem)
+        {
+            while (true)
+            {
+                if (solutionItem.Type == SolutionItemType.Solution)
+                {
+                    return solutionItem as Solution;
+                }
+
+                solutionItem = solutionItem.Parent;
+
+                if (solutionItem == null)
+                {
+                    return null;
+                }
+            }
         }
 
         internal static TextSpan GetTextSpan(this string source) => new TextSpan(source);

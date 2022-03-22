@@ -13,13 +13,11 @@ namespace DomainValues.Shared.Tagging
     {
         private readonly ITextBuffer _buffer;
         private readonly IClassificationTypeRegistryService _typeRegistry;
-        private readonly IClassificationFormatMapService _formatMap;
        
-        internal Classifier(IClassificationTypeRegistryService typeRegistry,IClassificationFormatMapService formatMap,ITextBuffer buffer) : base(buffer)
+        internal Classifier(IClassificationTypeRegistryService typeRegistry, ITextBuffer buffer) : base(buffer)
         {
             _buffer = buffer;
             _typeRegistry = typeRegistry;
-            _formatMap = formatMap;
             WeakEventManager<ITextBuffer,TextContentChangedEventArgs>.AddHandler(buffer,"Changed",TextBuffer_Changed);
 
             UpdateTagSpans();

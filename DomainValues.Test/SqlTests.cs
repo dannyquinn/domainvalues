@@ -297,7 +297,7 @@ namespace DomainValues.Test
 
             var content = SpansToContent.Convert(spans);
 
-            return Encoding.UTF8.GetString(content.GetSqlBytes(@"\Test\Test.dv"));
+            return content.GetSqlCode(@"\Test\Test.dv");
         }
     }
 }

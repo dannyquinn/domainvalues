@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="DomainValues.393db814-2cb9-41a7-af06-e39027d2773b" Version="1.0" Language="en-US" Publisher="Danny Quinn" />
+        <Identity Id="DomainValues.393db814-2cb9-41a7-af06-e39027d2773b" Version="1.8" Language="en-US" Publisher="Danny Quinn" />
         <DisplayName>DomainValues 2022</DisplayName>
         <Description xml:space="preserve">Makes synchronizing database lookup values and enumerations easier.</Description>
+        <MoreInfo>https://github.com/dannyquinn/domainvalues/wiki</MoreInfo>
         <License>LICENSE.txt</License>
+        <GettingStartedGuide>https://github.com/dannyquinn/domainvalues/wiki/Getting-Started</GettingStartedGuide>
         <Icon>DomainValuesIcon.png</Icon>
         <PreviewImage>DomainValuesPreview.png</PreviewImage>
         <Tags>SQL, Enum, Code Generation, Static Data, Domain Values</Tags>

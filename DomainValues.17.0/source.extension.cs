@@ -11,7 +11,7 @@ namespace DomainValues._17._0
         public const string Name = "DomainValues 2022";
         public const string Description = @"Makes synchronizing database lookup values and enumerations easier.";
         public const string Language = "en-US";
-        public const string Version = "1.0";
+        public const string Version = "1.8";
         public const string Author = "Danny Quinn";
         public const string Tags = "SQL, Enum, Code Generation, Static Data, Domain Values";
     }

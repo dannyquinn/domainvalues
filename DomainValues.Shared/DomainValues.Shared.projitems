@@ -9,12 +9,15 @@
     <Import_RootNamespace>DomainValues.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CommandLegacy\CommandFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandLegacy\TextViewListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Command\AlignTable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Command\CommentSelection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Command\SaveChildItems.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Command\UncommentSelection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\Errors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\TextViewExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DvContent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DvFileExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Column.cs" />

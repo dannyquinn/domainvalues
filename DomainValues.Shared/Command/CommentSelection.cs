@@ -19,23 +19,8 @@ namespace DomainValues.Shared.Command
 
         public bool ExecuteCommand(CommentSelectionCommandArgs args, CommandExecutionContext executionContext)
         {
-            var (start, end) = args.TextView.GetSelectionLineBounds();
-
-            using (var edit = args.SubjectBuffer.CreateEdit())
-            {
-                while (start <= end)
-                {
-                    var line = edit.Snapshot.GetLineFromLineNumber(start++);
-
-                    edit.Insert(line.Start, "#");
-                }
-
-                if (edit.HasEffectiveChanges)
-                {
-                    edit.Apply();
-                }
-            }
-
+            args.TextView.CommentSelection();
+            
             return true;
         }
 

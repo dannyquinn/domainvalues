@@ -3,11 +3,9 @@ using DomainValues.Shared.Model;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.Text.Editor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Solution = Community.VisualStudio.Toolkit.Solution;
 using Task = System.Threading.Tasks.Task;
 
@@ -15,21 +13,6 @@ namespace DomainValues.Shared.Common
 {
     public static class Extensions
     {
-        public static (int start, int end) GetSelectionLineBounds(this ITextView textView)
-        {
-            if (textView.Selection.IsEmpty)
-            {
-                var lineNo = textView.Caret.Position.BufferPosition.GetContainingLine().LineNumber;
-
-                return (lineNo, lineNo);
-            }
-
-            var start = textView.Selection.Start.Position.GetContainingLine().LineNumber;
-            var end = textView.Selection.End.Position.GetContainingLine().LineNumber;
-
-            return (start, end);
-        }
-
         public static ProjectItem AsProjectItem(this PhysicalFile physicalFile)
         {
             ThreadHelper.ThrowIfNotOnUIThread();

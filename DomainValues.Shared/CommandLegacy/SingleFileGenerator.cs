@@ -46,11 +46,12 @@ namespace DomainValues.Shared.CommandLegacy
 
             var content = SpansToContent.Convert(spans);
 
-            var enumBytes = Encoding.UTF8.GetBytes(content.GetEnumCode(codeProvider, FileNamespace));
+            
+            var enumCode = content.GetEnumCode(codeProvider, FileNamespace);
 
-            if (enumBytes != null)
+            if (!string.IsNullOrWhiteSpace(enumCode))
             {
-                CreateEnumFile(codeProvider, enumBytes, projectItem);
+                CreateEnumFile(codeProvider, Encoding.UTF8.GetBytes(enumCode), projectItem);
             }
             else
             {

@@ -29,7 +29,7 @@ namespace DomainValues.Shared.CommandLegacy
             {
                 case (uint)VSConstants.VSStd2KCmdID.COMMENT_BLOCK:
                 case (uint)VSConstants.VSStd2KCmdID.UNCOMMENT_BLOCK:
-                    prgCmds[0].cmdID = (uint)OLECMDF.OLECMDF_SUPPORTED | (uint)OLECMDF.OLECMDF_ENABLED;
+                    prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_SUPPORTED | (uint)OLECMDF.OLECMDF_ENABLED;
                     return VSConstants.S_OK;
                 default:
                     return Next.QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
@@ -65,7 +65,9 @@ namespace DomainValues.Shared.CommandLegacy
                 return hResult;
             }
 
-            if (GetTypeChar(pvaIn).Equals("|"))
+            var x = GetTypeChar(pvaIn);
+
+            if (GetTypeChar(pvaIn).Equals('|'))
             {
                 _view.AlignTable();
             }

@@ -1,4 +1,4 @@
-﻿#if !DvLegacy
+﻿#if !DV_LEGACY
 
 using Community.VisualStudio.Toolkit;
 using DomainValues.Shared.Common;

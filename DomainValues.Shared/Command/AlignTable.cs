@@ -1,4 +1,4 @@
-﻿#if !DvLegacy
+﻿#if !DV_LEGACY
 
 using DomainValues.Shared.Common;
 using Microsoft.VisualStudio.Commanding;

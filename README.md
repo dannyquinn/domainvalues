@@ -25,14 +25,14 @@ An extension that makes synchronizing database lookup values and enumerations ea
 
 ### Prerequisites
 
-- Visual Studio 2017 with extension development component
+- Visual Studio 2022 with extension development component
 
 ### Get the code
 
 - Clone this repo: `git clone https://github.com/dannyquinn/domainvalues.git`
 - Open solution and ensure that the project named DomainValues is the startup project.
 - Open the project properties for DomainValues and select the debug tab.
-- Set the start up program to devenv.exe (e.g. `C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.exe`).
+- Set the start up program to devenv.exe (e.g. `C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe`).
 - Set the command line arguments to `/rootsuffix Exp`
 - Save the project and press F5 or choose the menu command Debug > Start Debugging.
 - An experimental instance of Visual Studio will launched with the extension loaded.

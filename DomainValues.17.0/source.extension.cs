@@ -8,7 +8,7 @@ namespace DomainValues._17._0
     internal sealed partial class Vsix
     {
         public const string Id = "DomainValues.393db814-2cb9-41a7-af06-e39027d2773b";
-        public const string Name = "DomainValues  2022";
+        public const string Name = "DomainValues 2022";
         public const string Description = @"Makes synchronizing database lookup values and enumerations easier.";
         public const string Language = "en-US";
         public const string Version = "1.0";

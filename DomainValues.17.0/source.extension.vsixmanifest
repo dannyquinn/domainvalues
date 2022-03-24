@@ -2,7 +2,7 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
         <Identity Id="DomainValues.393db814-2cb9-41a7-af06-e39027d2773b" Version="1.0" Language="en-US" Publisher="Danny Quinn" />
-        <DisplayName>DomainValues  2022</DisplayName>
+        <DisplayName>DomainValues 2022</DisplayName>
         <Description xml:space="preserve">Makes synchronizing database lookup values and enumerations easier.</Description>
         <License>LICENSE.txt</License>
         <Icon>DomainValuesIcon.png</Icon>

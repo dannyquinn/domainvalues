@@ -8,8 +8,9 @@ namespace DomainValues.Shared.Processing.Parsing
     {
         public virtual List<ParsedSpan> ParseLine(int lineNumber, string source,TokenType? expectedType)
         {
-            List<ParsedSpan> parsedSpans = new List<ParsedSpan>();
-            TextSpan span = source.GetTextSpan();
+            var parsedSpans = new List<ParsedSpan>();
+
+            var span = source.GetTextSpan();
 
             if (span.Length > KeywordLength &&
                 span.Text.Substring(KeywordLength, 1) != " " &&
@@ -19,12 +20,15 @@ namespace DomainValues.Shared.Processing.Parsing
                 parsedSpans.Add(new ParsedSpan(lineNumber, TokenType.Parameter, span, Errors.Invalid));
                 return parsedSpans;
             }
-            ParsedSpan tokenSpan = new ParsedSpan(lineNumber,PrimaryType,span.To(KeywordLength));
+
+            var tokenSpan = new ParsedSpan(lineNumber,PrimaryType,span.To(KeywordLength));
 
             parsedSpans.Add(tokenSpan);
 
             if (expectedType != null)
+            {
                 CheckKeywordOrder(tokenSpan, expectedType);
+            }
 
             if (HasParams && span.From(KeywordLength).Length==0)
             {
@@ -38,6 +42,7 @@ namespace DomainValues.Shared.Processing.Parsing
                     parsedSpans.Add(paramToken);
                 }
             }
+
             return parsedSpans;
         }
 
@@ -53,6 +58,7 @@ namespace DomainValues.Shared.Processing.Parsing
                 NextExpectedToken = NextType;
                 return;
             }
+
             span.Errors.Add(new Error(string.Format(Errors.UnexpectedKeyword,span.Type,expectedType)));
             NextExpectedToken = null;
         }

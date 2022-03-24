@@ -5,49 +5,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-
 namespace DomainValues.Shared.Processing.Parsing
 {
     internal class EnumParser : ParserBase
     {
         public override List<ParsedSpan> ParseLine(int lineNumber, string source,TokenType? expectedType)
         {
-            List<ParsedSpan> spans =  base.ParseLine(lineNumber, source,expectedType);
+            var spans =  base.ParseLine(lineNumber, source,expectedType);
 
             if (spans.Count > 1 && spans.All(a => a.Type != (TokenType.Enum | TokenType.Parameter)))
             {
                 spans.Single(a=>a.Type==PrimaryType).Errors.Add(new Error(Errors.EnumNoName));
             }
+
             return spans;
         }
 
         protected override IEnumerable<ParsedSpan> GetParamTokens(int lineNumber, TextSpan span)
         {
-            IEnumerable<TextSpan> parameters = Regex.Matches(span.Text, @"\S+")
+            var parameters = Regex.Matches(span.Text, @"\S+")
                 .Cast<Match>()
                 .Select(a => new TextSpan(a.Index+span.Start, a.Value));
 
-            Dictionary<TokenType, List<string>> knownTokens = new Dictionary<TokenType, List<string>>
+            var knownTokens = new Dictionary<TokenType, List<string>>
             {
                 {TokenType.AccessType, new List<string> {"public", "internal"}},
                 {TokenType.BaseType, new List<string> {"byte", "sbyte", "short", "int16", "ushort", "int", "int32", "uint", "long", "int64", "ulong"}},
                 {TokenType.FlagsAttribute, new List<string> {"flags"}}
             };
 
-            TokenType flags = TokenType.AccessType | TokenType.BaseType | TokenType.FlagsAttribute | TokenType.Parameter;
+            var flags = TokenType.AccessType | TokenType.BaseType | TokenType.FlagsAttribute | TokenType.Parameter;
 
-            foreach (TextSpan parameter in parameters)
+            foreach (var parameter in parameters)
             {
-                bool found = false;
+                var found = false;
 
-                foreach (KeyValuePair<TokenType, List<string>> type in knownTokens)
+                foreach (var type in knownTokens)
                 {
                     if (!type.Value.Contains(parameter.Text, StringComparer.CurrentCultureIgnoreCase))
+                    {
                         continue;
+                    }
 
                     found = true;
 
-                    ParsedSpan parsedSpan = new ParsedSpan(lineNumber,type.Key,parameter);
+                    var parsedSpan = new ParsedSpan(lineNumber,type.Key,parameter);
 
                     if ((flags & type.Key) == 0)
                     {
@@ -57,14 +59,18 @@ namespace DomainValues.Shared.Processing.Parsing
                     {
                         flags ^= type.Key;
                     }
+
                     yield return parsedSpan;
 
                     break;
                 }
                 if (found)
+                {
                     continue;
+                }
 
-                ParsedSpan paramSpan = new ParsedSpan(lineNumber,TokenType.Enum | TokenType.Parameter,parameter);
+                var paramSpan = new ParsedSpan(lineNumber,TokenType.Enum | TokenType.Parameter,parameter);
+
                 if ((flags & TokenType.Parameter) == 0)
                 {
                     paramSpan.Errors.Add(new Error(Errors.Invalid));
@@ -73,6 +79,7 @@ namespace DomainValues.Shared.Processing.Parsing
                 {
                     flags ^= TokenType.Parameter;
                 }
+
                 yield return paramSpan;
             }
         }

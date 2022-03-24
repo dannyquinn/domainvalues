@@ -1,10 +1,8 @@
 ﻿using DomainValues.Shared.Common;
 using DomainValues.Shared.Model;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-
 
 namespace DomainValues.Shared.Processing.Parsing
 {
@@ -12,10 +10,10 @@ namespace DomainValues.Shared.Processing.Parsing
     {
         public override List<ParsedSpan> ParseLine(int lineNumber, string source,TokenType? expectedType)
         {
-            List<ParsedSpan> parsedSpans = new List<ParsedSpan>();
-            TextSpan span = source.GetTextSpan();
+            var parsedSpans = new List<ParsedSpan>();
+            var span = source.GetTextSpan();
 
-            TokenType token = TokenType.HeaderRow;
+            var token = TokenType.HeaderRow;
 
             if (expectedType != null && (expectedType & TokenType.HeaderRow) != 0)
             {
@@ -27,9 +25,9 @@ namespace DomainValues.Shared.Processing.Parsing
                 NextType = TokenType.Data | TokenType.Table | TokenType.ItemRow;
             }
 
-            int lastPipe = Regex.Matches(span.Text, @"(?<!\\)\|", RegexOptions.Compiled).Cast<Match>().Last().Index + 1;
+            var lastPipe = Regex.Matches(span.Text, @"(?<!\\)\|", RegexOptions.Compiled).Cast<Match>().Last().Index + 1;
 
-            ParsedSpan data = new ParsedSpan(lineNumber, token, span.To(lastPipe));
+            var data = new ParsedSpan(lineNumber, token, span.To(lastPipe));
 
             CheckKeywordOrder(data, expectedType);
 
@@ -37,26 +35,31 @@ namespace DomainValues.Shared.Processing.Parsing
 
             if (source.Length > lastPipe)
             {
-                TextSpan invalidSpan = span.From(lastPipe);
+                var invalidSpan = span.From(lastPipe);
 
                 if (invalidSpan.Text.Length > 0)
+                {
                     parsedSpans.Add(new ParsedSpan(lineNumber, TokenType.Parameter, invalidSpan, Errors.Invalid));
+                }
             }
 
 
             if (token == TokenType.ItemRow)
+            {
                 return parsedSpans;
+            }
 
-            MatchCollection columns = Extensions.Columns.Matches(source);
+            var columns = Extensions.Columns.Matches(source);
 
-            List<Match> duplicates = columns.Cast<Match>()
+            var duplicates = columns.Cast<Match>()
                 .GroupBy(a => a.Value.Trim().ToLower())
                 .SelectMany(a => a.Skip(1))
                 .ToList();
 
-            foreach (Match duplicate in duplicates)
+            foreach (var duplicate in duplicates)
             {
-                TextSpan value = duplicate.Value.GetTextSpan();
+                var value = duplicate.Value.GetTextSpan();
+
                 parsedSpans.Add(new ParsedSpan(lineNumber, TokenType.HeaderRow, duplicate.Index + value.Start, value.Text,string.Format(Errors.DuplicateValue,"Column",value.Text)));
             }
             return parsedSpans;

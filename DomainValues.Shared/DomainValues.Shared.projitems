@@ -9,7 +9,11 @@
     <Import_RootNamespace>DomainValues.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CommandLegacy\BaseGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandLegacy\BaseGeneratorWithSite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommandLegacy\CommandFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandLegacy\GeneratorRegistration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandLegacy\SingleFileGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommandLegacy\TextViewListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Command\AlignTable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Command\CommentSelection.cs" />

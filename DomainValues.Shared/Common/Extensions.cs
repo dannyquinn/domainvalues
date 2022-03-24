@@ -95,7 +95,7 @@ namespace DomainValues.Shared.Common
 
         internal static IEnumerable<string> GetColumns(this string source)
         {
-            return Extensions.Columns.Matches(source).Cast<Match>()
+            return Columns.Matches(source).Cast<Match>()
                  .Select(a => a.Value
                     .Trim()
                     .Replace("\\\\\\|", "\\\0")

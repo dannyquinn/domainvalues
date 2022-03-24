@@ -12,15 +12,15 @@ namespace DomainValues.Shared.Processing
     {
         public static List<ParsedSpan> GetSpans(string source, bool validateBlocks)
         {
-            List<ParsedSpan> spans = new List<ParsedSpan>();
+            var spans = new List<ParsedSpan>();
 
-            int lineCount = -1;
+            var lineCount = -1;
 
             TokenType? expectedType = TokenType.Table | TokenType.NullAs | TokenType.SpaceAs | TokenType.CopySql;
 
             using (StringReader sr = new StringReader(source))
             {
-                string currentLine;
+                var currentLine = string.Empty;
 
                 while ((currentLine = sr.ReadLine()) != null)
                 {
@@ -53,7 +53,9 @@ namespace DomainValues.Shared.Processing
             }
 
             if (validateBlocks)
+            {
                 Validate.CheckBlocks(spans);
+            }
 
             return spans;
         }

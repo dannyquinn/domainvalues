@@ -10,30 +10,30 @@ namespace DomainValues.Shared.Processing
     {
         public static ContentGenerator Convert(List<ParsedSpan> spans)
         {
-            ContentGenerator content = new ContentGenerator();
+            var content = new ContentGenerator();
 
-            ParsedSpan nullAs = spans.FirstOrDefault(a => a.Type == (TokenType.NullAs | TokenType.Parameter));
+            var nullAs = spans.FirstOrDefault(a => a.Type == (TokenType.NullAs | TokenType.Parameter));
 
             if (nullAs != null)
             {
                 content.UpdateNullAs(nullAs.Text);
             }
 
-            ParsedSpan spaceAs = spans.FirstOrDefault(a => a.Type == (TokenType.SpaceAs | TokenType.Parameter));
+            var spaceAs = spans.FirstOrDefault(a => a.Type == (TokenType.SpaceAs | TokenType.Parameter));
 
             if (spaceAs != null)
             {
                 content.UpdateSpaceAs(spaceAs.Text);
             }
 
-            ParsedSpan copySql = spans.FirstOrDefault(a => a.Type == (TokenType.CopySql | TokenType.Parameter));
+            var copySql = spans.FirstOrDefault(a => a.Type == (TokenType.CopySql | TokenType.Parameter));
 
             if (copySql != null)
             {
                 content.CopySql = copySql.Text;
             }
 
-            foreach (List<ParsedSpan> block in spans.GetStatementBlocks())
+            foreach (var block in spans.GetStatementBlocks())
             {
                 content.AddBlock(GetBlock(block));
             }
@@ -44,22 +44,22 @@ namespace DomainValues.Shared.Processing
         {
             string tableName = block.Single(a => a.Type == (TokenType.Table | TokenType.Parameter)).Text;
 
-            DataBlock dataBlock = new DataBlock(tableName);
+            var dataBlock = new DataBlock(tableName);
 
-            IEnumerable<string> keyVars = block
+            var keyVars = block
                 .Where(a => a.Type == (TokenType.Key | TokenType.Parameter))
                 .Select(a => a.Text);
 
-            foreach (Column column in GetColumns(block.First(a => a.Type == TokenType.HeaderRow).Text, keyVars))
+            foreach (var column in GetColumns(block.First(a => a.Type == TokenType.HeaderRow).Text, keyVars))
             {
                 dataBlock.Data.Add(column, new List<string>());
             }
 
-            foreach (ParsedSpan item in block.Where(a => a.Type == TokenType.ItemRow))
+            foreach (var item in block.Where(a => a.Type == TokenType.ItemRow))
             {
-                List<string> columns = item.Text.GetColumns().ToList();
+                var columns = item.Text.GetColumns().ToList();
 
-                for (int i = 0; i < columns.Count(); i++)
+                for (var i = 0; i < columns.Count(); i++)
                 {
                     dataBlock.Data.Values.ElementAt(i).Add(columns[i]);
                 }

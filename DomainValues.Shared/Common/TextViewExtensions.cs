@@ -181,7 +181,7 @@ namespace DomainValues.Shared.Common
 
         private static bool LineQualifies(SnapshotPoint point)
         {
-            string lineText = point.GetContainingLine().GetText();
+            var lineText = point.GetContainingLine().GetText();
 
             return lineText.TrimStart().StartsWith("|") &&
                    Regex.Matches(lineText, @"\|", RegexOptions.Compiled).Count >= 2;
@@ -189,7 +189,7 @@ namespace DomainValues.Shared.Common
 
         private static bool IsPipeEscaped(SnapshotPoint point)
         {
-            ITextSnapshotLine lineText = point.GetContainingLine();
+            var lineText = point.GetContainingLine();
 
             return lineText
                        .GetText()

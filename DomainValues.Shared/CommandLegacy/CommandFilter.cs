@@ -65,8 +65,6 @@ namespace DomainValues.Shared.CommandLegacy
                 return hResult;
             }
 
-            var x = GetTypeChar(pvaIn);
-
             if (GetTypeChar(pvaIn).Equals('|'))
             {
                 _view.AlignTable();

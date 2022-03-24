@@ -1,4 +1,6 @@
-﻿using Community.VisualStudio.Toolkit;
+﻿#if !DvLegacy
+
+using Community.VisualStudio.Toolkit;
 using DomainValues.Shared.Common;
 using DomainValues.Shared.Processing;
 using EnvDTE;
@@ -195,3 +197,5 @@ namespace DomainValues.Shared.Command
         }
     }
 }
+
+#endif

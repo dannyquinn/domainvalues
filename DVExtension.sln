@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32112.339
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31829.152
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainValues.ItemTemplate", "DomainValues.ItemTemplate\DomainValues.ItemTemplate.csproj", "{583F24E5-0DAF-4775-9408-15B699BA9260}"
 EndProject
@@ -21,9 +21,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DomainValues.Shared", "Doma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainValues.17.0", "DomainValues.17.0\DomainValues.17.0.csproj", "{62D553DF-2430-4863-8DCF-23648E9322E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainValues.15.0", "DomainValues.15.0\DomainValues.15.0.csproj", "{52D2F876-CD04-486B-8E6D-4BCC0D6D5B57}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		DomainValues.Shared\DomainValues.Shared.projitems*{1e66d9d8-1dbe-4066-bf6d-5bd8adac3dd3}*SharedItemsImports = 13
+		DomainValues.Shared\DomainValues.Shared.projitems*{52d2f876-cd04-486b-8e6d-4bcc0d6d5b57}*SharedItemsImports = 4
 		DomainValues.Shared\DomainValues.Shared.projitems*{62d553df-2430-4863-8dcf-23648e9322e5}*SharedItemsImports = 4
 		DomainValues.Shared\DomainValues.Shared.projitems*{78e2bf30-2d9c-47f9-bdd5-5edfa3b0070d}*SharedItemsImports = 4
 	EndGlobalSection
@@ -66,6 +69,14 @@ Global
 		{62D553DF-2430-4863-8DCF-23648E9322E5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{62D553DF-2430-4863-8DCF-23648E9322E5}.Release|x86.ActiveCfg = Release|x86
 		{62D553DF-2430-4863-8DCF-23648E9322E5}.Release|x86.Build.0 = Release|x86
+		{52D2F876-CD04-486B-8E6D-4BCC0D6D5B57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52D2F876-CD04-486B-8E6D-4BCC0D6D5B57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52D2F876-CD04-486B-8E6D-4BCC0D6D5B57}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{52D2F876-CD04-486B-8E6D-4BCC0D6D5B57}.Debug|x86.Build.0 = Debug|Any CPU
+		{52D2F876-CD04-486B-8E6D-4BCC0D6D5B57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52D2F876-CD04-486B-8E6D-4BCC0D6D5B57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52D2F876-CD04-486B-8E6D-4BCC0D6D5B57}.Release|x86.ActiveCfg = Release|Any CPU
+		{52D2F876-CD04-486B-8E6D-4BCC0D6D5B57}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

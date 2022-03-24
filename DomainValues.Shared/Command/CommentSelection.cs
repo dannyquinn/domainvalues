@@ -1,4 +1,6 @@
-﻿using DomainValues.Shared.Common;
+﻿#if !DvLegacy
+
+using DomainValues.Shared.Common;
 using Microsoft.VisualStudio.Commanding;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Editor.Commanding.Commands;
@@ -43,3 +45,5 @@ namespace DomainValues.Shared.Command
         }
     }
 }
+
+#endif

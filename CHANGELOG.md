@@ -8,8 +8,9 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 ## Road map
 
 
-- [ ] Update to work with Visual Studio 2022 
-- [x] Move core logic into a shared project 
+- [ ] Modernise Parser
+- [x] Update to work with Visual Studio 2022 
+
 
 Features that have a checkmark are complete and available for
 download in the [CI build](http://vsixgallery.com/author/danny%20quinn).
@@ -18,6 +19,10 @@ download in the [CI build](http://vsixgallery.com/author/danny%20quinn).
 
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
+
+### 1.8 
+
+- [x] Move core logic into a shared project 
 
 ### 1.7
 

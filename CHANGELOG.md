@@ -9,7 +9,7 @@ Download this extension from the [VSGallery](https://marketplace.visualstudio.co
 
 
 - [ ] Modernise Parser
-- [x] Update to work with Visual Studio 2022 
+
 
 
 Features that have a checkmark are complete and available for
@@ -23,6 +23,7 @@ on the official Visual Studio extension gallery.
 ### 1.8 
 
 - [x] Move core logic into a shared project 
+- [x] Update to work with Visual Studio 2022 
 
 ### 1.7
 

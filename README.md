@@ -6,9 +6,9 @@
 
 Download this extension from the Marketplace. 
 
-[Visual Studio 2017](https://marketplace.visualstudio.com/items?itemName=DannyQuinn.DomainValues2017)
-[Visual Studio 2019](https://marketplace.visualstudio.com/items?itemName=DannyQuinn.DomainValues)
-[Visual Studio 2022](https://marketplace.visualstudio.com/items?itemName=DannyQuinn.DomainValues2022) 
+[Visual Studio 2017](https://marketplace.visualstudio.com/items?itemName=DannyQuinn.DomainValues2017)  
+[Visual Studio 2019](https://marketplace.visualstudio.com/items?itemName=DannyQuinn.DomainValues)  
+[Visual Studio 2022](https://marketplace.visualstudio.com/items?itemName=DannyQuinn.DomainValues2022)   
 
 or get the [CI build](http://vsixgallery.com/author/danny%20quinn).
 

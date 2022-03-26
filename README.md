@@ -4,7 +4,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.txt)
 
 
-Download this extension from the [VSGallery](https://marketplace.visualstudio.com/items?itemName=DannyQuinn.DomainValues) or get the [CI build](http://vsixgallery.com/author/danny%20quinn).
+Download this extension from the Marketplace. 
+
+[Visual Studio 2017](https://marketplace.visualstudio.com/items?itemName=DannyQuinn.DomainValues2017)
+[Visual Studio 2019](https://marketplace.visualstudio.com/items?itemName=DannyQuinn.DomainValues)
+[Visual Studio 2022](https://marketplace.visualstudio.com/items?itemName=DannyQuinn.DomainValues2022) 
+
+or get the [CI build](http://vsixgallery.com/author/danny%20quinn).
 
 See the [change log](CHANGELOG.md) for changes and road map.
 

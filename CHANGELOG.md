@@ -18,6 +18,7 @@ on the official Visual Studio extension gallery.
 - [x] Move core logic into a shared project. 
 - [x] Update to work with Visual Studio 2022. 
 - [x] Fix - Item template was not visible in dialog for shared projects.
+- [x] Fix - Enum file does not generate in shared project under certain conditions.
 
 ### 1.7
 

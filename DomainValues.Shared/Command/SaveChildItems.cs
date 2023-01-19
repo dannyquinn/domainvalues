@@ -107,7 +107,10 @@ namespace DomainValues.Shared.Command
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            var language = physicalFile.AsProjectItem().ContainingProject.CodeModel.Language;
+            // If the file is inside a shared project that has not yet been linked to another 
+            // project then the language cannot be determined.  If that's the case then 
+            // default to C#
+            var language = physicalFile.AsProjectItem().ContainingProject?.CodeModel?.Language ?? CodeModelLanguageConstants.vsCMLanguageCSharp;
 
             var codePath = Path.ChangeExtension(physicalFile.FullPath,
                 CodeModelLanguageConstants.vsCMLanguageVB == language

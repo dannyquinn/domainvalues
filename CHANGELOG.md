@@ -5,13 +5,6 @@
 
 Download this extension from the [VSGallery](https://marketplace.visualstudio.com/items?itemName=DannyQuinn.DomainValues) or get the [CI build](http://vsixgallery.com/author/danny%20quinn).
 
-## Road map
-
-
-- [ ] Modernise Parser
-
-
-
 Features that have a checkmark are complete and available for
 download in the [CI build](http://vsixgallery.com/author/danny%20quinn).
 
@@ -22,12 +15,13 @@ on the official Visual Studio extension gallery.
 
 ### 1.8 
 
-- [x] Move core logic into a shared project 
-- [x] Update to work with Visual Studio 2022 
+- [x] Move core logic into a shared project. 
+- [x] Update to work with Visual Studio 2022. 
+- [x] Fix - Item template was not visible in dialog for shared projects.
 
 ### 1.7
 
-- [x] Fix - Removing enum definition didn't delete the generated .cs file
+- [x] Fix - Removing enum definition didn't delete the generated .cs file.
 
 ### 1.6
 
@@ -59,8 +53,8 @@ on the official Visual Studio extension gallery.
 
 ### 1.1
 
-- [x] Compatible with Visual Studio 2017
+- [x] Compatible with Visual Studio 2017.
 
 ### 1.0
 
-- [x] Initial release
+- [x] Initial release.

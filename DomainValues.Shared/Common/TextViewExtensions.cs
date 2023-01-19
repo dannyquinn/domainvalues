@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.Text;
+﻿using DomainValues.Shared.Model;
+using DomainValues.Shared.Processing;
+using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using System;
 using System.Collections.Generic;
@@ -108,6 +110,114 @@ namespace DomainValues.Shared.Common
             }
         }
 
+        public static void Format(this ITextView view, int start, int end)
+        {
+            var tokens = Scanner.GetSpans(view.TextBuffer.CurrentSnapshot.GetText(), false)
+                .GroupBy(a => a.LineNumber)
+                .ToList();
+
+            var blockId = 0;
+
+            var blockRows = new Dictionary<int, List<int>>();
+
+            using (var edit = view.TextBuffer.CreateEdit())
+            {
+                for (var i=start; i <= end; i++)
+                {
+                    var lineTokens = tokens
+                        .Where(a => a.Key == i)
+                        .SelectMany(a => a.OrderBy(b => b.Start))
+                        .ToList();
+
+                    if (!lineTokens.Any())
+                        continue;
+
+                    var lineToken = lineTokens.First();
+
+                    var ident = 0;
+
+                    switch (lineToken.Type)
+                    {
+                        case TokenType.Table:
+                            blockId++;
+                            break;
+                        case TokenType.ItemRow:
+                        case TokenType.HeaderRow:
+                            if (!blockRows.ContainsKey(blockId))
+                            {
+                                blockRows.Add(blockId, new List<int>());
+                            }
+
+                            blockRows[blockId].Add(lineToken.LineNumber);
+                            continue;
+                        case TokenType.Key:
+                        case TokenType.Enum:
+                        case TokenType.Template:
+                        case TokenType.Data:
+                            ident = 1;
+                            break;
+                    }
+
+                    var line = view.TextBuffer.CurrentSnapshot.GetLineFromLineNumber(lineToken.LineNumber);
+
+                    var startingText = line.GetText().Substring(0, lineToken.Start);
+
+                    var replacement = new string('\t', ident);
+
+                    if (startingText != replacement)
+                    {
+                        var span = new Span(line.Start, lineToken.Start);
+
+                        edit.Replace(span, replacement);
+                    }
+
+                    var index = lineToken.Start + lineToken.Text.Length;
+
+                    foreach (var token in lineTokens.Skip(1))
+                    {
+                        var wantedText = " ";
+
+                        switch (token.Type)
+                        {
+                            case TokenType.EnumInit:
+                                wantedText = " = ";
+                                break;
+                            case TokenType.EnumDesc:
+                                wantedText = " [";
+                                break;
+                            case TokenType.EnumMember:
+                                wantedText = "] ";
+                                break;
+                        }
+
+                        var actual = line.GetText().Substring(index, token.Start - index);
+
+                        if (actual != wantedText)
+                        {
+                            var span = new Span(line.Start.Position + index, token.Start - index);
+
+                            edit.Replace(span, wantedText);
+                        }
+
+                        index = token.Start + token.Text.Length;
+                    }
+                }
+
+                foreach (var value in blockRows.Values)
+                {
+                    var startLine = start > value.Min() ? start : value.Min();
+                    var endLine = end < value.Max() ? end : value.Max();
+
+                    AlignRows(edit, start, end);
+                }
+
+                if (edit.HasEffectiveChanges)
+                {
+                    edit.Apply();
+                }
+            }
+        }
+
         public static (int start, int end) GetSelectionLineBounds(this ITextView textView)
         {
             if (textView.Selection.IsEmpty)
@@ -198,5 +308,7 @@ namespace DomainValues.Shared.Common
                        .TakeWhile(a => a == 92) // 92 = \
                        .Count() % 2 == 1;
         }
+
+        
     }
 }

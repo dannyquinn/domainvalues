@@ -17,6 +17,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)CommandLegacy\TextViewListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Command\AlignTable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Command\CommentSelection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Command\FormatDocument.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Command\FormatSelection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Command\SaveChildItems.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Command\UncommentSelection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\Errors.cs" />

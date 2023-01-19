@@ -1,6 +1,7 @@
 ﻿#if DV_LEGACY
 
 using DomainValues.Shared.Common;
+using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text.Editor;
@@ -29,6 +30,8 @@ namespace DomainValues.Shared.CommandLegacy
             {
                 case (uint)VSConstants.VSStd2KCmdID.COMMENT_BLOCK:
                 case (uint)VSConstants.VSStd2KCmdID.UNCOMMENT_BLOCK:
+                case (uint)VSConstants.VSStd2KCmdID.FORMATDOCUMENT:
+                case (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION:
                     prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_SUPPORTED | (uint)OLECMDF.OLECMDF_ENABLED;
                     return VSConstants.S_OK;
                 default:
@@ -51,6 +54,19 @@ namespace DomainValues.Shared.CommandLegacy
                     _view.UncommentSelection();
                     return VSConstants.S_OK;
                 }
+                if (nCmdID == (uint)VSConstants.VSStd2KCmdID.FORMATDOCUMENT)
+                {
+                    _view.Format(0, _view.TextBuffer.CurrentSnapshot.LineCount - 1);
+                    return VSConstants.S_OK;
+                }
+                if (nCmdID == (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION)
+                {
+                    var (start, end) = _view.GetSelectionLineBounds();
+
+                    _view.Format(start, end);
+                    return VSConstants.S_OK;
+                }
+
             }
 
             int hResult = Next.Exec(pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);

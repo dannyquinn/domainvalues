@@ -6,6 +6,7 @@
     <Icon>DomainValues.ItemTemplate.ico</Icon>
     <TemplateID>53050a94-e027-49e4-be78-e4dfbb0bfae2</TemplateID>
     <ProjectType>CSharp</ProjectType>
+	<AppliesTo>CSharp | SharedAssetsProject</AppliesTo>
     <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
     <DefaultName>DomainValues.dv</DefaultName>
